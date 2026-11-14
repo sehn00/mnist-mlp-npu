@@ -1,0 +1,448 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
+| Date              : Sat Nov 14 19:47:46 2026
+| Host              : sehn-pc running 64-bit major release  (build 9200)
+| Command           : report_timing -setup -max_paths 5 -nworst 1 -file C:/Users/user/AISSD/aissd_D_1114/reports/synth_timing_setup_top5.rpt
+| Design            : npu_top
+| Device            : xck26-sfvc784
+| Speed File        : -2LV  PRODUCTION 1.30 05-15-2022
+| Design State      : Synthesized
+| Temperature Grade : C
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             5.453ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_C/p1_reg[15]/D
+                            (rising edge-triggered cell FDCE clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             i_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
+  Data Path Delay:        4.410ns  (logic 2.724ns (61.769%)  route 1.686ns (38.231%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    3.202ns = ( 13.202 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.910ns
+    Clock Pessimism Removal (CPR):    0.562ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock i_clk rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  i_clk (IN)
+                         net (fo=0)                   0.000     0.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     1.026     1.026 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000     1.026    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000     1.026 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.256     1.282    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.044     1.326 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.584     3.910    <hidden>
+                         RAMB36E2                                     r  <hidden>
+  -------------------------------------------------------------------    -------------------
+                         RAMB36E2 (Prop_RAMB36E2_CLKARDCLK_DOUTADOUT[1])
+                                                      1.406     5.316 f  <hidden>
+                         net (fo=1, unplaced)         0.290     5.606    <hidden>
+                         LUT6 (Prop_LUT6_I1_O)        0.188     5.794 f  <hidden>
+                         net (fo=1, unplaced)         0.211     6.005    <hidden>
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.063 f  <hidden>
+                         net (fo=1, unplaced)         0.154     6.217    u_B/u_mem/w_wd1[10]
+                         LUT6 (Prop_LUT6_I0_O)        0.152     6.369 f  u_B/u_mem/p10__0_carry_i_16/O
+                         net (fo=16, unplaced)        0.255     6.624    u_B/u_mem/w[10]
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.682 r  u_B/u_mem/p10__0_carry_i_29/O
+                         net (fo=1, unplaced)         0.211     6.893    u_B/u_mem/p10__0_carry_i_29_n_0
+                         LUT6 (Prop_LUT6_I3_O)        0.056     6.949 r  u_B/u_mem/p10__0_carry_i_10/O
+                         net (fo=1, unplaced)         0.037     6.986    u_C/p1_reg[2]_1[5]
+                         CARRY8 (Prop_CARRY8_S[5]_CO[7])
+                                                      0.246     7.232 r  u_C/p10__0_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     7.238    u_C/p10__0_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[1])
+                                                      0.106     7.344 r  u_C/p10__0_carry__0/O[1]
+                         net (fo=2, unplaced)         0.209     7.553    u_C/p10__0_carry__0_n_14
+                         LUT3 (Prop_LUT3_I2_O)        0.100     7.653 r  u_C/p10__85_carry_i_2/O
+                         net (fo=2, unplaced)         0.244     7.897    u_C/p10__85_carry_i_2_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.057     7.954 r  u_C/p10__85_carry_i_10/O
+                         net (fo=1, unplaced)         0.029     7.983    u_C/p10__85_carry_i_10_n_0
+                         CARRY8 (Prop_CARRY8_S[6]_CO[7])
+                                                      0.183     8.166 r  u_C/p10__85_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     8.172    u_C/p10__85_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[3])
+                                                      0.114     8.286 r  u_C/p10__85_carry__0/O[3]
+                         net (fo=1, unplaced)         0.034     8.320    u_C/p10[15]
+                         FDCE                                         r  u_C/p1_reg[15]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock i_clk rise edge)     10.000    10.000 r  
+                                                      0.000    10.000 r  i_clk (IN)
+                         net (fo=0)                   0.000    10.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     0.518    10.518 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000    10.518    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000    10.518 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.206    10.724    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.039    10.763 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.439    13.202    u_C/CLK
+                         FDCE                                         r  u_C/p1_reg[15]/C
+                         clock pessimism              0.562    13.765    
+                         clock uncertainty           -0.035    13.729    
+                         FDCE (Setup_FDCE_C_D)        0.043    13.772    u_C/p1_reg[15]
+  -------------------------------------------------------------------
+                         required time                         13.772    
+                         arrival time                          -8.320    
+  -------------------------------------------------------------------
+                         slack                                  5.453    
+
+Slack (MET) :             5.459ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_C/p2_reg[15]/D
+                            (rising edge-triggered cell FDCE clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             i_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
+  Data Path Delay:        4.404ns  (logic 2.767ns (62.829%)  route 1.637ns (37.171%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    3.202ns = ( 13.202 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.910ns
+    Clock Pessimism Removal (CPR):    0.562ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock i_clk rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  i_clk (IN)
+                         net (fo=0)                   0.000     0.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     1.026     1.026 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000     1.026    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000     1.026 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.256     1.282    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.044     1.326 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.584     3.910    <hidden>
+                         RAMB36E2                                     r  <hidden>
+  -------------------------------------------------------------------    -------------------
+                         RAMB36E2 (Prop_RAMB36E2_CLKARDCLK_DOUTADOUT[0])
+                                                      1.412     5.322 f  <hidden>
+                         net (fo=1, unplaced)         0.241     5.563    <hidden>
+                         LUT6 (Prop_LUT6_I0_O)        0.225     5.788 f  <hidden>
+                         net (fo=1, unplaced)         0.211     5.999    <hidden>
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.057 f  <hidden>
+                         net (fo=1, unplaced)         0.154     6.211    u_B/u_mem/w_wd1[18]
+                         LUT6 (Prop_LUT6_I0_O)        0.152     6.363 f  u_B/u_mem/p20__0_carry_i_16/O
+                         net (fo=16, unplaced)        0.255     6.618    u_B/u_mem/w[18]
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.676 r  u_B/u_mem/p20__0_carry_i_29/O
+                         net (fo=1, unplaced)         0.211     6.887    u_B/u_mem/p20__0_carry_i_29_n_0
+                         LUT6 (Prop_LUT6_I3_O)        0.056     6.943 r  u_B/u_mem/p20__0_carry_i_10/O
+                         net (fo=1, unplaced)         0.037     6.980    u_C/p2_reg[2]_1[5]
+                         CARRY8 (Prop_CARRY8_S[5]_CO[7])
+                                                      0.246     7.226 r  u_C/p20__0_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     7.232    u_C/p20__0_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[1])
+                                                      0.106     7.338 r  u_C/p20__0_carry__0/O[1]
+                         net (fo=2, unplaced)         0.209     7.547    u_C/p20__0_carry__0_n_14
+                         LUT3 (Prop_LUT3_I2_O)        0.100     7.647 r  u_C/p20__85_carry_i_2/O
+                         net (fo=2, unplaced)         0.244     7.891    u_C/p20__85_carry_i_2_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.057     7.948 r  u_C/p20__85_carry_i_10/O
+                         net (fo=1, unplaced)         0.029     7.977    u_C/p20__85_carry_i_10_n_0
+                         CARRY8 (Prop_CARRY8_S[6]_CO[7])
+                                                      0.183     8.160 r  u_C/p20__85_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     8.166    u_C/p20__85_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[3])
+                                                      0.114     8.280 r  u_C/p20__85_carry__0/O[3]
+                         net (fo=1, unplaced)         0.034     8.314    u_C/p20[15]
+                         FDCE                                         r  u_C/p2_reg[15]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock i_clk rise edge)     10.000    10.000 r  
+                                                      0.000    10.000 r  i_clk (IN)
+                         net (fo=0)                   0.000    10.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     0.518    10.518 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000    10.518    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000    10.518 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.206    10.724    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.039    10.763 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.439    13.202    u_C/CLK
+                         FDCE                                         r  u_C/p2_reg[15]/C
+                         clock pessimism              0.562    13.765    
+                         clock uncertainty           -0.035    13.729    
+                         FDCE (Setup_FDCE_C_D)        0.043    13.772    u_C/p2_reg[15]
+  -------------------------------------------------------------------
+                         required time                         13.772    
+                         arrival time                          -8.314    
+  -------------------------------------------------------------------
+                         slack                                  5.459    
+
+Slack (MET) :             5.462ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_C/p0_reg[15]/D
+                            (rising edge-triggered cell FDCE clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             i_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
+  Data Path Delay:        4.401ns  (logic 2.761ns (62.736%)  route 1.640ns (37.264%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    3.202ns = ( 13.202 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.910ns
+    Clock Pessimism Removal (CPR):    0.562ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock i_clk rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  i_clk (IN)
+                         net (fo=0)                   0.000     0.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     1.026     1.026 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000     1.026    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000     1.026 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.256     1.282    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.044     1.326 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.584     3.910    <hidden>
+                         RAMB36E2                                     r  <hidden>
+  -------------------------------------------------------------------    -------------------
+                         RAMB36E2 (Prop_RAMB36E2_CLKARDCLK_DOUTADOUT[0])
+                                                      1.412     5.322 f  <hidden>
+                         net (fo=1, unplaced)         0.241     5.563    <hidden>
+                         LUT6 (Prop_LUT6_I0_O)        0.225     5.788 f  <hidden>
+                         net (fo=1, unplaced)         0.211     5.999    <hidden>
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.057 f  <hidden>
+                         net (fo=1, unplaced)         0.154     6.211    u_B/u_mem/w_wd1[0]
+                         LUT6 (Prop_LUT6_I0_O)        0.152     6.363 f  u_B/u_mem/p00__0_carry_i_20/O
+                         net (fo=16, unplaced)        0.255     6.618    u_B/u_mem/w[0]
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.676 r  u_B/u_mem/p00__0_carry_i_31/O
+                         net (fo=1, unplaced)         0.211     6.887    u_B/u_mem/p00__0_carry_i_31_n_0
+                         LUT6 (Prop_LUT6_I1_O)        0.056     6.943 r  u_B/u_mem/p00__0_carry_i_12/O
+                         net (fo=1, unplaced)         0.040     6.983    u_C/p0_reg[2]_1[3]
+                         CARRY8 (Prop_CARRY8_S[3]_CO[7])
+                                                      0.240     7.223 r  u_C/p00__0_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     7.229    u_C/p00__0_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[1])
+                                                      0.106     7.335 r  u_C/p00__0_carry__0/O[1]
+                         net (fo=2, unplaced)         0.209     7.544    u_C/p00__0_carry__0_n_14
+                         LUT3 (Prop_LUT3_I2_O)        0.100     7.644 r  u_C/p00__85_carry_i_2/O
+                         net (fo=2, unplaced)         0.244     7.888    u_C/p00__85_carry_i_2_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.057     7.945 r  u_C/p00__85_carry_i_10/O
+                         net (fo=1, unplaced)         0.029     7.974    u_C/p00__85_carry_i_10_n_0
+                         CARRY8 (Prop_CARRY8_S[6]_CO[7])
+                                                      0.183     8.157 r  u_C/p00__85_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     8.163    u_C/p00__85_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[3])
+                                                      0.114     8.277 r  u_C/p00__85_carry__0/O[3]
+                         net (fo=1, unplaced)         0.034     8.311    u_C/p00[15]
+                         FDCE                                         r  u_C/p0_reg[15]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock i_clk rise edge)     10.000    10.000 r  
+                                                      0.000    10.000 r  i_clk (IN)
+                         net (fo=0)                   0.000    10.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     0.518    10.518 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000    10.518    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000    10.518 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.206    10.724    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.039    10.763 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.439    13.202    u_C/CLK
+                         FDCE                                         r  u_C/p0_reg[15]/C
+                         clock pessimism              0.562    13.765    
+                         clock uncertainty           -0.035    13.729    
+                         FDCE (Setup_FDCE_C_D)        0.043    13.772    u_C/p0_reg[15]
+  -------------------------------------------------------------------
+                         required time                         13.772    
+                         arrival time                          -8.311    
+  -------------------------------------------------------------------
+                         slack                                  5.462    
+
+Slack (MET) :             5.462ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_C/p1_reg[13]/D
+                            (rising edge-triggered cell FDCE clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             i_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
+  Data Path Delay:        4.401ns  (logic 2.716ns (61.713%)  route 1.685ns (38.287%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    3.202ns = ( 13.202 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.910ns
+    Clock Pessimism Removal (CPR):    0.562ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock i_clk rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  i_clk (IN)
+                         net (fo=0)                   0.000     0.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     1.026     1.026 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000     1.026    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000     1.026 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.256     1.282    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.044     1.326 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.584     3.910    <hidden>
+                         RAMB36E2                                     r  <hidden>
+  -------------------------------------------------------------------    -------------------
+                         RAMB36E2 (Prop_RAMB36E2_CLKARDCLK_DOUTADOUT[1])
+                                                      1.406     5.316 f  <hidden>
+                         net (fo=1, unplaced)         0.290     5.606    <hidden>
+                         LUT6 (Prop_LUT6_I1_O)        0.188     5.794 f  <hidden>
+                         net (fo=1, unplaced)         0.211     6.005    <hidden>
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.063 f  <hidden>
+                         net (fo=1, unplaced)         0.154     6.217    u_B/u_mem/w_wd1[10]
+                         LUT6 (Prop_LUT6_I0_O)        0.152     6.369 f  u_B/u_mem/p10__0_carry_i_16/O
+                         net (fo=16, unplaced)        0.255     6.624    u_B/u_mem/w[10]
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.682 r  u_B/u_mem/p10__0_carry_i_29/O
+                         net (fo=1, unplaced)         0.211     6.893    u_B/u_mem/p10__0_carry_i_29_n_0
+                         LUT6 (Prop_LUT6_I3_O)        0.056     6.949 r  u_B/u_mem/p10__0_carry_i_10/O
+                         net (fo=1, unplaced)         0.037     6.986    u_C/p1_reg[2]_1[5]
+                         CARRY8 (Prop_CARRY8_S[5]_CO[7])
+                                                      0.246     7.232 r  u_C/p10__0_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     7.238    u_C/p10__0_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[1])
+                                                      0.106     7.344 r  u_C/p10__0_carry__0/O[1]
+                         net (fo=2, unplaced)         0.209     7.553    u_C/p10__0_carry__0_n_14
+                         LUT3 (Prop_LUT3_I2_O)        0.100     7.653 r  u_C/p10__85_carry_i_2/O
+                         net (fo=2, unplaced)         0.244     7.897    u_C/p10__85_carry_i_2_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.057     7.954 r  u_C/p10__85_carry_i_10/O
+                         net (fo=1, unplaced)         0.029     7.983    u_C/p10__85_carry_i_10_n_0
+                         CARRY8 (Prop_CARRY8_S[6]_CO[7])
+                                                      0.183     8.166 r  u_C/p10__85_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     8.172    u_C/p10__85_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[1])
+                                                      0.106     8.278 r  u_C/p10__85_carry__0/O[1]
+                         net (fo=1, unplaced)         0.033     8.311    u_C/p10[13]
+                         FDCE                                         r  u_C/p1_reg[13]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock i_clk rise edge)     10.000    10.000 r  
+                                                      0.000    10.000 r  i_clk (IN)
+                         net (fo=0)                   0.000    10.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     0.518    10.518 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000    10.518    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000    10.518 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.206    10.724    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.039    10.763 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.439    13.202    u_C/CLK
+                         FDCE                                         r  u_C/p1_reg[13]/C
+                         clock pessimism              0.562    13.765    
+                         clock uncertainty           -0.035    13.729    
+                         FDCE (Setup_FDCE_C_D)        0.043    13.772    u_C/p1_reg[13]
+  -------------------------------------------------------------------
+                         required time                         13.772    
+                         arrival time                          -8.311    
+  -------------------------------------------------------------------
+                         slack                                  5.462    
+
+Slack (MET) :             5.468ns  (required time - arrival time)
+  Source:                 <hidden>
+                            (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_C/p2_reg[13]/D
+                            (rising edge-triggered cell FDCE clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             i_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
+  Data Path Delay:        4.395ns  (logic 2.759ns (62.776%)  route 1.636ns (37.224%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    3.202ns = ( 13.202 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.910ns
+    Clock Pessimism Removal (CPR):    0.562ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock i_clk rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  i_clk (IN)
+                         net (fo=0)                   0.000     0.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     1.026     1.026 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000     1.026    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000     1.026 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.256     1.282    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.044     1.326 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.584     3.910    <hidden>
+                         RAMB36E2                                     r  <hidden>
+  -------------------------------------------------------------------    -------------------
+                         RAMB36E2 (Prop_RAMB36E2_CLKARDCLK_DOUTADOUT[0])
+                                                      1.412     5.322 f  <hidden>
+                         net (fo=1, unplaced)         0.241     5.563    <hidden>
+                         LUT6 (Prop_LUT6_I0_O)        0.225     5.788 f  <hidden>
+                         net (fo=1, unplaced)         0.211     5.999    <hidden>
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.057 f  <hidden>
+                         net (fo=1, unplaced)         0.154     6.211    u_B/u_mem/w_wd1[18]
+                         LUT6 (Prop_LUT6_I0_O)        0.152     6.363 f  u_B/u_mem/p20__0_carry_i_16/O
+                         net (fo=16, unplaced)        0.255     6.618    u_B/u_mem/w[18]
+                         LUT6 (Prop_LUT6_I5_O)        0.058     6.676 r  u_B/u_mem/p20__0_carry_i_29/O
+                         net (fo=1, unplaced)         0.211     6.887    u_B/u_mem/p20__0_carry_i_29_n_0
+                         LUT6 (Prop_LUT6_I3_O)        0.056     6.943 r  u_B/u_mem/p20__0_carry_i_10/O
+                         net (fo=1, unplaced)         0.037     6.980    u_C/p2_reg[2]_1[5]
+                         CARRY8 (Prop_CARRY8_S[5]_CO[7])
+                                                      0.246     7.226 r  u_C/p20__0_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     7.232    u_C/p20__0_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[1])
+                                                      0.106     7.338 r  u_C/p20__0_carry__0/O[1]
+                         net (fo=2, unplaced)         0.209     7.547    u_C/p20__0_carry__0_n_14
+                         LUT3 (Prop_LUT3_I2_O)        0.100     7.647 r  u_C/p20__85_carry_i_2/O
+                         net (fo=2, unplaced)         0.244     7.891    u_C/p20__85_carry_i_2_n_0
+                         LUT4 (Prop_LUT4_I0_O)        0.057     7.948 r  u_C/p20__85_carry_i_10/O
+                         net (fo=1, unplaced)         0.029     7.977    u_C/p20__85_carry_i_10_n_0
+                         CARRY8 (Prop_CARRY8_S[6]_CO[7])
+                                                      0.183     8.160 r  u_C/p20__85_carry/CO[7]
+                         net (fo=1, unplaced)         0.006     8.166    u_C/p20__85_carry_n_0
+                         CARRY8 (Prop_CARRY8_CI_O[1])
+                                                      0.106     8.272 r  u_C/p20__85_carry__0/O[1]
+                         net (fo=1, unplaced)         0.033     8.305    u_C/p20[13]
+                         FDCE                                         r  u_C/p2_reg[13]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock i_clk rise edge)     10.000    10.000 r  
+                                                      0.000    10.000 r  i_clk (IN)
+                         net (fo=0)                   0.000    10.000    i_clk_IBUF_inst/I
+                         INBUF (Prop_INBUF_PAD_O)     0.518    10.518 r  i_clk_IBUF_inst/INBUF_INST/O
+                         net (fo=1, unplaced)         0.000    10.518    i_clk_IBUF_inst/OUT
+                         IBUFCTRL (Prop_IBUFCTRL_I_O)
+                                                      0.000    10.518 r  i_clk_IBUF_inst/IBUFCTRL_INST/O
+                         net (fo=1, unplaced)         0.206    10.724    i_clk_IBUF
+                         BUFGCE (Prop_BUFGCE_I_O)     0.039    10.763 r  i_clk_IBUF_BUFG_inst/O
+                         net (fo=521, unplaced)       2.439    13.202    u_C/CLK
+                         FDCE                                         r  u_C/p2_reg[13]/C
+                         clock pessimism              0.562    13.765    
+                         clock uncertainty           -0.035    13.729    
+                         FDCE (Setup_FDCE_C_D)        0.043    13.772    u_C/p2_reg[13]
+  -------------------------------------------------------------------
+                         required time                         13.772    
+                         arrival time                          -8.305    
+  -------------------------------------------------------------------
+                         slack                                  5.468    
+
+
+
+
