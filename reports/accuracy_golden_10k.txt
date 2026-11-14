@@ -1,0 +1,81 @@
+accuracy_golden_10k : python integer model (scripts/gen_golden_10k.py), golden v2 (shift FC1 11, FC2 7)
+MNIST test set      : 10000 images, mnist.npz sha256 731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1
+first 100 images     : input / label / FC1 / FC2 / FC3 bit-identical to hex/ (checked before writing)
+INT  accuracy       : 9930 / 10000 = 99.30 %
+FP   accuracy       : 9932 / 10000 = 99.32 %   (float64 model before quantization, for reference)
+saturated (>127)    : FC1 0 / 5120000 outputs, FC2 0 / 1280000 outputs
+max |acc| FC1/2/3   : 430648 / 19026 / 5704   (int32 limit 2147483647)
+FC3 top-2 ties      : 0 images (argmax takes the lower index, same as the testbench)
+output lines        : input 1960000, FC1 1280000, FC2 320000, FC3 100000  -> build/golden_10k
+
+misclassified by the integer model (70 images): image index, predicted -> label
+  img   247 : pred 6  label 4
+  img   340 : pred 3  label 5
+  img   445 : pred 0  label 6
+  img   551 : pred 9  label 7
+  img   582 : pred 2  label 8
+  img   583 : pred 7  label 2
+  img   646 : pred 6  label 2
+  img   674 : pred 3  label 5
+  img   720 : pred 8  label 5
+  img   740 : pred 9  label 4
+  img   947 : pred 9  label 8
+  img  1014 : pred 5  label 6
+  img  1033 : pred 1  label 8
+  img  1112 : pred 6  label 4
+  img  1182 : pred 5  label 6
+  img  1226 : pred 2  label 7
+  img  1232 : pred 4  label 9
+  img  1260 : pred 1  label 7
+  img  1530 : pred 7  label 8
+  img  1681 : pred 7  label 3
+  img  1901 : pred 4  label 9
+  img  2070 : pred 9  label 7
+  img  2098 : pred 0  label 2
+  img  2130 : pred 9  label 4
+  img  2182 : pred 2  label 1
+  img  2293 : pred 4  label 9
+  img  2387 : pred 1  label 9
+  img  2422 : pred 4  label 6
+  img  2462 : pred 0  label 2
+  img  2488 : pred 4  label 2
+  img  2582 : pred 7  label 9
+  img  2597 : pred 3  label 5
+  img  2654 : pred 1  label 6
+  img  2896 : pred 0  label 8
+  img  2927 : pred 2  label 3
+  img  2939 : pred 5  label 9
+  img  3023 : pred 5  label 8
+  img  3073 : pred 2  label 1
+  img  3225 : pred 9  label 7
+  img  3422 : pred 0  label 6
+  img  3451 : pred 9  label 7
+  img  3475 : pred 7  label 3
+  img  3558 : pred 0  label 5
+  img  3762 : pred 8  label 6
+  img  3767 : pred 2  label 7
+  img  3808 : pred 8  label 7
+  img  3869 : pred 4  label 9
+  img  3985 : pred 4  label 9
+  img  4078 : pred 3  label 9
+  img  4163 : pred 7  label 9
+  img  4176 : pred 7  label 2
+  img  4761 : pred 4  label 9
+  img  4807 : pred 0  label 8
+  img  5457 : pred 8  label 1
+  img  5634 : pred 3  label 2
+  img  5955 : pred 8  label 3
+  img  5973 : pred 8  label 3
+  img  5997 : pred 9  label 5
+  img  6571 : pred 7  label 9
+  img  6576 : pred 1  label 7
+  img  8094 : pred 8  label 2
+  img  8316 : pred 2  label 7
+  img  8408 : pred 5  label 8
+  img  9009 : pred 2  label 7
+  img  9024 : pred 2  label 7
+  img  9530 : pred 8  label 9
+  img  9634 : pred 8  label 0
+  img  9664 : pred 7  label 2
+  img  9700 : pred 8  label 2
+  img  9729 : pred 6  label 5
