@@ -1,0 +1,253 @@
+sim_summary : collected 2026-11-15 02:54   (full logs: build/review/<run>/xsim.log)
+
+==== t0
+ RD_LAT = 1
+ GO count  FC1 512 (512) / FC2 128 (128) / FC3 10 (10)
+ bias_we count 650 (650)
+ start->done   119009 clocks
+ *** tb_npu_ctrl PASS ***
+img PASS lines: 0   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== ctrl_rd2
+ RD_LAT = 2
+ GO count  FC1 512 (512) / FC2 128 (128) / FC3 10 (10)
+ bias_we count 650 (650)
+ start->done   119659 clocks
+ *** tb_npu_ctrl PASS ***
+img PASS lines: 0   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== base_top
+ golden bit-exact : 2 / 2 images
+ prediction       : 2 / 2 correct
+ *** tb_npu_top PASS ***
+img PASS lines: 2   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== top100_chk
+[CHK] run 1 img 0 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 2723946, errors 0
+[CHK] run 2 img 1 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 5450406, errors 0
+[CHK] run 3 img 2 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 8176866, errors 0
+[CHK] run 4 img 3 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 10903326, errors 0
+[CHK] run 5 img 4 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 13629786, errors 0
+[CHK] run 6 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 16356246, errors 0
+[CHK] run 7 img 6 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 19082706, errors 0
+[CHK] run 8 img 7 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 21809166, errors 0
+[CHK] run 9 img 8 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 24535626, errors 0
+[CHK] run 10 img 9 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 27262086, errors 0
+[CHK] run 11 img 10 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 29988546, errors 0
+[CHK] run 12 img 11 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 32715006, errors 0
+[CHK] run 13 img 12 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 35441466, errors 0
+[CHK] run 14 img 13 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 38167926, errors 0
+[CHK] run 15 img 14 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 40894386, errors 0
+[CHK] run 16 img 15 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 43620846, errors 0
+[CHK] run 17 img 16 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 46347306, errors 0
+[CHK] run 18 img 17 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 49073766, errors 0
+[CHK] run 19 img 18 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 51800226, errors 0
+[CHK] run 20 img 19 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 54526686, errors 0
+[CHK] run 21 img 20 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 57253146, errors 0
+[CHK] run 22 img 21 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 59979606, errors 0
+[CHK] run 23 img 22 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 62706066, errors 0
+[CHK] run 24 img 23 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 65432526, errors 0
+[CHK] run 25 img 24 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 68158986, errors 0
+[CHK] run 26 img 25 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 70885446, errors 0
+[CHK] run 27 img 26 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 73611906, errors 0
+[CHK] run 28 img 27 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 76338366, errors 0
+[CHK] run 29 img 28 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 79064826, errors 0
+[CHK] run 30 img 29 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 81791286, errors 0
+[CHK] run 31 img 30 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 84517746, errors 0
+[CHK] run 32 img 31 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 87244206, errors 0
+[CHK] run 33 img 32 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 89970666, errors 0
+[CHK] run 34 img 33 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 92697126, errors 0
+[CHK] run 35 img 34 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 95423586, errors 0
+[CHK] run 36 img 35 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 98150046, errors 0
+[CHK] run 37 img 36 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 100876506, errors 0
+[CHK] run 38 img 37 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 103602966, errors 0
+[CHK] run 39 img 38 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 106329426, errors 0
+[CHK] run 40 img 39 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 109055886, errors 0
+[CHK] run 41 img 40 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 111782346, errors 0
+[CHK] run 42 img 41 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 114508806, errors 0
+[CHK] run 43 img 42 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 117235266, errors 0
+[CHK] run 44 img 43 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 119961726, errors 0
+[CHK] run 45 img 44 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 122688186, errors 0
+[CHK] run 46 img 45 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 125414646, errors 0
+[CHK] run 47 img 46 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 128141106, errors 0
+[CHK] run 48 img 47 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 130867566, errors 0
+[CHK] run 49 img 48 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 133594026, errors 0
+[CHK] run 50 img 49 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 136320486, errors 0
+[CHK] run 51 img 50 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 139046946, errors 0
+[CHK] run 52 img 51 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 141773406, errors 0
+[CHK] run 53 img 52 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 144499866, errors 0
+[CHK] run 54 img 53 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 147226326, errors 0
+[CHK] run 55 img 54 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 149952786, errors 0
+[CHK] run 56 img 55 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 152679246, errors 0
+[CHK] run 57 img 56 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 155405706, errors 0
+[CHK] run 58 img 57 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 158132166, errors 0
+[CHK] run 59 img 58 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 160858626, errors 0
+[CHK] run 60 img 59 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 163585086, errors 0
+[CHK] run 61 img 60 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 166311546, errors 0
+[CHK] run 62 img 61 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 169038006, errors 0
+[CHK] run 63 img 62 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 171764466, errors 0
+[CHK] run 64 img 63 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 174490926, errors 0
+[CHK] run 65 img 64 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 177217386, errors 0
+[CHK] run 66 img 65 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 179943846, errors 0
+[CHK] run 67 img 66 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 182670306, errors 0
+[CHK] run 68 img 67 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 185396766, errors 0
+[CHK] run 69 img 68 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 188123226, errors 0
+[CHK] run 70 img 69 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 190849686, errors 0
+[CHK] run 71 img 70 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 193576146, errors 0
+[CHK] run 72 img 71 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 196302606, errors 0
+[CHK] run 73 img 72 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 199029066, errors 0
+[CHK] run 74 img 73 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 201755526, errors 0
+[CHK] run 75 img 74 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 204481986, errors 0
+[CHK] run 76 img 75 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 207208446, errors 0
+[CHK] run 77 img 76 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 209934906, errors 0
+[CHK] run 78 img 77 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 212661366, errors 0
+[CHK] run 79 img 78 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 215387826, errors 0
+[CHK] run 80 img 79 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 218114286, errors 0
+[CHK] run 81 img 80 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 220840746, errors 0
+[CHK] run 82 img 81 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 223567206, errors 0
+[CHK] run 83 img 82 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 226293666, errors 0
+[CHK] run 84 img 83 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 229020126, errors 0
+[CHK] run 85 img 84 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 231746586, errors 0
+[CHK] run 86 img 85 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 234473046, errors 0
+[CHK] run 87 img 86 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 237199506, errors 0
+[CHK] run 88 img 87 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 239925966, errors 0
+[CHK] run 89 img 88 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 242652426, errors 0
+[CHK] run 90 img 89 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 245378886, errors 0
+[CHK] run 91 img 90 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 248105346, errors 0
+[CHK] run 92 img 91 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 250831806, errors 0
+[CHK] run 93 img 92 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 253558266, errors 0
+[CHK] run 94 img 93 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 256284726, errors 0
+[CHK] run 95 img 94 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 259011186, errors 0
+[CHK] run 96 img 95 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 261737646, errors 0
+[CHK] run 97 img 96 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 264464106, errors 0
+[CHK] run 98 img 97 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 267190566, errors 0
+[CHK] run 99 img 98 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 269917026, errors 0
+[CHK] run 100 img 99 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 272643486, errors 0
+ golden bit-exact : 100 / 100 images
+ prediction       : 100 / 100 correct
+ *** tb_npu_top PASS ***
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:02:32 . Memory (MB): peak = 206.453 ; gain = 0.000
+last checker line: [CHK] run 100 img 99 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 272643486, errors 0
+img PASS lines: 100   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== stress
+[CHK] run 1 img 0 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 2723946, errors 0
+[CHK] run 2 img 1 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 5450406, errors 0
+[CHK] run 3 img 2 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 8176866, errors 0
+[CHK] run 4 img 3 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 10903326, errors 0
+[CHK] run 5 img 4 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 13629786, errors 0
+[CHK] run 6 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 16356246, errors 0
+[CHK] run 7 img 6 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 19082706, errors 0
+[CHK] run 8 img 7 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 21809166, errors 0
+[CHK] run 9 img 8 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 24535626, errors 0
+[CHK] run 10 img 9 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 27262086, errors 0
+[CHK] run 11 img 10 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 29988546, errors 0
+[CHK] run 12 img 11 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 32715006, errors 0
+[CHK] run 13 img 12 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 35441466, errors 0
+[CHK] run 14 img 13 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 38167926, errors 0
+[CHK] run 15 img 14 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 40894386, errors 0
+[CHK] run 16 img 15 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 43620846, errors 0
+ golden bit-exact : 16 / 16 images
+ prediction       : 16 / 16 correct
+ *** tb_npu_top PASS ***
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:00:27 . Memory (MB): peak = 206.586 ; gain = 0.000
+last checker line: [CHK] run 16 img 15 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 43620846, errors 0
+img PASS lines: 16   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== edge
+[CHK] run 1 img 0 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 2721167, errors 0
+[EDGE] S01 image written during reset, start on first clock after reset : PASS (golden mismatch 0, 0 clk)
+[CHK] run 2 img 1 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 5447634, errors 0
+[EDGE] S02 info: i_start asserted 124 times while busy
+[EDGE] S02 i_start re-asserted while busy (ignored?) : PASS (golden mismatch 0, 0 clk)
+[CHK] run 3 img 2 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 8179351, errors 0
+[EDGE] S03 i_start held 5 clocks : PASS (golden mismatch 0, 0 clk)
+[CHK] run 4 img 3 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 10905818, errors 0
+[EDGE] S04 info: 39663 external write+read pairs issued while busy, IMEM lines changed 0
+[EDGE] S04 external write/read while busy (ignored?) : PASS (golden mismatch 0, 0 clk)
+[CHK] reset during run 5 (L0 n251 k53) at t=5305118000
+[CHK] run 6 img 4 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 14779007, errors 0
+[EDGE] S05a reset in FC1, restart same image without reloading : PASS (golden mismatch 0, 0 clk)
+[CHK] reset during run 7 (L1 n61 k121) at t=7598688000
+[CHK] run 8 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 20021167, errors 0
+[EDGE] S05b reset in FC2, load another image, start : PASS (golden mismatch 0, 0 clk)
+[CHK] reset during run 9 (L2 n9 k18) at t=9986058000
+[CHK] run 10 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 25465496, errors 0
+[EDGE] S05c reset near the end of FC3, restart : PASS (golden mismatch 0, 0 clk)
+[CHK] reset during run 11 (L0 n152 k0) at t=11482067000
+[CHK] run 12 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 28881125, errors 0
+[EDGE] S05d reset asserted during a write clock, restart : PASS (golden mismatch 0, 0 clk)
+[CHK] run 13 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 31604848, errors 0
+[EDGE] S09 OMEM[9] read on the first idle clock : PASS (000002bb)
+[CHK] run 14 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 34326029, errors 0
+[CHK] run 15 img 5 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 37047195, errors 0
+[EDGE] S06a start on the first idle clock after done : PASS (golden mismatch 0, 0 clk)
+[CHK] run 16 img 6 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 39773648, errors 0
+[EDGE] S06b last image line written in the same clock as start : PASS (golden mismatch 0, 0 clk)
+[CHK] run 17 img 7 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 42500115, errors 0
+[EDGE] S07 start pulse while o_done=1 & o_busy=1 (DONE state clock) : OBSERVE -> ignored (no new run)
+[EDGE] S07 results after start pulse in DONE state : PASS (golden mismatch 0, 0 clk)
+[CHK] run 18 img 7 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 45223908, errors 0
+[EDGE] S12 read of ACT_A[0] issued right after o_done rose (still busy): got 0a020000, second try 00000000, golden 00000000 : OBSERVE -> first read is ignored (must wait for o_busy = 0)
+[CHK] run 19 img 8 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 47947840, errors 0
+[EDGE] S08 i_start held high through done : OBSERVE -> re-triggered (runs again as long as start is high)
+[CHK] run 20 img 8 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 50669006, errors 0
+[EDGE] S08 results after i_start held through done : PASS (golden mismatch 0, 0 clk)
+[EDGE] S10 burst write / burst read / write-then-read with cen held low : PASS
+[EDGE] S11 read of WMEM (sel 0) = 00000000, BIAS (sel 1) = 00000000 : OBSERVE (external access to weights/bias is not connected)
+[EDGE] S11 write to IMEM address 0x100 then read address 0 = cafe0001 : OBSERVE -> aliased (upper address bits are ignored)
+blk_mem_gen_v8_4_9 WARNING: Address c8 is outside range for A Write
+blk_mem_gen_v8_4_9 WARNING: Address c8 is outside range for A Read
+blk_mem_gen_v8_4_9 WARNING: Address c8 is outside range for A Read
+[EDGE] S11 write/read IMEM address 200 (depth is 196) = xxxxxxxx : OBSERVE
+[CHK] run 21 img 9 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 53395758, errors 0
+[EDGE] S11 normal run after odd external accesses (weights intact?) : PASS (golden mismatch 0, 0 clk)
+[CHK] FINAL : 21 runs, 53398341 checks evaluated, 0 errors, ext access ignored while busy 79327 clk, o_dout changed while busy 413596 clk
+ tb_edge : 15 PASS, 0 FAIL, 6 OBSERVE | checker errors 0
+ *** tb_edge PASS ***
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:00:22 . Memory (MB): peak = 197.855 ; gain = 0.000
+last checker line: [CHK] run 21 img 9 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 53395758, errors 0
+img PASS lines: 0   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== model_rd1
+[CHK] run 1 img 0 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 2723946, errors 0
+[CHK] run 2 img 1 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 5450406, errors 0
+ golden bit-exact : 2 / 2 images
+ prediction       : 2 / 2 correct
+ *** tb_npu_top PASS ***
+last checker line: [CHK] run 2 img 1 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119009 clk | checks 5450406, errors 0
+img PASS lines: 2   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== model_rd2
+[CHK] run 1 img 0 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119659 clk | checks 2730446, errors 0
+[CHK] run 2 img 1 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119659 clk | checks 5463406, errors 0
+ golden bit-exact : 2 / 2 images
+ prediction       : 2 / 2 correct
+ *** tb_npu_top PASS ***
+last checker line: [CHK] run 2 img 1 : go 512/128/10  we 128/32/10  valid 117056  bias_we 650  start->done 119659 clk | checks 5463406, errors 0
+img PASS lines: 2   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== net_synth
+ golden bit-exact : 2 / 2 images
+ prediction       : 2 / 2 correct
+ *** tb_npu_top PASS ***
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:10:07 . Memory (MB): peak = 203.836 ; gain = 0.000
+img PASS lines: 2   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== net_impl_saif
+ golden bit-exact : 1 / 1 images
+ prediction       : 1 / 1 correct
+ *** tb_npu_top PASS ***
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:04:42 . Memory (MB): peak = 204.203 ; gain = 0.000
+img PASS lines: 1   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== net_impl_time
+img PASS lines: 0   img FAIL lines: 0   [CHK-ERR] lines: 0
+
+==== golden_check.py
+round() 경계(.5)까지 가장 가까운 거리: weight 1.79e-07, bias 0.00216  (0 에 가까우면 반올림 방식에 따라 값이 갈림)
+  포화(>127)된 출력: FC1 0 / 51200, FC2 0 / 12800
+  [OK]   곱 s16 (|p| <= 32,767) : max |p| = 16129
+  [OK]   누산 s32 (매 클럭 값 포함) : max |acc| = 369257 (2^18.5)
+  [OK]   최악 입력에서도 s32 안 (실제 가중치 기준 상한) : 상한 1282427 (2^20.3)
+==== golden_check: 33 checks, 0 FAIL ====
