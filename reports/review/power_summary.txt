@@ -1,0 +1,50 @@
+vectorless : Total On-Chip Power (W) = 0.367; Dynamic (W) = 0.077; Device Static (W) = 0.289; Confidence Level = Low; Clocks = 0.004; CLB Logic = 0.004; Signals = 0.006; Block RAM = 0.038; I/O = 0.025;
+    vectorless  u_A = 0.001 W
+    vectorless  u_B = 0.045 W
+    vectorless  u_mem = 0.044 W
+    vectorless  u_bmem = 0.003 W
+    vectorless  u_wmem_bank0 = 0.011 W
+    vectorless  u_wmem_bank1 = 0.009 W
+    vectorless  u_wmem_bank2 = 0.009 W
+    vectorless  u_wmem_bank3 = 0.008 W
+    vectorless  u_C = 0.004 W
+    vectorless  u_D = 0.002 W
+saif : Total On-Chip Power (W) = 0.360; Dynamic (W) = 0.071; Device Static (W) = 0.289; Confidence Level = High; Clocks = 0.004; CLB Logic = 0.002; Signals = 0.005; Block RAM = 0.040; I/O = 0.021;
+    saif  u_B = 0.046 W
+    saif  u_mem = 0.046 W
+    saif  u_bmem = 0.003 W
+    saif  u_wmem_bank0 = 0.011 W
+    saif  u_wmem_bank1 = 0.010 W
+    saif  u_wmem_bank2 = 0.010 W
+    saif  u_wmem_bank3 = 0.009 W
+    saif  u_C = 0.002 W
+    saif  u_D = 0.002 W
+  enable (saif) u_wmem_bank0 : 28 primitives (5 tied to 1), average enable probability 0.2789, sum 7.810
+  enable (saif) u_wmem_bank1 : 28 primitives (0 tied to 1), average enable probability 0.1891, sum 5.294
+  enable (saif) u_wmem_bank2 : 28 primitives (0 tied to 1), average enable probability 0.1890, sum 5.293
+  enable (saif) u_wmem_bank3 : 28 primitives (0 tied to 1), average enable probability 0.1444, sum 4.044
+  enable (saif) u_bmem : 2 primitives (2 tied to 1), average enable probability 1.0000, sum 2.000
+  enable (saif) u_imem_a : 1 primitives (0 tied to 1), average enable probability 0.8396, sum 0.840
+  enable (saif) u_act_a : 1 primitives (0 tied to 1), average enable probability 0.1390, sum 0.139
+  enable (saif) u_act_b : 1 primitives (0 tied to 1), average enable probability 0.0032, sum 0.003
+  enable (saif) u_omem : 1 primitives (0 tied to 1), average enable probability 0.0002, sum 0.000
+what-if: enable probability scaled on 107 WMEM enable nets (x 0.2460 for bank 0/1, x 0.2458 for bank 2/3), skipped 5 tied-to-1 primitives, failed 0
+  enable (gated) u_wmem_bank0 : 28 primitives (5 tied to 1), average enable probability 0.2033, sum 5.691
+  enable (gated) u_wmem_bank1 : 28 primitives (0 tied to 1), average enable probability 0.0465, sum 1.303
+  enable (gated) u_wmem_bank2 : 28 primitives (0 tied to 1), average enable probability 0.0465, sum 1.301
+  enable (gated) u_wmem_bank3 : 28 primitives (0 tied to 1), average enable probability 0.0355, sum 0.994
+  enable (gated) u_bmem : 2 primitives (2 tied to 1), average enable probability 1.0000, sum 2.000
+  enable (gated) u_imem_a : 1 primitives (0 tied to 1), average enable probability 0.8396, sum 0.840
+  enable (gated) u_act_a : 1 primitives (0 tied to 1), average enable probability 0.1390, sum 0.139
+  enable (gated) u_act_b : 1 primitives (0 tied to 1), average enable probability 0.0032, sum 0.003
+  enable (gated) u_omem : 1 primitives (0 tied to 1), average enable probability 0.0002, sum 0.000
+saif_ena_gated : Total On-Chip Power (W) = 0.352; Dynamic (W) = 0.063; Device Static (W) = 0.289; Confidence Level = High; Clocks = 0.004; CLB Logic = 0.002; Signals = 0.004; Block RAM = 0.032; I/O = 0.021;
+    saif_ena_gated  u_B = 0.038 W
+    saif_ena_gated  u_mem = 0.038 W
+    saif_ena_gated  u_bmem = 0.003 W
+    saif_ena_gated  u_wmem_bank0 = 0.010 W
+    saif_ena_gated  u_wmem_bank1 = 0.007 W
+    saif_ena_gated  u_wmem_bank2 = 0.007 W
+    saif_ena_gated  u_wmem_bank3 = 0.007 W
+    saif_ena_gated  u_C = 0.002 W
+    saif_ena_gated  u_D = 0.002 W
