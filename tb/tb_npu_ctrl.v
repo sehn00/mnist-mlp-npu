@@ -11,7 +11,8 @@
 //   5) o_bias_we는 뉴런마다 정확히 1번, k=0 ISSUE의 RD_LAT클럭 뒤
 //   6) GO 다음 클럭의 o_oaddr = n/4 (FC3는 n), o_layer = 그 뉴런의 레이어
 //   7) GO 클럭의 o_lane = n%4, o_shift/o_relu_en/o_fc3 = 설정표 값
-//   8) start -> done 전체 클럭 수 (RD_LAT=1이면 약 119,010)
+//   8) start -> done 전체 클럭 수 = 119,009 + 650 x (RD_LAT - 1)  (RD_LAT=1이면 119,009, 2면 119,659)
+//   9) 타임아웃: o_done 이 200만 클럭 안에 안 올라오면 FAIL 로 끝냄
 // 시뮬레이션 시간: 약 1.2 ms (Vivado: run all)
 // ============================================================================
 `ifndef TB_RD_LAT
@@ -20,6 +21,7 @@
 
 module tb_npu_ctrl;
     localparam RD_LAT = `TB_RD_LAT;
+    localparam EXP_CYCLES = 119009 + 650 * (RD_LAT - 1);   // WAIT 가 RD_LAT + 1 클럭이라 뉴런(650개)마다 1클럭씩 늘어남
 
     reg  i_clk = 1'b0, i_rstn = 1'b0, i_start = 1'b0;
     wire o_busy, o_done, o_rd_en, o_valid, o_acc_clr, o_bias_we, o_go, o_relu_en, o_fc3;
@@ -86,7 +88,8 @@ module tb_npu_ctrl;
         $display(" GO count  FC1 %0d (512) / FC2 %0d (128) / FC3 %0d (10)", go_cnt[0], go_cnt[1], go_cnt[2]);
         $display(" bias_we count %0d (650)", bwe_cnt);
         $display(" last o_waddr  %0d (117055)", last_waddr);
-        $display(" start->done   %0d clocks", t_done - t_start);
+        $display(" start->done   %0d clocks (%0d)", t_done - t_start, EXP_CYCLES);
+        if (t_done - t_start != EXP_CYCLES) nerr = nerr + 1;
         if (go_cnt[0] != 512 || go_cnt[1] != 128 || go_cnt[2] != 10) nerr = nerr + 1;
         if (bwe_cnt != 650)      nerr = nerr + 1;
         if (last_waddr != 117055) nerr = nerr + 1;
@@ -94,6 +97,14 @@ module tb_npu_ctrl;
         if (nerr == 0) $display(" *** tb_npu_ctrl PASS ***");
         else           $display(" *** tb_npu_ctrl FAIL : %0d errors ***", nerr);
         $display("--------------------------------------------------");
+        $finish;
+    end
+
+    // ---- 타임아웃: 정상이면 약 12만 클럭에 끝남. 200만 클럭(20 ms)이 지나도 안 끝나면 FSM 이 멈춘 것 ----
+    initial begin
+        #(64'd20_000_000);
+        $display("[TIMEOUT] o_done did not rise within 2,000,000 clocks (scoreboard at L%0d n%0d k%0d)", e_layer, e_n, e_k);
+        $display(" *** tb_npu_ctrl FAIL : timeout ***");
         $finish;
     end
 
