@@ -1,0 +1,25 @@
+run_sim.tcl  2026-11-14 17:23:27
+Vivado 2024.2
+project re-used (10 IPs)
+==== tb_npu_ctrl (D unit test, RD_LAT=1) ====
+   RD_LAT = 1
+   GO count  FC1 512 (512) / FC2 128 (128) / FC3 10 (10)
+   bias_we count 650 (650)
+   last o_waddr  117055 (117055)
+   start->done   119009 clocks
+   *** tb_npu_ctrl PASS ***
+==== tb_npu_top (A+B+C+D, 10 images) ====
+  img 0 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 1 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 2 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 3 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 4 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 5 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 6 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 7 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 8 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 9 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+   golden bit-exact : 10 / 10 images
+   prediction       : 10 / 10 correct
+   *** tb_npu_top PASS ***
+done. logs: C:/Users/user/AISSD/aissd_D_1114/logs
