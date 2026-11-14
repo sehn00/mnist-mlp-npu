@@ -26,7 +26,8 @@
 // o_waddr      : 스펙대로 WMEM 하나(32b x 117,056)를 볼 때의 주소 = w_base + n*L + k
 // o_wbank_addr : 조원2 WMEM 4뱅크 구조용 주소 = wbank_base + (n/4)*L + k
 // o_wbank_sel  : 4뱅크 중 어느 뱅크인지 = n % 4  (뱅크 i = n%4==i 인 뉴런들의 가중치)
-//   -> 곱셈/나눗셈 없이 포인터를 +1씩 올리고, 뉴런이 끝날 때 lane != 3 이면 L만큼 되돌림
+//   -> 곱셈/나눗셈 없이 포인터를 +1씩 올리고, 뉴런의 마지막 줄(k = L-1)에서 lane != 3 이면
+//      묶음 시작으로 되돌림 (L-1 만큼 빼기). 그래서 주소는 항상 0 ~ 29,279 범위 안
 // ============================================================================
 module npu_ctrl #(
     parameter RD_LAT = 1                 // SRAM 읽기 지연 (1 또는 2)
@@ -143,13 +144,18 @@ module npu_ctrl #(
 
                 S_ISSUE: begin                       // 줄 k 주소를 내는 중
                     r_w_ptr  <= r_w_ptr + 17'd1;
-                    r_wb_ptr <= r_wb_ptr + 15'd1;
                     if (w_last_k) begin
+                        // 4뱅크 주소: 같은 4개 묶음(n/4)의 다음 뉴런이면 묶음 시작으로 되돌림.
+                        // lane 3 이면 다음 묶음으로 +1. (여기서 바로 되돌려야 주소가 29,279 를 안 넘음:
+                        // B 의 WMEM 은 ena 가 항상 1 이라 ISSUE 가 아닌 클럭의 주소도 실제로 읽힘)
+                        if (r_n[1:0] != 2'd3) r_wb_ptr <= r_wb_ptr - {7'd0, w_L} + 15'd1;
+                        else                  r_wb_ptr <= r_wb_ptr + 15'd1;
                         r_k        <= 8'd0;
                         r_wait_cnt <= 2'd0;
                         r_state    <= S_WAIT;
                     end else begin
-                        r_k <= r_k + 8'd1;
+                        r_wb_ptr <= r_wb_ptr + 15'd1;
+                        r_k      <= r_k + 8'd1;
                     end
                 end
 
@@ -161,9 +167,6 @@ module npu_ctrl #(
                 S_GO: begin                          // o_go, o_acc_clr = 1 (아래 assign)
                     r_oaddr <= w_fc3 ? r_n[7:0] : {1'b0, r_n[8:2]};    // FC3는 n, 나머지는 n/4 (n 최대 511 -> 7비트)
                     r_b_ptr <= r_b_ptr + 10'd1;
-                    // 4뱅크 주소: 같은 4개 묶음(n/4)의 다음 뉴런이면 묶음 시작으로 되돌림
-                    if (r_n[1:0] != 2'd3)
-                        r_wb_ptr <= r_wb_ptr - {7'd0, w_L};
                     if (w_last_n) begin
                         r_n     <= 10'd0;
                         r_state <= (r_layer == 2'd2) ? S_DONE : S_LAYER;

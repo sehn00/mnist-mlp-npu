@@ -113,6 +113,9 @@ module tb_npu_ctrl;
         end
         go_d1 = 1'b0;
 
+        // 4뱅크 주소는 ISSUE가 아닌 클럭에도 뱅크 깊이(29,280) 안에 있어야 함 (B의 WMEM은 ena가 항상 1)
+        if (o_wbank_addr > 15'd29279) err("o_wbank_addr out of range (> 29279)");
+
         // (4) valid = ISSUE를 RD_LAT클럭 늦춘 것
         if (o_valid !== (issue_hist[RD_LAT-1] != 0)) err("o_valid timing");
         if (o_valid) last_valid_cyc = cyc;
