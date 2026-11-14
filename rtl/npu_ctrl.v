@@ -14,8 +14,16 @@
 //        레이어 마지막 뉴런 GO 다음은 LAYER(1클럭), FC3 마지막 뉴런 GO 다음은 DONE
 //
 // RD_LAT : SRAM 읽기 지연 클럭 수
-//   1 = 스펙 v0.2 (BMEM 출력 레지스터 끔). 뉴런 하나 = L + 3클럭, 전체 약 119,010클럭
-//   2 = 현재 조원2 IP (WMEM, BMEM 출력 레지스터 켬). 뉴런 하나 = L + 4클럭
+//   1 = 지금 구성 (기본값). 과제 가이드 p.9 규칙대로 모든 BMEM 의 Primitives Output Register 를 끔.
+//       뉴런 하나 = L + 3클럭, start -> done 119,009클럭
+//   2 = 예전 구성 (조원2 11/12 IP: WMEM, BMEM 출력 레지스터 켬, 가이드 위반이라 폐기).
+//       뉴런 하나 = L + 4클럭, start -> done 119,659클럭. 비교용으로만 남겨 둠
+//
+// 끝났는지 볼 때 주의: o_done 은 DONE 상태 클럭에 올라가는데 그 클럭에는 o_busy 도 아직 1 이다
+//   (A 가 OMEM 9번에 마지막 점수를 쓰는 클럭). 그래서 o_done 이 o_busy 보다 1클럭 먼저 1 이 되고,
+//   그 1클럭 동안의 외부 읽기와 i_start 는 무시된다.
+//   -> 바깥(TB)에서는 "o_busy == 0 && o_done == 1" 을 기다린 뒤에 결과를 읽을 것
+// i_start 는 레벨로 받는다: IDLE 에서 1 이면 시작. 끝난 뒤까지 계속 1 로 두면 다시 시작하므로 1클럭 펄스로 줄 것
 //
 // 레이어 설정표 (golden v2, handoff_D_1112 5절)
 //   레이어  L    N    w_base   b_base  wbank_base  shift relu fc3  입력     출력(주소)
@@ -30,17 +38,17 @@
 //      묶음 시작으로 되돌림 (L-1 만큼 빼기). 그래서 주소는 항상 0 ~ 29,279 범위 안
 // ============================================================================
 module npu_ctrl #(
-    parameter RD_LAT = 1                 // SRAM 읽기 지연 (1 또는 2)
+    parameter RD_LAT = 1                 // SRAM 읽기 지연 (1 = 지금 구성, 2 = 예전 구성. 위 설명 참고)
 )(
     input  wire        i_clk,
     input  wire        i_rstn,
-    input  wire        i_start,          // 1클럭 1이면 FC1~FC3 시작
+    input  wire        i_start,          // 1클럭 1이면 FC1~FC3 시작 (IDLE 일 때만 받음)
     output wire        o_busy,           // 연산 중 1 (IDLE 이외)
-    output reg         o_done,           // 끝나면 1, 다음 i_start 까지 유지
+    output reg         o_done,           // 끝나면 1, 다음 i_start 까지 유지. o_busy 보다 1클럭 먼저 올라감 (위 설명 참고)
 
     // ---- B (메모리) ----
     output wire        o_rd_en,          // 1: 이번 클럭에 입력/가중치 읽기 (ISSUE 상태)
-    output wire [16:0] o_waddr,          // WMEM 줄 주소 (단일 WMEM 기준, 최대 117,055)
+    output wire [16:0] o_waddr,          // WMEM 줄 주소 (단일 WMEM 기준, 최대 117,055). top 에서는 미연결, TB 기준 주소로만 씀
     output wire [14:0] o_wbank_addr,     // WMEM 4뱅크 기준 주소 (최대 29,279)
     output wire [1:0]  o_wbank_sel,      // 4뱅크 중 선택 = n % 4
     output wire [7:0]  o_xaddr,          // 입력 메모리 줄 주소 = k (최대 195)

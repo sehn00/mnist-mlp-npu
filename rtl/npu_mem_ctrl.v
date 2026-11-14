@@ -8,21 +8,29 @@
 //   memory_controller.v 는 한 줄도 고치지 않고, 이 파일이 바깥에서 감싸서
 //   D/A/C 와 탑 외부 포트에 맞게 연결만 해 줌. 조원2가 정식 npu_mem_ctrl 을 만들면 교체.
 //
-// 조원2 메모리의 실제 모양 (.xci 확인 결과)
-//   WMEM  : 4뱅크 x (32b x 29,280), 뱅크 i = (n % 4 == i) 뉴런들의 가중치, 출력 레지스터 ON -> 지연 2
-//   BMEM  : 128b x 163, 한 줄에 bias 4개 ([31:0]=bias 4m, ... [127:96]=bias 4m+3), 출력 레지스터 ON -> 지연 2
+// 조원2 메모리의 모양
+//   WMEM  : 4뱅크 x (32b x 29,280), 뱅크 i = (n % 4 == i) 뉴런들의 가중치
+//   BMEM  : 128b x 163, 한 줄에 bias 4개 ([31:0]=bias 4m, ... [127:96]=bias 4m+3)
 //   IMEM_A: 32b x 196 (FC1 입력), ACT_A: 32b x 128 (FC1 출력 = FC2 입력)
-//   ACT_B : 32b x 32 (FC2 출력 = FC3 입력), OMEM: 32b x 10 (FC3 점수), 출력 레지스터 OFF -> 지연 1
-//   -> 과제 가이드 p.9: "Primitives Output Register should be disabled" -> 출력 레지스터 OFF(RD_LAT=1)가 규칙.
-//      RD_LAT=2는 조원2의 11/12 IP(ON)로 돌릴 때만 사용. top 의 RD_LAT 과 반드시 같은 값.
+//   ACT_B : 32b x 32 (FC2 출력 = FC3 입력), OMEM: 32b x 10 (FC3 점수)
+//   읽기 지연
+//     지금 구성 (RD_LAT=1, 기본값): 메모리 10개 전부 Primitives Output Register OFF -> 전부 지연 1.
+//       과제 가이드 p.9 "Primitives Output Register should be disabled" 를 따른 것 (run_sim.tcl 이 이렇게 IP 를 만듦)
+//     예전 구성 (RD_LAT=2): 조원2의 11/12 .xci 그대로. WMEM/BMEM 만 출력 레지스터 ON -> 지연 2, 나머지는 지연 1.
+//       가이드 위반이라 폐기, 비교용으로만 남겨 둠. top 의 RD_LAT 과 반드시 같은 값.
 //
 // 외부 포트 (스펙 3절과 같은 이름, 주소 맵은 임시: 조원2 메모리 구성 기준)
-//   i_addr[19:17] = 0 WMEM, 1 BIAS : COE 로 초기화 (memory_controller 가 wea=0 고정) -> 외부 쓰기 무시
-//                   2 IMEM_A (입력 이미지, 쓰기/읽기, 줄 0~195)
-//                   3 ACT_A  (FC1 출력, 읽기, 줄 0~127)
-//                   4 ACT_B  (FC2 출력, 읽기, 줄 0~31)
-//                   5 OMEM   (FC3 점수, 읽기, 0~9)
-//   o_dout 은 주소 준 다음 클럭에 나옴. i_busy = 1 이면 외부 접근 무시.
+//   i_addr[19:17] = 0 WMEM, 1 BIAS : COE 로 초기화 (memory_controller 가 wea=0 고정) -> 외부 쓰기 무시, 읽으면 0
+//                   2 IMEM_A (입력 이미지, 줄 0~195)
+//                   3 ACT_A  (FC1 출력, 줄 0~127)
+//                   4 ACT_B  (FC2 출력, 줄 0~31)
+//                   5 OMEM   (FC3 점수, 0~9)
+//   - 번호 2~5 는 전부 읽기와 쓰기가 다 됨 (결과 메모리도 외부 쓰기를 막지 않음)
+//   - 주소는 줄 수 안에서만 쓸 것: 범위 검사가 없고 윗주소 비트(i_addr[16:8] 등)는 무시됨
+//     (예: IMEM_A 주소 0x100 에 쓰면 줄 0 이 바뀜, 196~255 는 BRAM 깊이 밖)
+//   - o_dout 은 주소 준 다음 클럭 1클럭 동안만 유효 (값을 잡아 두지 않음)
+//   - i_busy = 1 이면 외부 접근 무시. 연산이 끝난 뒤에는 "o_busy == 0 && o_done == 1" 을 기다리고 읽을 것
+//     (o_done 이 o_busy 보다 1클럭 먼저 올라가서, o_done 만 보고 바로 읽으면 첫 읽기가 무시됨)
 // ============================================================================
 module npu_mem_ctrl #(
     parameter RD_LAT = 1            // BMEM 읽기 지연: 1 = 출력 레지스터 OFF (과제 가이드 p.9 규칙), 2 = ON
@@ -126,7 +134,7 @@ module npu_mem_ctrl #(
     // 읽기 데이터 정렬: 선택 신호를 데이터 지연만큼 같이 늦춤
     //   RD_LAT = 1 (가이드 규칙, 출력 레지스터 OFF): 모든 SRAM 지연 1
     //       -> 선택 신호 1클럭 지연, x/w/bias 모두 주소 뒤 1클럭
-    //   RD_LAT = 2 (조원2 11/12 IP, WMEM/BMEM 출력 레지스터 ON): WMEM/BMEM 지연 2, IMEM/ACT 지연 1
+    //   RD_LAT = 2 (예전 구성: 조원2 11/12 IP, WMEM/BMEM 출력 레지스터 ON): WMEM/BMEM 지연 2, IMEM/ACT 지연 1
     //       -> WMEM/BMEM 선택 신호 2클럭 지연, IMEM/ACT 데이터는 레지스터로 1클럭 더 늦춤
     // ------------------------------------------------------------------
     reg [1:0]  r_wsel_d1, r_wsel_d2;

@@ -9,14 +9,18 @@
 //   u_A npu_postproc  : bias, ReLU, shift, 포화, 4개 묶기
 //
 // RD_LAT = 1 : 과제 가이드 p.9 "Primitives Output Register should be disabled" -> BMEM 읽기 지연 1클럭.
-//              조원2의 11/12 IP(WMEM/BMEM 출력 레지스터 ON)를 그대로 쓸 때만 2로 바꿈.
+//              조원2의 11/12 IP(WMEM/BMEM 출력 레지스터 ON, 폐기된 구성)를 그대로 쓸 때만 2로 바꿈.
+//
+// 바깥에서 쓰는 순서: IMEM_A 에 이미지 쓰기 -> i_start 1클럭 -> "o_busy == 0 && o_done == 1" 기다리기 -> 결과 읽기
+//   (o_done 이 o_busy 보다 1클럭 먼저 올라가고, o_busy = 1 인 동안의 외부 접근과 i_start 는 무시됨)
+// 연결선 waddr(단일 WMEM 기준 주소)는 u_B 로 가지 않음: B 가 4뱅크 구조라 wbank_addr / wbank_sel 을 씀
 // ============================================================================
 module npu_top #(
-    parameter RD_LAT = 1    // BMEM 읽기 지연 (아래 주석 참고)
+    parameter RD_LAT = 1    // BMEM 읽기 지연 (위 주석 참고)
 )(
     input  wire        i_clk,
     input  wire        i_rstn,
-    // 외부 SRAM 접근 (o_busy = 0 일 때만)
+    // 외부 SRAM 접근 (o_busy = 0 일 때만. o_busy = 1 이면 무시됨)
     input  wire        i_cen,
     input  wire        i_wen,
     input  wire [19:0] i_addr,
