@@ -18,14 +18,16 @@
 #     SIM_MAX     시뮬레이션 시간 상한 (예: 5ms). 없으면 $finish 까지 (run -all)
 #     HEX_SRC     TB 가 읽을 golden 폴더 (기본 hex/). 합성 이미지 세트는 build/review/stress_hex
 #     STAGE_SRC   체커용 단계별 정답 폴더 (기본 build/review/golden_stages)
-# 끝나면 build/review/<run>/xsim.log 에 시뮬레이션 출력이 남음. 반환값: 0 = 시뮬레이션까지 실행됨
+#     OUT_BASE    결과 폴더의 부모 (기본 build/review). 정식 회귀(run_regress.sh)는 build/regress 를 씀
+#     BUILD_ONLY=1  컴파일(xvlog, xelab)까지만 하고 시뮬레이션은 안 돌림 (scripts/run_accuracy.sh 가 씀)
+# 끝나면 <OUT_BASE>/<run>/xsim.log 에 시뮬레이션 출력이 남음. 반환값: 0 = 시뮬레이션까지 실행됨
 # ============================================================================
 set -u
 RUN="$1"; RTL_DIR="$2"; DEFS="$3"; TBS="$4"; TOPS="$5"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -W)"
 XB="${VIVADO_BIN:-E:\\Xilinx\\Vivado\\2024.2\\bin}"
 IPGEN="$ROOT/vivado_sim/aissd_D_sim.gen/sources_1/ip"
-RD="$ROOT/build/review/$RUN"
+RD="$ROOT/${OUT_BASE:-build/review}/$RUN"
 
 abs() { case "$1" in [A-Za-z]:*|/*) echo "$1";; *) echo "$ROOT/$1";; esac; }
 
@@ -67,6 +69,8 @@ run "xvlog.bat --relax -prj sim.prj -log xvlog.log" xvlog.out
 if grep -q "^ERROR" xvlog.log 2>/dev/null; then echo "[$RUN] xvlog ERROR"; grep "^ERROR" xvlog.log | head -5; exit 3; fi
 run "xelab.bat --relax --mt 2 ${XELAB_OPTS:-} -L work $LIBS --snapshot snap $TOPARGS -log xelab.log" xelab.out
 if grep -q "^ERROR" xelab.log 2>/dev/null; then echo "[$RUN] xelab ERROR"; grep "^ERROR" xelab.log | head -5; exit 4; fi
+[ -d xsim.dir/snap ] || { echo "[$RUN] xelab made no snapshot (see $RD/xelab.log)"; exit 4; }
+if [ "${BUILD_ONLY:-0}" = "1" ]; then exit 0; fi
 if [ -n "${SIM_MAX:-}" ]; then            # 시뮬레이션 시간 상한 (예: SIM_MAX=5ms). TB 에 타임아웃이 없어도 멈추게
   printf 'run %s\nexit\n' "$SIM_MAX" > run.tcl
   run "xsim.bat snap -tclbatch run.tcl -log xsim.log" xsim.out

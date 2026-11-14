@@ -1,7 +1,9 @@
 @echo off
 REM ============================================================
 REM  run_sim.bat : double-click to run Vivado batch simulation
-REM  result -> result.txt , logs -> logs\
+REM  result -> result.txt , logs -> logs\  (Vivado log: logs\run_sim.log)
+REM  exit code: 0 = both testbenches PASS, 1 = FAIL
+REM  extra arguments are passed to run_sim.tcl, e.g.  run_sim.bat 100 fresh
 REM ============================================================
 cd /d "%~dp0"
 set "VIV="
@@ -20,11 +22,19 @@ if not defined VIV (
   pause
   exit /b 1
 )
+if not exist logs mkdir logs
 echo Using: %VIV%
 echo This takes about 5-20 minutes. Please wait...
-call "%VIV%" -mode batch -source run_sim.tcl -log run_sim.log -journal run_sim.jou -notrace
+if "%~1"=="" (
+  call "%VIV%" -mode batch -source run_sim.tcl -log logs\run_sim.log -journal logs\run_sim.jou -notrace
+) else (
+  call "%VIV%" -mode batch -source run_sim.tcl -log logs\run_sim.log -journal logs\run_sim.jou -notrace -tclargs %*
+)
+set "RC=%ERRORLEVEL%"
 echo.
 echo ===================== result.txt =====================
 type result.txt
 echo ======================================================
-pause
+if "%RC%"=="0" (echo RESULT: PASS) else (echo RESULT: FAIL ^(exit code %RC%^))
+if not defined RUN_SIM_NOPAUSE pause
+exit /b %RC%

@@ -1,13 +1,13 @@
-run_sim.tcl  2026-11-14 19:30:44
+run_sim.tcl  2026-11-15 08:18:10
 Vivado 2024.2
-IP creation OK (10 blk_mem_gen)
+project re-used (10 IPs)
 BRAM primitives output register: WMEM/BMEM false, others false (RD_LAT = 1)
 ==== tb_npu_ctrl (D unit test, RD_LAT=1) ====
    RD_LAT = 1
    GO count  FC1 512 (512) / FC2 128 (128) / FC3 10 (10)
    bias_we count 650 (650)
    last o_waddr  117055 (117055)
-   start->done   119009 clocks
+   start->done   119009 clocks (119009)
    *** tb_npu_ctrl PASS ***
   simulator warnings in simulate.log: 0
 ==== tb_npu_top (A+B+C+D, 100 images) ====
@@ -113,6 +113,8 @@ BRAM primitives output register: WMEM/BMEM false, others false (RD_LAT = 1)
   img 99 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119009 clk | PASS
    golden bit-exact : 100 / 100 images
    prediction       : 100 / 100 correct
+   clock count      : 100 / 100 images at 119009 clk
    *** tb_npu_top PASS ***
   simulator warnings in simulate.log: 0
 done. logs: C:/Users/user/AISSD/aissd_D_1114/logs
+RESULT: PASS (tb_npu_ctrl and tb_npu_top, 100 images)

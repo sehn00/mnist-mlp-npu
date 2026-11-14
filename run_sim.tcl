@@ -5,26 +5,35 @@
 #      Primitives Output Register is OFF on every IP (project guideline p.9) = read latency 1.
 #      (The team .xci of 11/12 has it ON for WMEM/BMEM. Add "oreg_on" to rebuild that old setup.)
 #   3) run tb_npu_ctrl (D unit test) and tb_npu_top (A+B+C+D, N_IMG images)
-#   4) write a summary to result.txt
+#   4) write a summary to result.txt. Exit code 0 only if both testbenches print their PASS line, else 1.
 # ============================================================================
-# Usage: double-click run_sim.bat, or
-#        vivado -mode batch -source run_sim.tcl                      (10 images)
-#        vivado -mode batch -source run_sim.tcl -tclargs 100        (100 images)
-#        vivado -mode batch -source run_sim.tcl -tclargs 10 fresh   (delete + re-create project and IPs)
-#        vivado -mode batch -source run_sim.tcl -tclargs 10 fresh oreg_on   (old setup: WMEM/BMEM register ON, RD_LAT=2)
+# Usage: double-click run_sim.bat, or (create the logs folder first: mkdir logs)
+#        vivado -mode batch -source run_sim.tcl -log logs/run_sim.log -journal logs/run_sim.jou -notrace
+#   add at the end, in any order:
+#        -tclargs 100              100 images (default 10)
+#        -tclargs fresh            delete + re-create project and IPs
+#        -tclargs 10 fresh oreg_on old setup: WMEM/BMEM register ON, RD_LAT=2
 # The project (vivado_sim/) and its 10 IPs are re-used if they already exist.
 # After changing an IP setting, always run once with "fresh".
+# Full regression (these two testbenches + checker, stress images, edge cases): bash run_regress.sh
 # If this variable is set, cmd.exe does not look in the current folder, and Vivado then fails
 # to start compile.bat ("Spawn failed: Broken pipe"). Clear it for this Vivado process only.
 catch {unset ::env(NoDefaultCurrentDirectoryInExePath)}
 
 set N_IMG 10
 set fresh 0
-if {[llength $argv] > 0} { set N_IMG [lindex $argv 0] }
-if {[llength $argv] > 1 && [lindex $argv 1] eq "fresh"} { set fresh 1 }
 # WMEM/BMEM primitives output register: false = guideline p.9 (RD_LAT=1), true = team .xci of 11/12 (RD_LAT=2)
 set WB_OREG false
-if {[llength $argv] > 2 && [lindex $argv 2] eq "oreg_on"} { set WB_OREG true }
+foreach a $argv {
+    if {[string is integer -strict $a] && $a > 0} { set N_IMG $a
+    } elseif {$a eq "fresh"}   { set fresh 1
+    } elseif {$a eq "oreg_on"} { set WB_OREG true
+    } else {
+        puts "run_sim.tcl: unknown argument '$a' (use: <number of images> fresh oreg_on)"
+        exit 1
+    }
+}
+set all_pass 1
 
 set here     [file normalize [file dirname [info script]]]
 set proj_dir "$here/vivado_sim"
@@ -104,7 +113,13 @@ note "BRAM primitives output register: WMEM/BMEM $WB_OREG, others false (RD_LAT 
 # ---------------------------------------------------------------- sim sources
 # local copy of tb_npu_top.v with absolute HEX_DIR
 set f [open "$here/tb/tb_npu_top.v" r]; fconfigure $f -encoding utf-8; set src [read $f]; close $f
-set src [string map [list "`define HEX_DIR \"hex/\"" "`define HEX_DIR \"$hex_dir/\""] $src]
+set src_new [string map [list "`define HEX_DIR \"hex/\"" "`define HEX_DIR \"$hex_dir/\""] $src]
+if {$src_new eq $src} {
+    note "tb_npu_top.v : the line `define HEX_DIR \"hex/\" was not found, cannot point the testbench at $hex_dir -> FAIL"
+    close_project
+    exit 1
+}
+set src $src_new
 file mkdir "$here/build"
 set tb_local "$here/build/tb_npu_top_local.v"
 set f [open $tb_local w]; fconfigure $f -encoding utf-8; puts -nonewline $f $src; close $f
@@ -120,7 +135,8 @@ set_property verilog_define $defs [get_filesets sim_1]
 set_property top_lib xil_defaultlib [get_filesets sim_1]
 
 proc run_tb {top runtime} {
-    global proj_dir log_dir
+    global proj_dir log_dir all_pass
+    set passed 0
     set xdir "$proj_dir/aissd_D_sim.sim/sim_1/behav/xsim"
     foreach lg {simulate.log compile.log elaborate.log xvlog.log} { file delete -force "$xdir/$lg" }
     set_property top $top [get_filesets sim_1]
@@ -136,14 +152,20 @@ proc run_tb {top runtime} {
         set f [open $slog r]; set txt [read $f]; close $f
         set nwarn 0
         foreach line [split $txt \n] {
-            if {[regexp {PASS|FAIL|ERR|TIMEOUT|GO count|bias_we count|last o_waddr|start->done|RD_LAT|golden bit|prediction|^img } $line]} {
+            if {[regexp {PASS|FAIL|ERR|TIMEOUT|GO count|bias_we count|last o_waddr|start->done|RD_LAT|golden bit|prediction|clock count|^img } $line]} {
                 note "  $line"
             }
             if {[regexp -nocase {warning|outside range} $line]} { incr nwarn }
         }
         note "  simulator warnings in simulate.log: $nwarn"
+        # PASS only if the testbench printed its own PASS line and no FAIL / TIMEOUT line
+        if {[string first "*** $top PASS ***" $txt] >= 0 && ![regexp "\\*\\*\\* $top FAIL|TIMEOUT" $txt]} { set passed 1 }
     } else {
         note "$top : simulate.log not found (see $xdir/)"
+    }
+    if {!$passed} {
+        set all_pass 0
+        note "  => $top did NOT pass"
     }
     foreach lg {compile.log elaborate.log} {
         if {[file exists "$xdir/$lg"]} { file copy -force "$xdir/$lg" "$log_dir/${top}_$lg" }
@@ -157,4 +179,10 @@ run_tb tb_npu_top [expr {$N_IMG * 2}]ms
 
 note "done. logs: $log_dir"
 close_project
-exit 0
+if {$all_pass} {
+    note "RESULT: PASS (tb_npu_ctrl and tb_npu_top, $N_IMG images)"
+    exit 0
+} else {
+    note "RESULT: FAIL (see the lines above and $log_dir)"
+    exit 1
+}

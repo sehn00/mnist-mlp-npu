@@ -1,0 +1,16 @@
+run_regress.sh  2026-11-15 08:21:30   golden images for tb_npu_top: 100
+git 17081ca + uncommitted changes
+
+step                  sec  detail
+rules         PASS      1  no initial / #delay / $readmem in rtl/ (6 files)
+golden_check  PASS      2  ==== golden_check: 33 checks, 0 FAIL ====
+gen_stress    PASS      1  16 images, FC1 saturated (>127): 24 / 8192 outputs, FC2 saturated: 1 / 2048
+ctrl_rd1      PASS     11  start->done 119009 clocks (119009) | simulator warnings 0
+ctrl_rd2      PASS     10  start->done 119659 clocks (119659) | simulator warnings 0
+top100_chk    PASS    191  golden bit-exact : 100 / 100 images, prediction : 100 / 100 correct, clock count : 100 / 100 images at 119009 clk | checker: 100 runs, 272643486 checks, 0 errors | simulator warnings 0
+stress16_chk  PASS     43  golden bit-exact : 16 / 16 images, prediction : 16 / 16 correct, clock count : 16 / 16 images at 119009 clk | checker: 16 runs, 43620846 checks, 0 errors | simulator warnings 0
+edge_chk      PASS     43  tb_edge : 15 PASS, 0 FAIL, 6 OBSERVE | checker errors 0 | checker: 21 runs, 53398341 checks evaluated, 0 errors | simulator warnings 3
+model_rd1     PASS     12  golden bit-exact : 2 / 2 images, prediction : 2 / 2 correct, clock count : 2 / 2 images at 119009 clk | checker: 2 runs, 5450406 checks, 0 errors | simulator warnings 0
+model_rd2     PASS     12  golden bit-exact : 2 / 2 images, prediction : 2 / 2 correct, clock count : 2 / 2 images at 119659 clk | checker: 2 runs, 5463406 checks, 0 errors | simulator warnings 0
+
+*** REGRESSION PASS *** (10 steps, 327 s)
