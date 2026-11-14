@@ -4,7 +4,7 @@
 #   -> run_sim.tcl 을 먼저 한 번 돌려야 함
 # Usage: vivado -mode batch -source run_impl.tcl -log run_impl.log -notrace
 #        vivado -mode batch -source run_impl.tcl -tclargs synth     (합성까지만)
-# 결과 : result_impl.txt (요약), reports/*.rpt
+# 결과 : result_impl.txt (요약), reports/*.rpt (사용량, 타이밍, 전력)
 # ============================================================================
 catch {unset ::env(NoDefaultCurrentDirectoryInExePath)}   ;# see run_sim.tcl
 # Parallel Vivado jobs. Each one needs 2-3 GB of RAM: with 8 jobs a 16 GB PC ran out of memory
@@ -74,6 +74,23 @@ proc summarize {tag} {
     }
 }
 
+# 전력 리포트 (가이드 p.39: breakdown 포함). 스위칭 정보 파일(SAIF) 없이 Vivado 기본 추정(vectorless)으로 계산.
+proc summarize_power {tag} {
+    global rpt_dir
+    set pf "$rpt_dir/${tag}_power.rpt"
+    report_power -file $pf
+    report_power -hier all -hierarchical_depth 3 -file "$rpt_dir/${tag}_power_hier.rpt"
+    set f [open $pf r]; set txt [read $f]; close $f
+    foreach line [split $txt \n] {
+        if {[regexp {^\| (Total On-Chip Power \(W\)|Dynamic \(W\)|Device Static \(W\)|Confidence Level|Junction Temperature \(C\))\s*\|\s*([^|]+?)\s*\|} $line -> k v]} {
+            note "  \[$tag\] power: $k = $v"
+        }
+        if {[regexp {^\| (Clocks|CLB Logic|Signals|Block RAM|I/O|Static Power)\s*\|\s*([<0-9.]+)\s*\|} $line -> k v]} {
+            note "  \[$tag\] power breakdown: $k = $v W"
+        }
+    }
+}
+
 # ---------------------------------------------------------------- synthesis
 note "==== synthesis (synth_1) ===="
 # IP runs (out-of-context synthesis of the 10 BRAMs): keep finished ones, reset the rest
@@ -116,6 +133,7 @@ if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {
 }
 open_run impl_1 -name impl_1
 summarize impl
+if {[catch {summarize_power impl} err]} { note "report_power: $err" }
 set wns [get_property SLACK [get_timing_paths -setup -max_paths 1 -nworst 1]]
 set whs [get_property SLACK [get_timing_paths -hold  -max_paths 1 -nworst 1]]
 if {$wns >= 0 && $whs >= 0} { note "*** TIMING MET at 100 MHz (WNS $wns, WHS $whs) ***" } \
@@ -123,5 +141,6 @@ else                        { note "*** TIMING NOT MET (WNS $wns, WHS $whs) ***"
 close_design
 
 note "done. reports: $rpt_dir"
+file copy -force $result "$rpt_dir/impl_summary.txt"
 close_project
 exit 0

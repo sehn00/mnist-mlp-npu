@@ -4,4 +4,4 @@
 #   I/O 지연 제약(set_input_delay / set_output_delay)도 아직 없음
 #   -> 타이밍 리포트는 레지스터-레지스터(칩 내부) 경로만 검사함.
 # ============================================================================
-create_clock -period 10.000 -name clk [get_ports i_clk]
+create_clock -name i_clk -period 10 [get_ports i_clk]

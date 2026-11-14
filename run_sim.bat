@@ -6,12 +6,13 @@ REM ============================================================
 cd /d "%~dp0"
 set "VIV="
 for %%P in (
+  "E:\Xilinx\Vivado\2024.2\bin\vivado.bat"
   "C:\AMDDesignTools\2024.2\Vivado\bin\vivado.bat"
   "C:\Xilinx\Vivado\2024.2\bin\vivado.bat"
   "C:\Xilinx\2024.2\Vivado\bin\vivado.bat"
   "D:\Xilinx\Vivado\2024.2\bin\vivado.bat"
   "D:\AMDDesignTools\2024.2\Vivado\bin\vivado.bat"
-) do if exist %%P set "VIV=%%~P"
+) do if not defined VIV if exist %%P set "VIV=%%~P"
 if not defined VIV for /f "delims=" %%W in ('where vivado.bat 2^>nul') do set "VIV=%%W"
 if not defined VIV (
   echo [ERROR] vivado.bat not found.
