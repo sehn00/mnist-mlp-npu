@@ -37,7 +37,11 @@ module tb_npu_top;
     wire [31:0] o_dout;
     wire        o_busy, o_done;
 
-    npu_top u_top (
+`ifdef OREG_ON
+    npu_top #(.RD_LAT(2)) u_top (   // 조원2 11/12 IP(출력 레지스터 ON) 구성
+`else
+    npu_top #(.RD_LAT(1)) u_top (   // 과제 가이드 규칙: 출력 레지스터 OFF
+`endif
         .i_clk(i_clk), .i_rstn(i_rstn),
         .i_cen(i_cen), .i_wen(i_wen), .i_addr(i_addr), .i_din(i_din), .o_dout(o_dout),
         .i_start(i_start), .o_busy(o_busy), .o_done(o_done)

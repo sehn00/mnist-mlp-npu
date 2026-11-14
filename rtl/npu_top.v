@@ -8,10 +8,12 @@
 //   u_C npu_pe_array  : 곱셈 4개 + 덧셈 트리 + 누산기
 //   u_A npu_postproc  : bias, ReLU, shift, 포화, 4개 묶기
 //
-// RD_LAT = 2 : 조원2 WMEM/BMEM 이 출력 레지스터 ON(읽기 지연 2)이라서 2로 맞춤.
-//              나중에 출력 레지스터를 끄고(스펙대로) 어댑터의 x 지연을 빼면 1로 바꾸면 됨.
+// RD_LAT = 1 : 과제 가이드 p.9 "Primitives Output Register should be disabled" -> BMEM 읽기 지연 1클럭.
+//              조원2의 11/12 IP(WMEM/BMEM 출력 레지스터 ON)를 그대로 쓸 때만 2로 바꿈.
 // ============================================================================
-module npu_top (
+module npu_top #(
+    parameter RD_LAT = 1    // BMEM 읽기 지연 (아래 주석 참고)
+)(
     input  wire        i_clk,
     input  wire        i_rstn,
     // 외부 SRAM 접근 (o_busy = 0 일 때만)
@@ -25,7 +27,6 @@ module npu_top (
     output wire        o_busy,
     output wire        o_done
 );
-    localparam RD_LAT = 2;
 
     // ---- 블록 사이 연결선 (이름 = 보내는 쪽 출력 이름에서 o_ 뺀 것) ----
     wire [31:0] x, w, bias, acc, wdata;
@@ -50,7 +51,7 @@ module npu_top (
         .o_relu_en(relu_en), .o_shift(shift), .o_fc3(fc3)
     );
 
-    npu_mem_ctrl u_B (
+    npu_mem_ctrl #(.RD_LAT(RD_LAT)) u_B (
         .i_clk(i_clk), .i_rstn(i_rstn),
         .i_cen(i_cen), .i_wen(i_wen), .i_addr(i_addr), .i_din(i_din), .o_dout(o_dout),
         .i_busy(busy), .i_rd_en(rd_en),

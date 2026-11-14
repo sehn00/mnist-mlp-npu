@@ -1,8 +1,9 @@
 # ============================================================================
 # run_sim.tcl : one-click Vivado batch flow for D block + integration test
 #   1) create a NEW project (vivado_sim/), does not touch aissd_mnist_npu
-#   2) re-create the 10 BRAM IPs with the same settings as memory_controller.zip .xci
-#      (WMEM/BMEM: output register ON = read latency 2, COE init / others: latency 1)
+#   2) re-create the 10 BRAM IPs with the same settings as memory_controller.zip .xci, EXCEPT:
+#      Primitives Output Register is OFF on every IP (project guideline p.9) = read latency 1.
+#      (The team .xci of 11/12 has it ON for WMEM/BMEM. Add "oreg_on" to rebuild that old setup.)
 #   3) run tb_npu_ctrl (D unit test) and tb_npu_top (A+B+C+D, N_IMG images)
 #   4) write a summary to result.txt
 # ============================================================================
@@ -10,7 +11,9 @@
 #        vivado -mode batch -source run_sim.tcl                      (10 images)
 #        vivado -mode batch -source run_sim.tcl -tclargs 100        (100 images)
 #        vivado -mode batch -source run_sim.tcl -tclargs 10 fresh   (delete + re-create project and IPs)
+#        vivado -mode batch -source run_sim.tcl -tclargs 10 fresh oreg_on   (old setup: WMEM/BMEM register ON, RD_LAT=2)
 # The project (vivado_sim/) and its 10 IPs are re-used if they already exist.
+# After changing an IP setting, always run once with "fresh".
 # If this variable is set, cmd.exe does not look in the current folder, and Vivado then fails
 # to start compile.bat ("Spawn failed: Broken pipe"). Clear it for this Vivado process only.
 catch {unset ::env(NoDefaultCurrentDirectoryInExePath)}
@@ -19,6 +22,9 @@ set N_IMG 10
 set fresh 0
 if {[llength $argv] > 0} { set N_IMG [lindex $argv 0] }
 if {[llength $argv] > 1 && [lindex $argv 1] eq "fresh"} { set fresh 1 }
+# WMEM/BMEM primitives output register: false = guideline p.9 (RD_LAT=1), true = team .xci of 11/12 (RD_LAT=2)
+set WB_OREG false
+if {[llength $argv] > 2 && [lindex $argv 2] eq "oreg_on"} { set WB_OREG true }
 
 set here     [file normalize [file dirname [info script]]]
 set proj_dir "$here/vivado_sim"
@@ -64,11 +70,11 @@ if {!$fresh && [file exists "$proj_dir/aissd_D_sim.xpr"]} {
     set_property target_language Verilog [current_project]
     add_files -norecurse [glob $here/rtl/*.v]
     if {[catch {
-        mk_bram wmem_bank0  32 29280 true  "$coe_dir/weight_bank0.coe"
-        mk_bram wmem_bank1  32 29280 true  "$coe_dir/weight_bank1.coe"
-        mk_bram wmem_bank2  32 29280 true  "$coe_dir/weight_bank2.coe"
-        mk_bram wmem_bank3  32 29280 true  "$coe_dir/weight_bank3.coe"
-        mk_bram bmem_128   128   163 true  "$coe_dir/bias_128bit.coe"
+        mk_bram wmem_bank0  32 29280 $WB_OREG "$coe_dir/weight_bank0.coe"
+        mk_bram wmem_bank1  32 29280 $WB_OREG "$coe_dir/weight_bank1.coe"
+        mk_bram wmem_bank2  32 29280 $WB_OREG "$coe_dir/weight_bank2.coe"
+        mk_bram wmem_bank3  32 29280 $WB_OREG "$coe_dir/weight_bank3.coe"
+        mk_bram bmem_128   128   163 $WB_OREG "$coe_dir/bias_128bit.coe"
         mk_bram imem_a_bram 32   196 false ""
         mk_bram imem_b_bram 32   196 false ""
         mk_bram act_a_bram  32   128 false ""
@@ -81,6 +87,19 @@ if {!$fresh && [file exists "$proj_dir/aissd_D_sim.xpr"]} {
     }
     note "IP creation OK (10 blk_mem_gen)"
 }
+# The RTL read latency must match the IPs: stop if a re-used project has a different register setting.
+foreach ip [get_ips] {
+    set nm   [get_property NAME $ip]
+    set want false
+    if {[string match {wmem_bank*} $nm] || $nm eq "bmem_128"} { set want $WB_OREG }
+    set got  [get_property CONFIG.Register_PortA_Output_of_Memory_Primitives $ip]
+    if {$got ne $want} {
+        note "IP $nm : primitives output register is $got, expected $want -> run again with: -tclargs $N_IMG fresh"
+        close_project
+        exit 1
+    }
+}
+note "BRAM primitives output register: WMEM/BMEM $WB_OREG, others false (RD_LAT = [expr {$WB_OREG ? 2 : 1}])"
 
 # ---------------------------------------------------------------- sim sources
 # local copy of tb_npu_top.v with absolute HEX_DIR
@@ -95,7 +114,9 @@ foreach tbf [list "$here/tb/tb_npu_ctrl.v" $tb_local] {
         add_files -fileset sim_1 -norecurse $tbf
     }
 }
-set_property verilog_define [list "N_IMG=$N_IMG"] [get_filesets sim_1]
+set defs [list "N_IMG=$N_IMG"]
+if {$WB_OREG} { lappend defs "OREG_ON" }
+set_property verilog_define $defs [get_filesets sim_1]
 set_property top_lib xil_defaultlib [get_filesets sim_1]
 
 proc run_tb {top runtime} {
@@ -113,11 +134,14 @@ proc run_tb {top runtime} {
     if {[file exists $slog]} {
         file copy -force $slog "$log_dir/${top}_simulate.log"
         set f [open $slog r]; set txt [read $f]; close $f
+        set nwarn 0
         foreach line [split $txt \n] {
             if {[regexp {PASS|FAIL|ERR|TIMEOUT|GO count|bias_we count|last o_waddr|start->done|RD_LAT|golden bit|prediction|^img } $line]} {
                 note "  $line"
             }
+            if {[regexp -nocase {warning|outside range} $line]} { incr nwarn }
         }
+        note "  simulator warnings in simulate.log: $nwarn"
     } else {
         note "$top : simulate.log not found (see $xdir/)"
     }

@@ -3,8 +3,14 @@
 // bram_models.v : iverilog 시뮬레이션 전용 BRAM 행동 모델 (Vivado 에서는 넣지 말 것!)
 // Vivado 에서는 조원2의 .xci (Block Memory Generator IP) 가 같은 이름으로 들어감.
 // .xci 설정 그대로 흉내냄: Single Port, WRITE_FIRST, ENA 핀 사용,
-//   WMEM/BMEM = 출력 레지스터 ON (읽기 지연 2), 나머지 = OFF (읽기 지연 1)
+//   기본: 전부 출력 레지스터 OFF (읽기 지연 1, 과제 가이드 규칙)
+//   +define+OREG_ON 이면 WMEM/BMEM 출력 레지스터 ON (조원2 11/12 IP 흉내, 읽기 지연 2)
 // ============================================================================
+`ifdef OREG_ON
+  `define WB_OREG 1
+`else
+  `define WB_OREG 0
+`endif
 `ifndef HEX_DIR
   `define HEX_DIR "hex/"
 `endif
@@ -40,7 +46,7 @@ endmodule
 `define WBANK(name, file) \
 module name (input wire clka, input wire ena, input wire [0:0] wea, input wire [14:0] addra, \
              input wire [31:0] dina, output wire [31:0] douta); \
-    bram_sp_model #(.W(32), .D(29280), .AW(15), .OREG(1), .INIT({`HEX_DIR, file})) u_m \
+    bram_sp_model #(.W(32), .D(29280), .AW(15), .OREG(`WB_OREG), .INIT({`HEX_DIR, file})) u_m \
         (.clka(clka), .ena(ena), .wea(wea), .addra(addra), .dina(dina), .douta(douta)); \
 endmodule
 
@@ -51,7 +57,7 @@ endmodule
 
 module bmem_128 (input wire clka, input wire ena, input wire [0:0] wea, input wire [7:0] addra,
                  input wire [127:0] dina, output wire [127:0] douta);
-    bram_sp_model #(.W(128), .D(163), .AW(8), .OREG(1), .INIT({`HEX_DIR, "bias_128bit.mem"})) u_m
+    bram_sp_model #(.W(128), .D(163), .AW(8), .OREG(`WB_OREG), .INIT({`HEX_DIR, "bias_128bit.mem"})) u_m
         (.clka(clka), .ena(ena), .wea(wea), .addra(addra), .dina(dina), .douta(douta));
 endmodule
 

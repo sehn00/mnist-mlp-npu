@@ -13,8 +13,8 @@
 //   BMEM  : 128b x 163, 한 줄에 bias 4개 ([31:0]=bias 4m, ... [127:96]=bias 4m+3), 출력 레지스터 ON -> 지연 2
 //   IMEM_A: 32b x 196 (FC1 입력), ACT_A: 32b x 128 (FC1 출력 = FC2 입력)
 //   ACT_B : 32b x 32 (FC2 출력 = FC3 입력), OMEM: 32b x 10 (FC3 점수), 출력 레지스터 OFF -> 지연 1
-//   -> 이 어댑터는 IMEM/ACT 읽기 데이터를 1클럭 더 늦춰서 x, w, bias 를 모두 "주소 뒤 2클럭"에 맞춤
-//      (그래서 top 에서 npu_ctrl 을 RD_LAT = 2 로 씀)
+//   -> 과제 가이드 p.9: "Primitives Output Register should be disabled" -> 출력 레지스터 OFF(RD_LAT=1)가 규칙.
+//      RD_LAT=2는 조원2의 11/12 IP(ON)로 돌릴 때만 사용. top 의 RD_LAT 과 반드시 같은 값.
 //
 // 외부 포트 (스펙 3절과 같은 이름, 주소 맵은 임시: 조원2 메모리 구성 기준)
 //   i_addr[19:17] = 0 WMEM, 1 BIAS : COE 로 초기화 (memory_controller 가 wea=0 고정) -> 외부 쓰기 무시
@@ -24,7 +24,9 @@
 //                   5 OMEM   (FC3 점수, 읽기, 0~9)
 //   o_dout 은 주소 준 다음 클럭에 나옴. i_busy = 1 이면 외부 접근 무시.
 // ============================================================================
-module npu_mem_ctrl (
+module npu_mem_ctrl #(
+    parameter RD_LAT = 1            // BMEM 읽기 지연: 1 = 출력 레지스터 OFF (과제 가이드 p.9 규칙), 2 = ON
+)(
     input  wire        i_clk,
     input  wire        i_rstn,
 
@@ -49,7 +51,7 @@ module npu_mem_ctrl (
     input  wire        i_we,          // A o_we
     input  wire [31:0] i_wdata,       // A o_wdata
 
-    // ---- C, A 로 가는 읽기 데이터 (주소 뒤 2클럭) ----
+    // ---- C, A 로 가는 읽기 데이터 (주소 뒤 RD_LAT 클럭) ----
     output wire [31:0] o_x,
     output wire [31:0] o_w,
     output wire [31:0] o_bias
@@ -122,37 +124,47 @@ module npu_mem_ctrl (
 
     // ------------------------------------------------------------------
     // 읽기 데이터 정렬: 선택 신호를 데이터 지연만큼 같이 늦춤
-    //   WMEM/BMEM: 지연 2 -> 선택 신호 2클럭 늦춤
-    //   IMEM/ACT : 지연 1 -> 선택 신호 1클럭 늦추고, 고른 데이터를 레지스터로 1클럭 더 늦춤
+    //   RD_LAT = 1 (가이드 규칙, 출력 레지스터 OFF): 모든 SRAM 지연 1
+    //       -> 선택 신호 1클럭 지연, x/w/bias 모두 주소 뒤 1클럭
+    //   RD_LAT = 2 (조원2 11/12 IP, WMEM/BMEM 출력 레지스터 ON): WMEM/BMEM 지연 2, IMEM/ACT 지연 1
+    //       -> WMEM/BMEM 선택 신호 2클럭 지연, IMEM/ACT 데이터는 레지스터로 1클럭 더 늦춤
     // ------------------------------------------------------------------
     reg [1:0]  r_wsel_d1, r_wsel_d2;
     reg [1:0]  r_bsel_d1, r_bsel_d2;
     reg [1:0]  r_xsel_d1;
     reg [31:0] r_x;
+    reg [31:0] w_x_mux;                       // IMEM/ACT 읽기 데이터 중 이번 레이어 입력 고르기
+    always @(*) begin
+        case (r_xsel_d1)
+            2'd0:    w_x_mux = w_imem_dout;
+            2'd1:    w_x_mux = w_acta_dout;
+            default: w_x_mux = w_actb_dout;
+        endcase
+    end
+
     always @(posedge i_clk or negedge i_rstn) begin
         if (!i_rstn) begin
             r_wsel_d1 <= 2'd0; r_wsel_d2 <= 2'd0;
             r_bsel_d1 <= 2'd0; r_bsel_d2 <= 2'd0;
             r_xsel_d1 <= 2'd0; r_x       <= 32'd0;
         end else begin
-            r_wsel_d1 <= i_wbank_sel; r_wsel_d2 <= r_wsel_d1;
+            r_wsel_d1 <= i_wbank_sel;  r_wsel_d2 <= r_wsel_d1;
             r_bsel_d1 <= i_baddr[1:0]; r_bsel_d2 <= r_bsel_d1;
             r_xsel_d1 <= i_layer;
-            case (r_xsel_d1)
-                2'd0:    r_x <= w_imem_dout;
-                2'd1:    r_x <= w_acta_dout;
-                default: r_x <= w_actb_dout;
-            endcase
+            r_x       <= w_x_mux;
         end
     end
 
-    assign o_x = r_x;
-    assign o_w = (r_wsel_d2 == 2'd0) ? w_wd0 :
-                 (r_wsel_d2 == 2'd1) ? w_wd1 :
-                 (r_wsel_d2 == 2'd2) ? w_wd2 : w_wd3;
-    assign o_bias = (r_bsel_d2 == 2'd0) ? w_bias128[31:0]  :
-                    (r_bsel_d2 == 2'd1) ? w_bias128[63:32] :
-                    (r_bsel_d2 == 2'd2) ? w_bias128[95:64] : w_bias128[127:96];
+    wire [1:0] w_wsel = (RD_LAT == 2) ? r_wsel_d2 : r_wsel_d1;
+    wire [1:0] w_bsel = (RD_LAT == 2) ? r_bsel_d2 : r_bsel_d1;
+
+    assign o_x = (RD_LAT == 2) ? r_x : w_x_mux;
+    assign o_w = (w_wsel == 2'd0) ? w_wd0 :
+                 (w_wsel == 2'd1) ? w_wd1 :
+                 (w_wsel == 2'd2) ? w_wd2 : w_wd3;
+    assign o_bias = (w_bsel == 2'd0) ? w_bias128[31:0]  :
+                    (w_bsel == 2'd1) ? w_bias128[63:32] :
+                    (w_bsel == 2'd2) ? w_bias128[95:64] : w_bias128[127:96];
 
     // ------------------------------------------------------------------
     // 외부 읽기 데이터: 다음 클럭에 나옴 (선택 신호 1클럭 늦춤)
