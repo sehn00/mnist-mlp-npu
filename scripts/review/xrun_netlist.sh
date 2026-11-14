@@ -28,17 +28,25 @@ case "$MODE" in
   synth_funcsim) NET="$NL/npu_top_synth_funcsim.v"; LIBS="-L unisims_ver -L secureip"; XOPT="" ;;
   impl_funcsim)  NET="$NL/npu_top_impl_funcsim.v";  LIBS="-L unisims_ver -L secureip"; XOPT="" ;;
   impl_timesim)  NET="$NL/npu_top_impl_timesim.v";  LIBS="-L simprims_ver -L secureip"
-                 XOPT="-maxdelay -transport_int_delays -pulse_r 0 -pulse_int_r 0 -pulse_e 0 -pulse_int_e 0"
-                 sed -i -E "s/^(\s*)i_rstn = 1'b1;/\1@(negedge i_clk) i_rstn = 1'b1;/; s/^(\s*)data = o_dout;/\1#4.5 data = o_dout;/" "$RD/tb_npu_top_netlist.v" ;;
+                 XOPT="${DELAY_OPT:--maxdelay} -transport_int_delays -pulse_r 0 -pulse_int_r 0 -pulse_e 0 -pulse_int_e 0" ;;
   *) echo "unknown mode $MODE"; exit 2 ;;
 esac
+# 타이밍 시뮬용 TB 변형 (TB_VARIANT=timesim 이면 지연 없는 넷리스트에도 같은 TB 를 씀: 비교 실험용)
+if [ "$MODE" = "impl_timesim" ] || [ "${TB_VARIANT:-}" = "timesim" ]; then
+  sed -i -E "s/^(\s*)i_rstn = 1'b1;/\1@(negedge i_clk) i_rstn = 1'b1;/; s/^(\s*)data = o_dout;/\1#${SAMPLE_DLY:-4.5} data = o_dout;/" "$RD/tb_npu_top_netlist.v"
+fi
 
-cat > "$RD/sim.prj" <<EOF
-verilog work "$NET"
-verilog work -d "N_IMG=$NIMG" "$RD/tb_npu_top_netlist.v"
-verilog work "$ROOT/vivado_sim/aissd_D_sim.sim/sim_1/behav/xsim/glbl.v"
-nosort
-EOF
+# EXTRA_SRC  : 같이 컴파일할 파일 (tb/review/tb_progress.v, tb_dump.v 등), EXTRA_TOPS : 같이 올릴 top 모듈 이름
+# EXTRA_DEFS : 그 파일들에 줄 define (예: DUMP_NS=12500)
+EDEF=""; for d in ${EXTRA_DEFS:-}; do EDEF="$EDEF -d \"$d\""; done
+{
+  echo "verilog work \"$NET\""
+  echo "verilog work -d \"N_IMG=$NIMG\" \"$RD/tb_npu_top_netlist.v\""
+  for f in ${EXTRA_SRC:-}; do echo "verilog work $EDEF \"$ROOT/$f\""; done
+  echo "verilog work \"$ROOT/vivado_sim/aissd_D_sim.sim/sim_1/behav/xsim/glbl.v\""
+  echo "nosort"
+} > "$RD/sim.prj"
+ETOPS=""; for t in ${EXTRA_TOPS:-}; do ETOPS="$ETOPS work.$t"; done
 
 cd "$RD" || exit 2
 if [ "$SAIF" = "saif" ]; then
@@ -49,7 +57,7 @@ fi
 run() { env -u NoDefaultCurrentDirectoryInExePath cmd //c "$XB\\$1" > "$2" 2>&1; }
 run "xvlog.bat --relax -prj sim.prj -log xvlog.log" xvlog.out
 if grep -q "^ERROR" xvlog.log 2>/dev/null; then echo "[$RUN] xvlog ERROR"; grep "^ERROR" xvlog.log | head -5; exit 3; fi
-run "xelab.bat --relax --mt 2 $XOPT -L work $LIBS --snapshot snap work.tb_npu_top work.glbl -log xelab.log" xelab.out
+run "xelab.bat --relax --mt 2 $XOPT -L work $LIBS --snapshot snap work.tb_npu_top $ETOPS work.glbl -log xelab.log" xelab.out
 if grep -q "^ERROR" xelab.log 2>/dev/null; then echo "[$RUN] xelab ERROR"; grep "^ERROR" xelab.log | head -5; exit 4; fi
 run "xsim.bat snap -tclbatch run.tcl -log xsim.log" xsim.out
 [ -f xsim.log ] || { echo "[$RUN] xsim.log missing"; exit 5; }

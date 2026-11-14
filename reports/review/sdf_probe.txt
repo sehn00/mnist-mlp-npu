@@ -1,0 +1,12 @@
+sdf_probe : XSim Vivado Simulator v2024.2.0   xelab options: -maxdelay -transport_int_delays -pulse_r 0 -pulse_int_r 0 -pulse_e 0 -pulse_int_e 0   sdf: probe.sdf
+SDF: clock interconnect 2000 ps to all four FDCE C pins, C->Q 110 ps. Expected: every q changes at clock edge + BUFGCE + 2000 + 110 ps.
+INFO: [XSIM 43-3451] SDF backannotation process started with SDF file "probe.sdf", for root module "probe_tb/u".
+INFO: [XSIM 43-3452] SDF backannotation was successful for SDF file "probe.sdf", for root module "probe_tb/u".
+q0 (sub, bracket name)  = 0 at 0.100 ns  (clock edge 0.3f ns)-204.9
+q1 (sub, plain name)    = 0 at 0.100 ns  (clock edge 0.3f ns)-204.9
+q2 (top, bracket name)  = 0 at 0.100 ns  (clock edge 0.3f ns)-204.9
+q3 (top, plain name)    = 0 at 0.100 ns  (clock edge 0.3f ns)-204.9
+q0 (sub, bracket name)  = 1 at 205.110 ns  (clock edge 0.3f ns)0.11
+q2 (top, bracket name)  = 1 at 205.110 ns  (clock edge 0.3f ns)0.11
+q1 (sub, plain name)    = 1 at 207.110 ns  (clock edge 0.3f ns)2.11
+q3 (top, plain name)    = 1 at 207.110 ns  (clock edge 0.3f ns)2.11

@@ -1,0 +1,57 @@
+(DELAYFILE
+(SDFVERSION "3.0" )
+(DESIGN "probe_top")
+(VENDOR "XILINX")
+(PROGRAM "Vivado")
+(VERSION "2024.2")
+(DIVIDER /)
+(TIMESCALE 1ps)
+(CELL
+  (CELLTYPE "FDCE")
+  (INSTANCE u_s/a_reg\[0\])
+  (DELAY
+    (ABSOLUTE
+      (IOPATH C Q (110.0:110.0:110.0) (110.0:110.0:110.0))
+    )
+  )
+)
+(CELL
+  (CELLTYPE "FDCE")
+  (INSTANCE u_s/b_reg)
+  (DELAY
+    (ABSOLUTE
+      (IOPATH C Q (110.0:110.0:110.0) (110.0:110.0:110.0))
+    )
+  )
+)
+(CELL
+  (CELLTYPE "FDCE")
+  (INSTANCE c_reg\[0\])
+  (DELAY
+    (ABSOLUTE
+      (IOPATH C Q (110.0:110.0:110.0) (110.0:110.0:110.0))
+    )
+  )
+)
+(CELL
+  (CELLTYPE "FDCE")
+  (INSTANCE d_reg)
+  (DELAY
+    (ABSOLUTE
+      (IOPATH C Q (110.0:110.0:110.0) (110.0:110.0:110.0))
+    )
+  )
+)
+(CELL
+    (CELLTYPE "probe_top")
+    (INSTANCE )
+    (DELAY
+      (ABSOLUTE
+      (INTERCONNECT bg/O u_s/a_reg\[0\]/C (2000.0:2000.0:2000.0) (2000.0:2000.0:2000.0))
+      (INTERCONNECT bg/O u_s/b_reg/C (2000.0:2000.0:2000.0) (2000.0:2000.0:2000.0))
+      (INTERCONNECT bg/O c_reg\[0\]/C (2000.0:2000.0:2000.0) (2000.0:2000.0:2000.0))
+      (INTERCONNECT bg/O d_reg/C (2000.0:2000.0:2000.0) (2000.0:2000.0:2000.0))
+      )
+    )
+)
+)

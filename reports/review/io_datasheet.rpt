@@ -1,0 +1,249 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
+| Date              : Sun Nov 15 03:08:48 2026
+| Host              : sehn-pc running 64-bit major release  (build 9200)
+| Command           : report_datasheet -file C:/Users/user/AISSD/aissd_D_1114/reports/review/io_datasheet.rpt
+| Design            : npu_top
+| Device            : xck26-sfvc784
+| Speed File        : -2LV  PRODUCTION 1.30 05-15-2022
+| Design State      : Routed
+| Temperature Grade : C
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Data Sheet Report
+
+Input Ports Setup/Hold
+
+----------+------------+----------+-------+---------------+---------+---------------+---------+----------+
+Reference | Input      | IO Reg   | Delay |     Setup(ns) | Process |      Hold(ns) | Process | Internal |
+Clock     | Port       | Type     | Type  | to Clk (Edge) | Corner  | to Clk (Edge) | Corner  | Clock    |
+----------+------------+----------+-------+---------------+---------+---------------+---------+----------+
+i_clk     | i_addr[0]  | RAMB18E2 | -     |     1.687 (r) | SLOW    |     1.027 (r) | SLOW    |          |
+i_clk     | i_addr[1]  | RAMB18E2 | -     |     2.238 (r) | SLOW    |     0.643 (r) | SLOW    |          |
+i_clk     | i_addr[2]  | RAMB18E2 | -     |     1.794 (r) | SLOW    |     1.155 (r) | SLOW    |          |
+i_clk     | i_addr[3]  | RAMB18E2 | -     |     1.495 (r) | SLOW    |     1.097 (r) | SLOW    |          |
+i_clk     | i_addr[4]  | RAMB18E2 | -     |     1.814 (r) | SLOW    |     0.738 (r) | SLOW    |          |
+i_clk     | i_addr[5]  | RAMB18E2 | -     |     1.770 (r) | SLOW    |     0.602 (r) | SLOW    |          |
+i_clk     | i_addr[6]  | RAMB18E2 | -     |     1.433 (r) | SLOW    |     1.089 (r) | SLOW    |          |
+i_clk     | i_addr[7]  | RAMB18E2 | -     |     0.957 (r) | SLOW    |     1.135 (r) | SLOW    |          |
+i_clk     | i_addr[17] | RAMB18E2 | -     |     1.956 (r) | SLOW    |     1.468 (r) | SLOW    |          |
+i_clk     | i_addr[18] | RAMB18E2 | -     |     1.980 (r) | SLOW    |     1.488 (r) | SLOW    |          |
+i_clk     | i_addr[19] | RAMB18E2 | -     |     1.901 (r) | SLOW    |     1.408 (r) | SLOW    |          |
+i_clk     | i_cen      | RAMB18E2 | -     |     1.505 (r) | SLOW    |     1.290 (r) | SLOW    |          |
+i_clk     | i_din[0]   | RAMB18E2 | -     |     1.087 (r) | SLOW    |     1.264 (r) | SLOW    |          |
+i_clk     | i_din[1]   | RAMB18E2 | -     |     1.242 (r) | SLOW    |     1.216 (r) | SLOW    |          |
+i_clk     | i_din[2]   | RAMB18E2 | -     |     2.319 (r) | SLOW    |     0.987 (r) | SLOW    |          |
+i_clk     | i_din[3]   | RAMB18E2 | -     |     0.980 (r) | SLOW    |     1.390 (r) | SLOW    |          |
+i_clk     | i_din[4]   | RAMB18E2 | -     |     1.616 (r) | SLOW    |     1.256 (r) | SLOW    |          |
+i_clk     | i_din[5]   | RAMB18E2 | -     |     1.700 (r) | SLOW    |     1.039 (r) | SLOW    |          |
+i_clk     | i_din[6]   | RAMB18E2 | -     |     1.619 (r) | SLOW    |     1.389 (r) | SLOW    |          |
+i_clk     | i_din[7]   | RAMB18E2 | -     |     1.076 (r) | SLOW    |     1.254 (r) | SLOW    |          |
+i_clk     | i_din[8]   | RAMB18E2 | -     |     1.336 (r) | SLOW    |     1.260 (r) | SLOW    |          |
+i_clk     | i_din[9]   | RAMB18E2 | -     |     1.114 (r) | SLOW    |     1.369 (r) | SLOW    |          |
+i_clk     | i_din[10]  | RAMB18E2 | -     |     1.822 (r) | SLOW    |     1.461 (r) | SLOW    |          |
+i_clk     | i_din[11]  | RAMB18E2 | -     |     1.380 (r) | SLOW    |     1.362 (r) | SLOW    |          |
+i_clk     | i_din[12]  | RAMB18E2 | -     |     1.647 (r) | SLOW    |     1.084 (r) | SLOW    |          |
+i_clk     | i_din[13]  | RAMB18E2 | -     |     1.176 (r) | SLOW    |     1.388 (r) | SLOW    |          |
+i_clk     | i_din[14]  | RAMB18E2 | -     |     1.130 (r) | SLOW    |     1.317 (r) | SLOW    |          |
+i_clk     | i_din[15]  | RAMB18E2 | -     |     1.781 (r) | SLOW    |     0.808 (r) | SLOW    |          |
+i_clk     | i_din[16]  | RAMB18E2 | -     |     1.093 (r) | SLOW    |     1.464 (r) | SLOW    |          |
+i_clk     | i_din[17]  | RAMB18E2 | -     |     1.200 (r) | SLOW    |     1.419 (r) | SLOW    |          |
+i_clk     | i_din[18]  | RAMB18E2 | -     |     0.957 (r) | SLOW    |     1.477 (r) | SLOW    |          |
+i_clk     | i_din[19]  | RAMB18E2 | -     |     0.858 (r) | SLOW    |     1.345 (r) | SLOW    |          |
+i_clk     | i_din[20]  | RAMB18E2 | -     |     1.576 (r) | SLOW    |     1.498 (r) | SLOW    |          |
+i_clk     | i_din[21]  | RAMB18E2 | -     |     0.945 (r) | SLOW    |     1.365 (r) | SLOW    |          |
+i_clk     | i_din[22]  | RAMB18E2 | -     |     1.057 (r) | SLOW    |     1.504 (r) | SLOW    |          |
+i_clk     | i_din[23]  | RAMB18E2 | -     |     0.866 (r) | SLOW    |     1.484 (r) | SLOW    |          |
+i_clk     | i_din[24]  | RAMB18E2 | -     |     0.766 (r) | SLOW    |     1.539 (r) | SLOW    |          |
+i_clk     | i_din[25]  | RAMB18E2 | -     |     0.794 (r) | SLOW    |     1.324 (r) | SLOW    |          |
+i_clk     | i_din[26]  | RAMB18E2 | -     |     0.916 (r) | SLOW    |     1.541 (r) | SLOW    |          |
+i_clk     | i_din[27]  | RAMB18E2 | -     |     0.874 (r) | SLOW    |     1.520 (r) | SLOW    |          |
+i_clk     | i_din[28]  | RAMB18E2 | -     |     0.682 (r) | SLOW    |     1.528 (r) | SLOW    |          |
+i_clk     | i_din[29]  | RAMB18E2 | -     |     0.587 (r) | SLOW    |     1.544 (r) | SLOW    |          |
+i_clk     | i_din[30]  | RAMB18E2 | -     |     0.575 (r) | SLOW    |     1.563 (r) | SLOW    |          |
+i_clk     | i_din[31]  | RAMB18E2 | -     |     1.243 (r) | SLOW    |     1.190 (r) | SLOW    |          |
+i_clk     | i_rstn     | FDCE     | -     |     1.524 (r) | SLOW    |     1.640 (r) | SLOW    |          |
+i_clk     | i_start    | FDCE     | -     |     1.612 (r) | SLOW    |     1.436 (r) | SLOW    |          |
+i_clk     | i_wen      | RAMB18E2 | -     |     1.243 (r) | SLOW    |     1.304 (r) | SLOW    |          |
+----------+------------+----------+-------+---------------+---------+---------------+---------+----------+
+
+
+Output Ports Clock-to-out
+
+----------+------------+----------+-------+----------------+---------+----------------+---------+----------+
+Reference | Output     | IO Reg   | Delay | Max Clk (Edge) | Process | Min Clk (Edge) | Process | Internal |
+Clock     | Port       | Type     | Type  |    to port(ns) | Corner  |    to port(ns) | Corner  | Clock    |
+----------+------------+----------+-------+----------------+---------+----------------+---------+----------+
+i_clk     | o_busy     | FDCE     | -     |      6.905 (r) | SLOW    |      2.887 (r) | FAST    |          |
+i_clk     | o_done     | FDCE     | -     |      5.922 (r) | SLOW    |      2.678 (r) | FAST    |          |
+i_clk     | o_dout[0]  | RAMB18E2 | -     |      8.177 (r) | SLOW    |      2.833 (r) | FAST    |          |
+i_clk     | o_dout[1]  | RAMB18E2 | -     |      7.988 (r) | SLOW    |      2.782 (r) | FAST    |          |
+i_clk     | o_dout[2]  | RAMB18E2 | -     |      7.891 (r) | SLOW    |      2.953 (r) | FAST    |          |
+i_clk     | o_dout[3]  | RAMB18E2 | -     |      7.780 (r) | SLOW    |      2.913 (r) | FAST    |          |
+i_clk     | o_dout[4]  | RAMB18E2 | -     |      7.500 (r) | SLOW    |      2.837 (r) | FAST    |          |
+i_clk     | o_dout[5]  | RAMB18E2 | -     |      8.976 (r) | SLOW    |      3.363 (r) | FAST    |          |
+i_clk     | o_dout[6]  | RAMB18E2 | -     |      7.752 (r) | SLOW    |      2.808 (r) | FAST    |          |
+i_clk     | o_dout[7]  | RAMB18E2 | -     |      8.845 (r) | SLOW    |      3.263 (r) | FAST    |          |
+i_clk     | o_dout[8]  | RAMB18E2 | -     |      8.876 (r) | SLOW    |      2.953 (r) | FAST    |          |
+i_clk     | o_dout[9]  | RAMB18E2 | -     |      7.625 (r) | SLOW    |      2.838 (r) | FAST    |          |
+i_clk     | o_dout[10] | RAMB18E2 | -     |      7.798 (r) | SLOW    |      2.766 (r) | FAST    |          |
+i_clk     | o_dout[11] | RAMB18E2 | -     |      7.901 (r) | SLOW    |      2.761 (r) | FAST    |          |
+i_clk     | o_dout[12] | RAMB18E2 | -     |      7.921 (r) | SLOW    |      2.843 (r) | FAST    |          |
+i_clk     | o_dout[13] | RAMB18E2 | -     |      7.828 (r) | SLOW    |      2.589 (r) | FAST    |          |
+i_clk     | o_dout[14] | RAMB18E2 | -     |      7.779 (r) | SLOW    |      2.863 (r) | FAST    |          |
+i_clk     | o_dout[15] | RAMB18E2 | -     |      7.704 (r) | SLOW    |      2.907 (r) | FAST    |          |
+i_clk     | o_dout[16] | RAMB18E2 | -     |      8.610 (r) | SLOW    |      2.801 (r) | FAST    |          |
+i_clk     | o_dout[17] | RAMB18E2 | -     |      9.668 (r) | SLOW    |      3.552 (r) | FAST    |          |
+i_clk     | o_dout[18] | RAMB18E2 | -     |      8.244 (r) | SLOW    |      2.882 (r) | FAST    |          |
+i_clk     | o_dout[19] | RAMB18E2 | -     |      8.105 (r) | SLOW    |      2.685 (r) | FAST    |          |
+i_clk     | o_dout[20] | RAMB18E2 | -     |      7.829 (r) | SLOW    |      2.867 (r) | FAST    |          |
+i_clk     | o_dout[21] | RAMB18E2 | -     |      8.558 (r) | SLOW    |      3.201 (r) | FAST    |          |
+i_clk     | o_dout[22] | RAMB18E2 | -     |      8.186 (r) | SLOW    |      2.986 (r) | FAST    |          |
+i_clk     | o_dout[23] | RAMB18E2 | -     |      7.885 (r) | SLOW    |      2.977 (r) | FAST    |          |
+i_clk     | o_dout[24] | RAMB18E2 | -     |      8.480 (r) | SLOW    |      3.297 (r) | FAST    |          |
+i_clk     | o_dout[25] | RAMB18E2 | -     |      8.012 (r) | SLOW    |      2.963 (r) | FAST    |          |
+i_clk     | o_dout[26] | RAMB18E2 | -     |      7.745 (r) | SLOW    |      2.877 (r) | FAST    |          |
+i_clk     | o_dout[27] | RAMB18E2 | -     |      8.622 (r) | SLOW    |      2.907 (r) | FAST    |          |
+i_clk     | o_dout[28] | RAMB18E2 | -     |      9.222 (r) | SLOW    |      3.353 (r) | FAST    |          |
+i_clk     | o_dout[29] | RAMB18E2 | -     |      8.240 (r) | SLOW    |      3.224 (r) | FAST    |          |
+i_clk     | o_dout[30] | RAMB18E2 | -     |      8.691 (r) | SLOW    |      3.218 (r) | FAST    |          |
+i_clk     | o_dout[31] | RAMB18E2 | -     |      8.063 (r) | SLOW    |      2.900 (r) | FAST    |          |
+----------+------------+----------+-------+----------------+---------+----------------+---------+----------+
+
+
+Setup between Clocks
+
+-------+-------------+---------------+---------+---------------+---------+---------------+---------+---------------+---------+
+Source | Destination |  Src:Rise     | Process |  Src:Rise     | Process |  Src:Fall     | Process |  Src:Fall     | Process |
+Clock  | Clock       | Dest:Rise(ns) | Corner  | Dest:Fall(ns) | Corner  | Dest:Rise(ns) | Corner  | Dest:Fall(ns) | Corner  |
+-------+-------------+---------------+---------+---------------+---------+---------------+---------+---------------+---------+
+i_clk  | i_clk       |         7.447 | SLOW    |               |         |               |         |               |         |
+-------+-------------+---------------+---------+---------------+---------+---------------+---------+---------------+---------+
+
+
+Setup / Hold times for input bus
+Clocked by: i_clk
+Worst Case Data Window: 3.725 ns
+Ideal Clock Offset to Actual Clock: -0.375 ns
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+                   |             | Process |             | Process | Setup     |  Hold     | Source Offset |
+Source             |   Setup(ns) | Corner  |    Hold(ns) | Corner  | Slack(ns) | Slack(ns) | to Center(ns) |
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+i_addr[0]          |   1.687 (r) | SLOW    |   1.027 (r) | SLOW    |       inf |       inf |             - |
+i_addr[1]          |   2.238 (r) | SLOW    |   0.643 (r) | SLOW    |       inf |       inf |             - |
+i_addr[2]          |   1.794 (r) | SLOW    |   1.155 (r) | SLOW    |       inf |       inf |             - |
+i_addr[3]          |   1.495 (r) | SLOW    |   1.097 (r) | SLOW    |       inf |       inf |             - |
+i_addr[4]          |   1.814 (r) | SLOW    |   0.738 (r) | SLOW    |       inf |       inf |             - |
+i_addr[5]          |   1.770 (r) | SLOW    |   0.602 (r) | SLOW    |       inf |       inf |             - |
+i_addr[6]          |   1.433 (r) | SLOW    |   1.089 (r) | SLOW    |       inf |       inf |             - |
+i_addr[7]          |   0.957 (r) | SLOW    |   1.135 (r) | SLOW    |       inf |       inf |             - |
+i_addr[8]          |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[9]          |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[10]         |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[11]         |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[12]         |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[13]         |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[14]         |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[15]         |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[16]         |           - | -       |           - | -       |       inf |       inf |             - |
+i_addr[17]         |   1.956 (r) | SLOW    |   1.468 (r) | SLOW    |       inf |       inf |             - |
+i_addr[18]         |   1.980 (r) | SLOW    |   1.488 (r) | SLOW    |       inf |       inf |             - |
+i_addr[19]         |   1.901 (r) | SLOW    |   1.408 (r) | SLOW    |       inf |       inf |             - |
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+Worst Case Summary |   2.238 (r) | SLOW    |   1.488 (r) | SLOW    |       inf |       inf |             - |
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+
+
+
+Setup / Hold times for input bus
+Clocked by: i_clk
+Worst Case Data Window: 3.882 ns
+Ideal Clock Offset to Actual Clock: -0.378 ns
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+                   |             | Process |             | Process | Setup     |  Hold     | Source Offset |
+Source             |   Setup(ns) | Corner  |    Hold(ns) | Corner  | Slack(ns) | Slack(ns) | to Center(ns) |
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+i_din[0]           |   1.087 (r) | SLOW    |   1.264 (r) | SLOW    |       inf |       inf |             - |
+i_din[1]           |   1.242 (r) | SLOW    |   1.216 (r) | SLOW    |       inf |       inf |             - |
+i_din[2]           |   2.319 (r) | SLOW    |   0.987 (r) | SLOW    |       inf |       inf |             - |
+i_din[3]           |   0.980 (r) | SLOW    |   1.390 (r) | SLOW    |       inf |       inf |             - |
+i_din[4]           |   1.616 (r) | SLOW    |   1.256 (r) | SLOW    |       inf |       inf |             - |
+i_din[5]           |   1.700 (r) | SLOW    |   1.039 (r) | SLOW    |       inf |       inf |             - |
+i_din[6]           |   1.619 (r) | SLOW    |   1.389 (r) | SLOW    |       inf |       inf |             - |
+i_din[7]           |   1.076 (r) | SLOW    |   1.254 (r) | SLOW    |       inf |       inf |             - |
+i_din[8]           |   1.336 (r) | SLOW    |   1.260 (r) | SLOW    |       inf |       inf |             - |
+i_din[9]           |   1.114 (r) | SLOW    |   1.369 (r) | SLOW    |       inf |       inf |             - |
+i_din[10]          |   1.822 (r) | SLOW    |   1.461 (r) | SLOW    |       inf |       inf |             - |
+i_din[11]          |   1.380 (r) | SLOW    |   1.362 (r) | SLOW    |       inf |       inf |             - |
+i_din[12]          |   1.647 (r) | SLOW    |   1.084 (r) | SLOW    |       inf |       inf |             - |
+i_din[13]          |   1.176 (r) | SLOW    |   1.388 (r) | SLOW    |       inf |       inf |             - |
+i_din[14]          |   1.130 (r) | SLOW    |   1.317 (r) | SLOW    |       inf |       inf |             - |
+i_din[15]          |   1.781 (r) | SLOW    |   0.808 (r) | SLOW    |       inf |       inf |             - |
+i_din[16]          |   1.093 (r) | SLOW    |   1.464 (r) | SLOW    |       inf |       inf |             - |
+i_din[17]          |   1.200 (r) | SLOW    |   1.419 (r) | SLOW    |       inf |       inf |             - |
+i_din[18]          |   0.957 (r) | SLOW    |   1.477 (r) | SLOW    |       inf |       inf |             - |
+i_din[19]          |   0.858 (r) | SLOW    |   1.345 (r) | SLOW    |       inf |       inf |             - |
+i_din[20]          |   1.576 (r) | SLOW    |   1.498 (r) | SLOW    |       inf |       inf |             - |
+i_din[21]          |   0.945 (r) | SLOW    |   1.365 (r) | SLOW    |       inf |       inf |             - |
+i_din[22]          |   1.057 (r) | SLOW    |   1.504 (r) | SLOW    |       inf |       inf |             - |
+i_din[23]          |   0.866 (r) | SLOW    |   1.484 (r) | SLOW    |       inf |       inf |             - |
+i_din[24]          |   0.766 (r) | SLOW    |   1.539 (r) | SLOW    |       inf |       inf |             - |
+i_din[25]          |   0.794 (r) | SLOW    |   1.324 (r) | SLOW    |       inf |       inf |             - |
+i_din[26]          |   0.916 (r) | SLOW    |   1.541 (r) | SLOW    |       inf |       inf |             - |
+i_din[27]          |   0.874 (r) | SLOW    |   1.520 (r) | SLOW    |       inf |       inf |             - |
+i_din[28]          |   0.682 (r) | SLOW    |   1.528 (r) | SLOW    |       inf |       inf |             - |
+i_din[29]          |   0.587 (r) | SLOW    |   1.544 (r) | SLOW    |       inf |       inf |             - |
+i_din[30]          |   0.575 (r) | SLOW    |   1.563 (r) | SLOW    |       inf |       inf |             - |
+i_din[31]          |   1.243 (r) | SLOW    |   1.190 (r) | SLOW    |       inf |       inf |             - |
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+Worst Case Summary |   2.319 (r) | SLOW    |   1.563 (r) | SLOW    |       inf |       inf |             - |
+-------------------+-------------+---------+-------------+---------+-----------+-----------+---------------+
+
+
+
+Max / Min delays for output bus
+Clocked by: i_clk
+Bus Skew: 2.168 ns
+-------------------+-------------+---------+-------------+---------+----------+
+                   |     Max     | Process |     Min     | Process | Edge     |
+Pad                |   Delay(ns) | Corner  |   Delay(ns) | Corner  | Skew(ns) |
+-------------------+-------------+---------+-------------+---------+----------+
+o_dout[0]          |   8.177 (r) | SLOW    |   2.833 (r) | FAST    |    0.677 |
+o_dout[1]          |   7.988 (r) | SLOW    |   2.782 (r) | FAST    |    0.488 |
+o_dout[2]          |   7.891 (r) | SLOW    |   2.953 (r) | FAST    |    0.391 |
+o_dout[3]          |   7.780 (r) | SLOW    |   2.913 (r) | FAST    |    0.324 |
+o_dout[4]          |   7.500 (r) | SLOW    |   2.837 (r) | FAST    |    0.247 |
+o_dout[5]          |   8.976 (r) | SLOW    |   3.363 (r) | FAST    |    1.476 |
+o_dout[6]          |   7.752 (r) | SLOW    |   2.808 (r) | FAST    |    0.252 |
+o_dout[7]          |   8.845 (r) | SLOW    |   3.263 (r) | FAST    |    1.344 |
+o_dout[8]          |   8.876 (r) | SLOW    |   2.953 (r) | FAST    |    1.375 |
+o_dout[9]          |   7.625 (r) | SLOW    |   2.838 (r) | FAST    |    0.249 |
+o_dout[10]         |   7.798 (r) | SLOW    |   2.766 (r) | FAST    |    0.297 |
+o_dout[11]         |   7.901 (r) | SLOW    |   2.761 (r) | FAST    |    0.401 |
+o_dout[12]         |   7.921 (r) | SLOW    |   2.843 (r) | FAST    |    0.421 |
+o_dout[13]         |   7.828 (r) | SLOW    |   2.589 (r) | FAST    |    0.328 |
+o_dout[14]         |   7.779 (r) | SLOW    |   2.863 (r) | FAST    |    0.278 |
+o_dout[15]         |   7.704 (r) | SLOW    |   2.907 (r) | FAST    |    0.317 |
+o_dout[16]         |   8.610 (r) | SLOW    |   2.801 (r) | FAST    |    1.110 |
+o_dout[17]         |   9.668 (r) | SLOW    |   3.552 (r) | FAST    |    2.168 |
+o_dout[18]         |   8.244 (r) | SLOW    |   2.882 (r) | FAST    |    0.744 |
+o_dout[19]         |   8.105 (r) | SLOW    |   2.685 (r) | FAST    |    0.605 |
+o_dout[20]         |   7.829 (r) | SLOW    |   2.867 (r) | FAST    |    0.328 |
+o_dout[21]         |   8.558 (r) | SLOW    |   3.201 (r) | FAST    |    1.057 |
+o_dout[22]         |   8.186 (r) | SLOW    |   2.986 (r) | FAST    |    0.686 |
+o_dout[23]         |   7.885 (r) | SLOW    |   2.977 (r) | FAST    |    0.388 |
+o_dout[24]         |   8.480 (r) | SLOW    |   3.297 (r) | FAST    |    0.980 |
+o_dout[25]         |   8.012 (r) | SLOW    |   2.963 (r) | FAST    |    0.512 |
+o_dout[26]         |   7.745 (r) | SLOW    |   2.877 (r) | FAST    |    0.288 |
+o_dout[27]         |   8.622 (r) | SLOW    |   2.907 (r) | FAST    |    1.121 |
+o_dout[28]         |   9.222 (r) | SLOW    |   3.353 (r) | FAST    |    1.722 |
+o_dout[29]         |   8.240 (r) | SLOW    |   3.224 (r) | FAST    |    0.739 |
+o_dout[30]         |   8.691 (r) | SLOW    |   3.218 (r) | FAST    |    1.191 |
+o_dout[31]         |   8.063 (r) | SLOW    |   2.900 (r) | FAST    |    0.563 |
+-------------------+-------------+---------+-------------+---------+----------+
+Worst Case Summary |   9.668 (r) | SLOW    |   2.589 (r) | FAST    |    2.168 |
+-------------------+-------------+---------+-------------+---------+----------+
+
+
+
