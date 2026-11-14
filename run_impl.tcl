@@ -7,6 +7,9 @@
 # 결과 : result_impl.txt (요약), reports/*.rpt
 # ============================================================================
 catch {unset ::env(NoDefaultCurrentDirectoryInExePath)}   ;# see run_sim.tcl
+# Parallel Vivado jobs. Each one needs 2-3 GB of RAM: with 8 jobs a 16 GB PC ran out of memory
+# and three IP runs died without any error message. Keep this small.
+set JOBS 2
 set stop_after "impl"
 if {[llength $argv] > 0} { set stop_after [lindex $argv 0] }
 
@@ -73,9 +76,16 @@ proc summarize {tag} {
 
 # ---------------------------------------------------------------- synthesis
 note "==== synthesis (synth_1) ===="
+# IP runs (out-of-context synthesis of the 10 BRAMs): keep finished ones, reset the rest
+foreach r [get_runs -quiet *_synth_1] {
+    if {[get_property PROGRESS $r] ne "100%"} { reset_run $r }
+}
 reset_run synth_1
-launch_runs synth_1 -jobs 8
-wait_on_run synth_1
+launch_runs synth_1 -jobs $JOBS
+if {[catch {wait_on_run synth_1} err]} { note "wait_on_run synth_1: $err" }
+foreach r [get_runs -quiet *_synth_1] {
+    if {[get_property PROGRESS $r] ne "100%"} { note "  IP run $r : [get_property STATUS $r]" }
+}
 set st [get_property STATUS [get_runs synth_1]]
 note "synth_1 status: $st"
 if {[get_property PROGRESS [get_runs synth_1]] ne "100%"} {
@@ -95,8 +105,8 @@ if {$stop_after eq "synth"} {
 
 # ---------------------------------------------------------------- implementation
 note "==== implementation (impl_1) ===="
-launch_runs impl_1 -jobs 8
-wait_on_run impl_1
+launch_runs impl_1 -jobs $JOBS
+if {[catch {wait_on_run impl_1} err]} { note "wait_on_run impl_1: $err" }
 set st [get_property STATUS [get_runs impl_1]]
 note "impl_1 status: $st"
 if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {

@@ -1,0 +1,23 @@
+run_impl.tcl  2026-11-14 17:36:15
+Vivado 2024.2
+part xck26-sfvc784-2LV-c  top npu_top
+==== synthesis (synth_1) ====
+synth_1 status: synth_design Complete!
+  [synth] LUT cells 1398 / FF 341 / RAMB36 106 / RAMB18 13 (= 112.5 BRAM tiles) / DSP48E2 0 / CARRY8 52
+  [synth] WNS 6.083 ns  (logic levels 17, data delay 3.781 ns)
+  [synth]   from u_A/r_bias_reg[0]/C
+  [synth]   to   u_A/o_wdata_reg[31]/D
+  [synth] WHS -0.031 ns
+  [synth]   from u_B/r_bsel_d1_reg[0]/C
+  [synth]   to   u_B/r_bsel_d2_reg[0]/D
+==== implementation (impl_1) ====
+impl_1 status: route_design Complete!
+  [impl] LUT cells 1513 / FF 341 / RAMB36 106 / RAMB18 12 (= 112.0 BRAM tiles) / DSP48E2 0 / CARRY8 52
+  [impl] WNS 2.138 ns  (logic levels 1, data delay 7.221 ns)
+  [impl]   from u_D/r_wb_ptr_reg[13]/C
+  [impl]   to   u_B/u_mem/u_wmem_bank0/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[22].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.SIMPLE_PRIM36.ram/ENARDEN
+  [impl] WHS 0.041 ns
+  [impl]   from u_D/r_b_ptr_reg[4]/C
+  [impl]   to   u_B/u_mem/u_bmem/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[1].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.WIDE_PRIM36.ram/ADDRBWRADDR[8]
+*** TIMING MET at 100 MHz (WNS 2.138, WHS 0.041) ***
+done. reports: C:/Users/user/AISSD/aissd_D_1114/reports
