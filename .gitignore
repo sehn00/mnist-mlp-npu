@@ -6,5 +6,5 @@ logs/
 *.vvp
 *.vcd
 .Xil/
-result.txt
-result_impl.txt
+/result.txt
+/result_impl.txt

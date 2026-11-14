@@ -1,0 +1,115 @@
+run_sim.tcl  2026-11-14 17:25:38
+Vivado 2024.2
+project re-used (10 IPs)
+==== tb_npu_ctrl (D unit test, RD_LAT=1) ====
+   RD_LAT = 1
+   GO count  FC1 512 (512) / FC2 128 (128) / FC3 10 (10)
+   bias_we count 650 (650)
+   last o_waddr  117055 (117055)
+   start->done   119009 clocks
+   *** tb_npu_ctrl PASS ***
+==== tb_npu_top (A+B+C+D, 100 images) ====
+  img 0 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 1 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 2 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 3 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 4 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 5 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 6 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 7 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 8 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 9 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 10 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 11 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 12 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 13 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 14 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 15 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 16 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 17 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 18 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 19 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 20 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 21 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 22 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 23 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 24 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 25 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 26 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 27 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 28 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 29 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 30 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 31 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 32 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 33 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 34 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 35 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 36 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 37 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 38 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 39 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 40 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 41 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 42 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 43 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 44 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 45 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 46 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 47 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 48 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 49 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 50 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 51 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 52 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 53 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 54 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 55 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 56 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 57 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 58 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 59 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 5 label 5 | 119659 clk | PASS
+  img 60 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 61 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 8 label 8 | 119659 clk | PASS
+  img 62 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 63 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 64 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 65 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 66 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 67 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 68 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 69 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 70 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 71 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 0 label 0 | 119659 clk | PASS
+  img 72 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 73 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 74 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 75 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 76 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 77 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 78 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 79 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 80 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 81 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 82 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 2 label 2 | 119659 clk | PASS
+  img 83 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 84 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 8 label 8 | 119659 clk | PASS
+  img 85 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 86 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 87 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 88 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 89 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 90 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 91 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 92 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+  img 93 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 3 label 3 | 119659 clk | PASS
+  img 94 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 95 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 4 label 4 | 119659 clk | PASS
+  img 96 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 1 label 1 | 119659 clk | PASS
+  img 97 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 7 label 7 | 119659 clk | PASS
+  img 98 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 6 label 6 | 119659 clk | PASS
+  img 99 : FC1 128/128  FC2 32/32  FC3 10/10 match | pred 9 label 9 | 119659 clk | PASS
+   golden bit-exact : 100 / 100 images
+   prediction       : 100 / 100 correct
+   *** tb_npu_top PASS ***
+done. logs: C:/Users/user/AISSD/aissd_D_1114/logs
