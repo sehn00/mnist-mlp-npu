@@ -1,0 +1,9 @@
+vivado_sim/
+build/
+logs/
+*.log
+*.jou
+*.vvp
+*.vcd
+.Xil/
+result.txt

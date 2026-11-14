@@ -1,0 +1,8 @@
+FP32 test accuracy   : 99.32%
+INT   test accuracy  : 99.30%
+shift (FC1, FC2)     : 11, 7  (선택 기준: train)
+weight scale (FC1~3) : 2390.5453, 105.9960, 588.0600
+max |acc| FC1/2/3    : 430648, 19026, 5704
+max |bias| FC1/2/3   : 81550, 108, 339
+weight.hex lines     : 117056
+bias.hex lines       : 650
