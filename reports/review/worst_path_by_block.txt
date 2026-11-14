@@ -1,0 +1,27 @@
+A setup: slack 4.766 ns, levels 15, delay 5.264 ns
+    from u_A/r_bias_reg[1]/C
+    to   u_A/o_wdata_reg[31]/D
+A hold : slack 0.067 ns  (u_B/r_bsel_d1_reg[0]/C -> u_A/r_bias_reg[21]/D)
+B setup: slack 3.453 ns, levels 1, delay 5.885 ns
+    from u_D/r_wb_ptr_reg[13]/C
+    to   u_B/u_mem/u_wmem_bank0/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[18].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.SIMPLE_PRIM36.ram/ENARDEN
+B hold : slack 0.054 ns  (u_D/r_b_ptr_reg[9]/C -> u_B/u_mem/u_bmem/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[1].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.WIDE_PRIM36.ram/ADDRARDADDR[13])
+C setup: slack 2.553 ns, levels 10, delay 7.094 ns
+    from u_B/u_mem/u_wmem_bank0/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[5].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.SIMPLE_PRIM36.ram/CLKARDCLK
+    to   u_C/p0_reg[15]/D
+C hold : slack 0.118 ns  (u_D/FSM_sequential_r_state_reg[0]/C -> u_C/acc_reg[7]/D)
+D setup: slack 6.112 ns, levels 4, delay 3.817 ns
+    from u_D/r_layer_reg[1]/C
+    to   u_D/r_wb_ptr_reg[13]/D
+D hold : slack 0.084 ns  (u_D/r_n_reg[5]/C -> u_D/r_oaddr_reg[5]/D)
+WNS 2.553 ns at 10 ns period -> minimum period about 7.447 ns = 134.3 MHz (this placement, slow corner)
+BRAM primitives: 118
+  u_wmem_bank0 : 28 primitives, ENARDEN tied to 1: 5, driven by logic (address decode): 23
+  u_wmem_bank1 : 28 primitives, ENARDEN tied to 1: 0, driven by logic (address decode): 28
+  u_wmem_bank2 : 28 primitives, ENARDEN tied to 1: 0, driven by logic (address decode): 28
+  u_wmem_bank3 : 28 primitives, ENARDEN tied to 1: 0, driven by logic (address decode): 28
+  u_bmem : 2 primitives, ENARDEN tied to 1: 2, driven by logic (address decode): 0
+  u_imem_a : 1 primitives, ENARDEN tied to 1: 0, driven by logic (address decode): 1
+  u_act_a : 1 primitives, ENARDEN tied to 1: 0, driven by logic (address decode): 1
+  u_act_b : 1 primitives, ENARDEN tied to 1: 0, driven by logic (address decode): 1
+  u_omem : 1 primitives, ENARDEN tied to 1: 0, driven by logic (address decode): 1

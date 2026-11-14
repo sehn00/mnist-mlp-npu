@@ -1,0 +1,36 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
+| Date         : Sat Nov 14 22:40:09 2026
+| Host         : sehn-pc running 64-bit major release  (build 9200)
+| Command      : report_high_fanout_nets -max_nets 15 -file C:/Users/user/AISSD/aissd_D_1114/reports/review/high_fanout.rpt
+| Design       : npu_top
+| Device       : xck26
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+High Fan-out Nets Information
+
+1. Summary
+----------
+
++-------------------------+--------+-------------+
+| Net Name                | Fanout | Driver Type |
++-------------------------+--------+-------------+
+| i_rstn_IBUF_inst/O      |    263 | IBUFCTRL    |
+| u_D/r_layer_reg[1]_0[1] |    158 | FDCE        |
+| u_D/Q[10]               |    124 | FDCE        |
+| u_D/Q[11]               |    123 | FDCE        |
+| u_D/Q[0]                |    120 | FDCE        |
+| u_D/Q[6]                |    120 | FDCE        |
+| u_D/Q[3]                |    119 | FDCE        |
+| u_D/Q[1]                |    119 | FDCE        |
+| u_D/Q[8]                |    119 | FDCE        |
+| u_D/Q[7]                |    118 | FDCE        |
+| u_D/Q[2]                |    118 | FDCE        |
+| u_D/r_state[2]          |    118 | FDCE        |
+| u_D/Q[4]                |    118 | FDCE        |
+| u_D/Q[5]                |    117 | FDCE        |
+| u_D/Q[9]                |    117 | FDCE        |
++-------------------------+--------+-------------+
+
+

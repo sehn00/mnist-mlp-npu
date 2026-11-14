@@ -1,0 +1,29 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
+| Date         : Sat Nov 14 22:40:08 2026
+| Host         : sehn-pc running 64-bit major release  (build 9200)
+| Command      : report_design_analysis -logic_level_distribution -logic_level_dist_paths 5000 -file C:/Users/user/AISSD/aissd_D_1114/reports/review/logic_levels.rpt
+| Design       : npu_top
+| Device       : xck26
+| Design State : Routed
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Design Analysis
+
+Table of Contents
+-----------------
+1. Logic Level Distribution
+
+1. Logic Level Distribution
+---------------------------
+
++-----------------+-------------+------+-----+----+----+----+----+---+----+----+----+----+----+----+----+----+----+
+| End Point Clock | Requirement |   0  |  1  |  2 |  3 |  4 |  5 | 6 |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15 |
++-----------------+-------------+------+-----+----+----+----+----+---+----+----+----+----+----+----+----+----+----+
+| i_clk           | 10.000ns    | 1493 | 419 | 34 | 30 | 29 | 13 | 6 | 11 | 23 | 19 | 24 | 20 | 19 |  1 | 16 |  8 |
++-----------------+-------------+------+-----+----+----+----+----+---+----+----+----+----+----+----+----+----+----+
+* Columns represent the logic levels per end point clock
+** Distribution is for top worst 2165 paths
+
+
