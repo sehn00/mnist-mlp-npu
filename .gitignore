@@ -8,3 +8,18 @@ logs/
 .Xil/
 /result.txt
 /result_impl.txt
+
+# ---- 공개 저장소에서 제외 (조원4 PC에만 보관) ----
+# 개인 메모 (Claude Code가 CLAUDE.md와 같이 읽음)
+CLAUDE.local.md
+# 카톡 대화·사진, 교수님 자료(과제 가이드 PDF)
+docs/kakao_chat_*.txt
+docs/chat_pictures/
+docs/AISSD_project_*.pdf
+# 실명이 들어 있는 PDF
+docs/npu_arch_spec_v0.2.pdf
+docs/old/인반설_1029_*.pdf
+# 큰 생성 파일 (스크립트로 다시 만듦: scripts/gen_golden_10k.py)
+golden_10k/
+*.backup.log
+*.backup.jou

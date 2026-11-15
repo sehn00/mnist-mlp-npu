@@ -1,3 +1,44 @@
+# mnist-mlp-npu : MNIST MLP (784-512-128-10) INT8 NPU in Verilog
+
+AISSD 2조 팀 프로젝트. PE 4개(4-MAC) 배열, 가중치 전부 칩 안 BRAM, Kria K26C 100 MHz. 담당: A 후처리 조원1 · B 메모리 조원2 · C PE 배열 조원3 · D 제어기/top 조원4
+
+## 팀원용: 5분 안에 돌려보는 법
+준비물: Windows + **Vivado 2024.2** + Git Bash + Python 3 (`numpy`, 회귀 스크립트용)
+
+1. 받기
+   ```bash
+   git clone https://github.com/sehn00/mnist-mlp-npu.git
+   cd mnist-mlp-npu
+   ```
+2. **Vivado 통합 시뮬 10장 (1~2분)**: `run_sim.bat` 더블클릭, 또는 cmd에서 `run_sim.bat 10`
+   - `vivado_sim/` 프로젝트와 BRAM IP 10개(출력 레지스터 OFF)를 만들고 `tb_npu_ctrl` → `tb_npu_top`을 돌림
+   - 결과: `result.txt` 마지막 줄이 `RESULT: PASS`면 성공 (사진 10장 FC1/FC2/FC3 golden 비트 일치)
+   - Vivado를 못 찾으면 `run_sim.bat` 맨 위 후보 경로에 내 PC의 `vivado.bat` 경로를 추가
+3. **전체 회귀 (Git Bash, 2번을 한 번 돌린 뒤)**
+   ```bash
+   bash run_regress.sh 10
+   ```
+   10장 빠른 확인. 100장 전체는 `bash run_regress.sh` (약 5분). 끝에 `exit 0` = 11단계 전부 PASS, 요약은 `logs/regress_summary.txt`. Vivado가 `E:\Xilinx\Vivado\2024.2\bin`이 아니면 먼저 `export VIVADO_BIN='C:\Xilinx\Vivado\2024.2\bin'`처럼 지정
+4. (선택) 합성 + 구현: `vivado -mode batch -source run_impl.tcl -log logs/run_impl.log -journal logs/run_impl.jou -notrace` (약 10분 이상, 결과 `result_impl.txt`, `reports/`)
+
+내 블록만 고쳤을 때도 3번 회귀를 돌려서 PASS인지 확인하고 올려 줘.
+
+## 폴더 안내
+| 폴더 | 내용 |
+|---|---|
+| `rtl/` | 합성 대상 6개: `npu_top`(최상위), `npu_ctrl`(D), `npu_mem_ctrl`(B 임시 어댑터), `npu_postproc`(A), `npu_pe_array`(C), `memory_controller`(B) |
+| `tb/` | `tb_npu_ctrl`(D 단위), `tb_npu_top`(통합), `review/`(매 클럭 검사기, 예외 상황 TB) |
+| `hex/`, `coe/` | 통합 TB용 golden 100장, BRAM 초기화 COE (가중치·bias) |
+| `constr/` | XDC (100 MHz 클럭 한 줄) |
+| `run_sim.tcl` / `run_sim.bat` / `run_impl.tcl` / `run_regress.sh` | 시뮬, 합성·구현, 전체 회귀 스크립트 |
+| `scripts/` | IP 설정 검사, MNIST 1만 장 golden 생성(`gen_golden_10k.py`, 결과는 `build/`에 생성되고 커밋 안 함), 정확도 실행 |
+| `reports/` | 시뮬·합성·구현·타이밍·전력·정확도 결과 |
+| `docs/` | 과제 요구사항 체크, 이름 규칙, handoff, 리뷰, 회의 확인 사항 (과제 가이드 PDF와 카톡 자료는 공개 저장소에 없음) |
+| `team_originals/` | 팀원이 보낸 원본 그대로 (A, B, C, handoff, golden v2). 읽기 전용 |
+| `sim_models/` | iverilog 전용 BRAM 모델. Vivado에 넣지 말 것, 제출 zip에서 뺄 것 |
+
+---
+
 # D 블록 (npu_ctrl + npu_top) + A·B·C·D 통합 · 2026-11-14 (11/15 회귀·정확도 추가) · 조원4
 
 ## 결과 요약 (Vivado 2024.2, 실제 Block Memory Generator IP, xck26-sfvc784-2LV-c)
