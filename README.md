@@ -7,18 +7,18 @@
 |---|---|---|---|
 | D 단위 `tb_npu_ctrl` (RD_LAT=1) | **PASS** | GO 512/128/10 · bias_we 650 · 마지막 o_waddr 117,055 · **119,009클럭** · 경고 0개 | `reports/sim_100img.txt` |
 | 통합 `tb_npu_top` 100장 | **PASS** | **100/100장 FC1/FC2/FC3 golden v2 비트 일치, 예측 100/100**, 장당 **119,009클럭**(약 1.19 ms), 시뮬레이터 경고 0개 | 〃 |
-| 전체 회귀 `run_regress.sh` (11/15) | **PASS (10단계 전부)** | golden 100장 100/100 + 매 클럭 검사기 2억 7,264만 번 검사에 에러 0 · 합성 이미지 16장 16/16 (포화 FC1 24번, FC2 1번 포함) · 예외 상황 판정 15개 PASS · 327초 | `reports/regress_summary.txt` |
+| 전체 회귀 `run_regress.sh` (11/15 오후, D01·D07·V01 반영 후) | **PASS (11단계 전부)** | IP 설정 검사 PASS · golden 100장 100/100 + 매 클럭 검사기 2억 8,462만 번 검사에 에러 0 · 합성 이미지 16장 16/16 (포화 FC1 24번, FC2 1번 포함) · 예외 상황 판정 16개 PASS (done 직후 start·읽기 포함) · 363초 | `reports/regress_summary.txt` |
 | 테스트셋 정확도, 파이썬 정수 모델 (MNIST 1만 장) | 완료 | **9,930 / 10,000 = 99.30%** (float 99.32%). 앞 100장은 기존 golden hex와 비트 일치 | `reports/accuracy_golden_10k.txt` |
-| 테스트셋 정확도, RTL 시뮬 (MNIST 1만 장) | **PASS** (11/15 완료) | **9,930 / 10,000 = 99.30%**. 1만 장 전부 FC3 점수 10개가 golden과 비트 일치, 전부 장당 119,009클럭, 파이썬 모델과 예측이 다른 이미지 0장, 타임아웃 0 (RTL 커밋 74c88dd 기준) | `reports/accuracy_10k.txt` |
-| 합성 (`npu_top`, 10 ns 클럭) | 완료 | LUT 1,401 · FF 283 · RAMB36 106 + RAMB18 13 · DSP 0 | `reports/synth_*.rpt` |
-| 구현 (place & route) | **100 MHz 타이밍 충족** | **WNS +2.553 ns · WHS +0.054 ns** (실패 경로 0 / 2,165) | `reports/impl_timing_*.rpt` |
-| 전력 (구현 후, vectorless 추정) | 완료 | **합계 0.367 W** = 동적 0.077 W + 정적 0.289 W | `reports/impl_power*.rpt` |
+| 테스트셋 정확도, RTL 시뮬 (MNIST 1만 장) | **PASS** (11/15 완료) | **9,930 / 10,000 = 99.30%**. 1만 장 전부 FC3 점수 10개가 golden과 비트 일치, 전부 장당 119,009클럭, 파이썬 모델과 예측이 다른 이미지 0장, 타임아웃 0. **1만 장은 커밋 74c88dd 기준** (RTL·TB 스탬프로 확인). 그 뒤 D01은 완료 신호(o_done) 타이밍만 바꿔서 계산 결과에는 영향 없음, 회귀로 확인 (golden 100장 + 합성 이미지 16장 비트 일치, 장당 119,009클럭 그대로). 1만 장은 다시 안 돌림 | `reports/accuracy_10k.txt` |
+| 합성 (`npu_top`, 10 ns 클럭, 11/15 D01 후 다시) | 완료 | LUT 1,400 · FF 283 · RAMB36 106 + RAMB18 13 · DSP 0 | `reports/synth_*.rpt` |
+| 구현 (place & route, 11/15 D01 후 다시) | **100 MHz 타이밍 충족** | **WNS +2.709 ns · WHS +0.031 ns** (실패 경로 0 / 2,165). `run_impl.tcl` 반환값 0 (둘 다 > 0일 때만 0) | `reports/impl_timing_*.rpt`, `reports/impl_summary.txt` |
+| 전력 (구현 후, vectorless 추정) | 완료 | **합계 0.366 W** = 동적 0.077 W + 정적 0.289 W | `reports/impl_power*.rpt` |
 
 구현 후 자원 사용량 (K26 전체 대비)
 
 | 자원 | 사용 | 전체 | 비율 | 블록별 |
 |---|---|---|---|---|
-| CLB LUT | 1,185 | 117,120 | 1.0% | B 763 (memory_controller + BRAM IP 내부 731, 어댑터 32) · D 202 · C 154 · A 66 |
+| CLB LUT | 1,183 | 117,120 | 1.0% | B 762 (memory_controller + BRAM IP 내부 730, 어댑터 32) · D 197 · C 155 · A 71 |
 | FF | 283 | 234,240 | 0.12% | A 97 · C 97 · D 60 · B 29 |
 | BRAM 타일 | **112** | 144 | **77.8%** | RAMB36 106 + RAMB18 12. WMEM 뱅크당 RAMB36 26 + RAMB18 2, BMEM RAMB36 2, IMEM_A·ACT_A·ACT_B·OMEM 각 RAMB18 1 |
 | DSP | 0 | 1,248 | 0% | C의 8×8 곱셈 4개가 LUT로 구현됨 |
@@ -32,13 +32,13 @@
 |---|---|---|
 | 장당 클럭 수 | 119,659 | **119,009** (뉴런당 1클럭 × 650 감소) |
 | golden v2 일치 | 100/100 | 100/100 |
-| CLB LUT / FF | 1,199 / 341 | 1,185 / 283 |
+| CLB LUT / FF | 1,199 / 341 | 1,183 / 283 |
 | BRAM 타일 / DSP | 112 / 0 | 112 / 0 |
-| WNS / WHS | +2.138 / +0.041 ns | **+2.553 / +0.054 ns** |
-| 가장 느린 경로 | D 주소 포인터 → WMEM enable (7.22 ns) | WMEM 출력 → C 곱셈 → 곱 레지스터 (7.09 ns) |
-| 전력 | 측정 안 함 (그때는 전력 리포트가 스크립트에 없었음) | 0.367 W |
+| WNS / WHS | +2.138 / +0.041 ns | **+2.709 / +0.031 ns** (D01 전 +2.553 / +0.054) |
+| 가장 느린 경로 | D 주소 포인터 → WMEM enable (7.22 ns) | WMEM 출력 → C 곱셈 → 곱 레지스터 (7.02 ns) |
+| 전력 | 측정 안 함 (그때는 전력 리포트가 스크립트에 없었음) | 0.366 W |
 
-- 가장 느린 경로: WMEM 뱅크0 BRAM 출력 → 뱅크 안 BRAM 26개 중 고르는 MUX → 4뱅크 MUX → C의 8×8 곱셈(LUT) → 곱 레지스터 `u_C/p0_reg[15]`. 지연 7.09 ns (로직 38%, 배선 62%, 로직 10단). 출력 레지스터를 꺼서 BRAM 출력부터 곱셈까지가 한 클럭 안에 들어왔지만 여유가 2.55 ns 남아.
+- 가장 느린 경로: WMEM 뱅크0 BRAM 출력 → 뱅크 안 BRAM 26개 중 고르는 MUX → 4뱅크 MUX → C의 8×8 곱셈(LUT) → 곱 레지스터 `u_C/p0_reg[15]`. 지연 7.02 ns (로직 45%, 배선 55%, 로직 11단, 11/15 D01 후 구현 기준). 출력 레지스터를 꺼서 BRAM 출력부터 곱셈까지가 한 클럭 안에 들어왔지만 여유가 2.71 ns 남아. 가장 빠듯한 hold 경로는 A 안(`r_pack` → `o_wdata`, +0.031 ns). D01은 o_done 레지스터의 set 조건만 바꾼 거라 경로 차이는 배치·배선 결과가 달라진 몫
 - 아직 안 한 것: 핀 배치(PACKAGE_PIN), I/O 지연 제약, 구현 후(post-route) 시뮬레이션, 보드 동작. 타이밍 리포트는 칩 내부 레지스터 사이 경로만 검사한 결과야 (입력 47개, 출력 34개 포트는 I/O 지연 제약 없음).
 - iverilog + BRAM 행동 모델(`sim_models/`)로는 조원4가 같은 RTL 조합에서 RD_LAT=1 100장 PASS(119,009클럭), RD_LAT=2(`-DOREG_ON`) 10장 PASS를 확인했고, Vivado 결과와 같아.
 - 합성·구현 **로그**에 critical warning 0개. 경고는 OOC 클럭 주기 차이(Timing 38-316), 어댑터의 안 쓰는 주소 비트(Synth 8-7129), RD_LAT=1에서 안 쓰여 지워진 RD_LAT=2용 레지스터 3개(Synth 8-6014)뿐. 단, 구현 후 **DRC 리포트**에는 Critical Warning 2건이 있어: NSTD-1(I/O 표준 미지정), UCIO-1(핀 위치 미지정), 포트 82개 전부 해당 (`reports/review/drc_routed.rpt`). 핀 제약이 없어서 생기는 것이고, 이 상태로는 비트스트림을 못 만들어 (4절 #13).
@@ -101,17 +101,18 @@ wave_fc2_n27_n28.png  통합 파형 (FC2 뉴런 27 → 28 경계, iverilog)
    bash run_regress.sh        (통합 TB golden 100장, 전체 약 5분)
    bash run_regress.sh 10     (10장, 빠른 확인용)
    ```
-   Vivado 프로젝트를 열지 않고 xvlog → xelab → xsim만 써. 하나라도 FAIL이면 반환값 1. 요약은 `logs/regress_summary.txt`, 단계별 로그는 `logs/regress/`. 돌리는 10단계:
+   Vivado 프로젝트를 열지 않고 xvlog → xelab → xsim만 써. 하나라도 FAIL이면 반환값 1. 요약은 `logs/regress_summary.txt`, 단계별 로그는 `logs/regress/`. 돌리는 11단계:
 
    | 단계 | 내용 |
    |---|---|
    | rules | `rtl/`에 `initial`, `#지연`, `$readmemh/b`가 없는지 (가이드 p.4-5) |
+   | ip_check | (11/15 검수 D03) `scripts/check_ip.py`: BRAM IP 10개의 폭·깊이·Primitives/Core 출력 레지스터(.xci와 생성된 시뮬 모델 둘 다)와 생성된 `.mif` == `coe/`를 RTL의 `RD_LAT` 기본값과 대조 |
    | golden_check | `.pt`에서 다시 계산한 가중치·bias·사진 100장 결과 == 팀 golden hex (33항목) |
    | gen_stress | 합성 이미지 16장 + 정답 생성 (포화, 레인별, 난수). golden 100장에는 포화가 한 번도 없어서 필요 |
    | ctrl_rd1, ctrl_rd2 | `tb_npu_ctrl` (D 단위), RD_LAT = 1 / 2. 클럭 수 119,009 / 119,659 검사 + 타임아웃 |
    | top100_chk | `tb_npu_top` golden 100장 + `npu_checker`(매 클럭 검사기, 조건 15종) |
    | stress16_chk | `tb_npu_top` 합성 이미지 16장 + 검사기 |
-   | edge_chk | `tb_edge` 예외 상황 12종(연산 중 start·리셋·외부 접근 등) + 검사기 |
+   | edge_chk | `tb_edge` 예외 상황 12종(연산 중 start·리셋·외부 접근, done 직후 start·읽기 등) + 검사기 |
    | model_rd1, model_rd2 | BRAM 행동 모델(`sim_models/`)로 2장. rd2는 예전 OREG_ON 구성 |
 
 1. **시뮬레이션 (Vivado 프로젝트 + IP 생성)**: `run_sim.bat` 더블클릭 (`run_sim.bat 100`처럼 인자를 줄 수 있음). 또는
@@ -121,11 +122,13 @@ wave_fc2_n27_n28.png  통합 파형 (FC2 뉴런 27 → 28 경계, iverilog)
    vivado -mode batch -source run_sim.tcl -log logs/run_sim.log -journal logs/run_sim.jou -notrace -tclargs 100   (100장)
    ```
    새 프로젝트 `vivado_sim/`를 만들고(이미 있으면 재사용), 조원2 .xci와 같은 설정에서 **Primitives Output Register만 전부 OFF로 바꿔서** BRAM IP 10개를 2024.2에서 새로 만든 다음 `tb_npu_ctrl` → `tb_npu_top`을 돌려. 결과는 `result.txt`, 로그는 `logs/`. **두 TB가 다 PASS여야 반환값 0, 아니면 1** (`result.txt` 마지막 줄 `RESULT: PASS / FAIL`). 기존 `aissd_mnist_npu` 프로젝트는 건드리지 않아. 10장은 1~2분, 100장도 몇 분이면 끝나. IP 설정을 바꿨으면 `-tclargs 100 fresh`로 프로젝트를 새로 만들어야 해 (설정이 안 맞으면 스크립트가 멈추고 알려 줘). 예전 ON 구성은 `-tclargs 10 fresh oreg_on`. 인자 순서는 상관없어 (`fresh`만 써도 됨).
+   시뮬 전에 `scripts/check_ip.py`로 IP 10개 설정(폭·깊이·출력 레지스터·초기화 파일)이 RTL의 RD_LAT와 맞는지 검사하고, 안 맞으면 반환값 1로 멈춰 (11/15 검수 D03). 파이썬은 PATH의 `python`을 쓰고, 다른 걸 쓰려면 `NPU_PYTHON` 환경 변수에 python.exe 경로 (`PYTHON`은 Vivado가 자기 폴더로 덮어써서 못 씀).
 2. **합성 + 구현**: 시뮬을 한 번 돌린 뒤
    ```
    vivado -mode batch -source run_impl.tcl -log logs/run_impl.log -journal logs/run_impl.jou -notrace
    ```
    결과는 `result_impl.txt`, 리포트는 `reports/` (사용량, 타이밍, 전력). IP가 이미 합성돼 있으면 약 10분, 처음이면 IP 10개 합성 때문에 더 걸려.
+   **반환값 (11/15 검수 V02, D03)**: 0 = 성공. 1 = 합성 전 IP 검사(`check_ip.py`) 실패, 합성·구현 실패, 또는 구현 후 setup/hold 검사 경로가 없거나 **WNS ≤ 0 또는 WHS ≤ 0** (가이드 p.5 "slack 양수"). 타이밍이 실패해도 리포트와 `result_impl.txt`는 다 쓰고 끝나. 마지막 줄 `RESULT: PASS / FAIL`.
    **주의**: 병렬 작업 수(`JOBS`)는 2로 둘 것. 8로 돌렸더니 RAM 16GB PC에서 메모리가 바닥나 IP 합성 런 3개가 에러 메시지 없이 죽었어.
 3. **GUI로 직접 넣을 때**: Design Sources에 `rtl/` 6개, IP는 조원2 zip의 `ip/*.xci` 10개(**WMEM 4개와 BMEM은 Port A Options에서 Primitives Output Register 체크를 끌 것**, 각 IP의 COE 경로를 내 PC 경로로 지정 후 Generate Output Products. 2024.1에서 만든 IP라 2024.2에서 잠겨 보이면 Upgrade IP), Simulation Sources에 `tb/` 2개. `sim_models/bram_models.v`는 **넣지 않음**(IP와 이름이 겹침). `tb_npu_top.v` 맨 위 `HEX_DIR`을 내 PC의 `hex/` 절대경로로 변경(슬래시 `/`, 끝에 `/`). 합성할 때는 `constr/npu_top.xdc` 추가, top = `npu_top`.
 4. 파형 캡처할 신호 추천: `u_D/r_state, r_n, r_k, valid, acc, bias_we, bias, go, lane, we, wdata, oaddr`
@@ -140,10 +143,11 @@ wave_fc2_n27_n28.png  통합 파형 (FC2 뉴런 27 → 28 경계, iverilog)
      ```
      python scripts/accuracy_report.py && git add reports/accuracy_10k.txt && git commit -m "Accuracy: 10,000-image RTL result"
      ```
-     묶음 로그를 모아 요약(비트 일치 장수, RTL 정확도, 틀린 이미지 목록)을 화면에 찍고 `reports/accuracy_10k.txt`를 쓴 다음 커밋해. 1만 장이 다 안 끝났거나 불일치가 있으면 `RESULT: FAIL`로 끝나고 커밋은 안 돼. 그 뒤 맨 위 표의 "진행 중" 줄만 그 출력의 `RTL accuracy` 숫자로 고치면 끝.
+     묶음 로그를 모아 요약(비트 일치 장수, RTL 정확도, 틀린 이미지 목록)을 화면에 찍고 `reports/accuracy_10k.txt`를 쓴 다음 커밋해. 1만 장이 다 안 끝났거나 불일치가 있으면 `RESULT: FAIL`로 끝나고 커밋은 안 돼. (`run_accuracy.sh`는 끝에 이걸 `--stamp build/accuracy/stamp.txt`와 같이 자동으로 부름)
    - 중간에 끊겼으면(PC 종료 등) 위의 `run_accuracy_detached.ps1`을 다시 실행하면 끝난 묶음은 건너뛰고 이어서 해. 도는 중에 또 실행하면 "이미 돌고 있음"이라고 하고 안 띄워. PC가 절전에 들어가면 그동안 멈췄다가 깨어나면 이어서 돌아.
    - `gen_golden_10k.py`는 MNIST 테스트셋(`~/.keras/datasets/mnist.npz`, 다른 위치면 `--mnist`)을 픽셀 >> 1로 바꾸고, **앞 100장이 `hex/`의 기존 100장(입력·label·FC1·FC2·FC3)과 비트 단위로 같은지 먼저 확인**한 뒤에만 파일을 써.
    - `run_accuracy.sh`는 `tb_npu_top`을 정확도 전용 모드(`ACC_ONLY`: FC3 점수 10개를 golden과 비교 + argmax를 label과 비교, FC1/FC2 출력은 안 읽음)로 한 번 컴파일하고 500장씩 20묶음으로 돌려. 시뮬레이션은 한 번에 하나만. 끝난 묶음은 건너뛰니까 중간에 끊겨도 같은 명령으로 이어서 할 수 있어. 진행 상황은 `build/accuracy/progress.txt`.
+   - (11/15 검수 V03) 이어 돌리기 기준: 스탬프(`build/accuracy/stamp.txt`)에 RTL·TB·`xrun.sh`·컴파일 define·**생성된 BRAM IP 시뮬 모델과 `.mif`**·`coe/`·golden이 다 들어가서, 하나라도 바뀌면 처음부터 다시 해. 묶음마다 완료 표시 `chunk_<번호>.done`(스탬프 + xsim 종료 코드)을 남기고, 스탬프가 같고 종료 코드 0이고 로그에 그 묶음 구간 줄과 TB 마지막 줄이 있을 때만 "끝난 묶음"으로 건너뛰어. 집계(`accuracy_report.py`)도 묶음마다 구간 줄·이미지 수·`*** tb_npu_top PASS ***`·`.done`을 확인해. 시작 전에 `check_ip.py`도 돌려.
    - 일부만 볼 때: `bash scripts/run_accuracy.sh 1000 250` (앞 1,000장, 250장씩).
 
 iverilog (참고):

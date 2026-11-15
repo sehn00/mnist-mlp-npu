@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version      : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
-| Date              : Sat Nov 14 19:47:46 2026
+| Date              : Sun Nov 15 13:26:58 2026
 | Host              : sehn-pc running 64-bit major release  (build 9200)
 | Command           : report_timing -hold -max_paths 5 -nworst 1 -file C:/Users/user/AISSD/aissd_D_1114/reports/synth_timing_hold_top5.rpt
 | Design            : npu_top
@@ -202,9 +202,9 @@ Slack (VIOLATED) :        -0.007ns  (arrival time - required time)
                          FDCE                                         r  u_A/r_pack_reg[26]/C
   -------------------------------------------------------------------    -------------------
                          FDCE (Prop_FDCE_C_Q)         0.084     1.768 r  u_A/r_pack_reg[26]/Q
-                         net (fo=2, unplaced)         0.043     1.811    u_A/r_pack[26]
-                         LUT4 (Prop_LUT4_I3_O)        0.037     1.848 r  u_A/r_pack[26]_i_1/O
-                         net (fo=1, unplaced)         0.018     1.866    u_A/w_pack_next[26]
+                         net (fo=2, unplaced)         0.043     1.811    u_D/r_pack_reg[30][13]
+                         LUT4 (Prop_LUT4_I3_O)        0.037     1.848 r  u_D/r_pack[26]_i_1/O
+                         net (fo=1, unplaced)         0.018     1.866    u_A/D[13]
                          FDCE                                         r  u_A/r_pack_reg[26]/D
   -------------------------------------------------------------------    -------------------
 
@@ -257,9 +257,9 @@ Slack (VIOLATED) :        -0.007ns  (arrival time - required time)
                          FDCE                                         r  u_A/r_pack_reg[27]/C
   -------------------------------------------------------------------    -------------------
                          FDCE (Prop_FDCE_C_Q)         0.084     1.768 r  u_A/r_pack_reg[27]/Q
-                         net (fo=2, unplaced)         0.043     1.811    u_D/r_pack_reg[30][17]
-                         LUT4 (Prop_LUT4_I3_O)        0.037     1.848 r  u_D/r_pack[27]_i_1/O
-                         net (fo=1, unplaced)         0.018     1.866    u_A/D[17]
+                         net (fo=2, unplaced)         0.043     1.811    u_A/r_pack[27]
+                         LUT4 (Prop_LUT4_I3_O)        0.037     1.848 r  u_A/r_pack[27]_i_1/O
+                         net (fo=1, unplaced)         0.018     1.866    u_A/w_pack_next[27]
                          FDCE                                         r  u_A/r_pack_reg[27]/D
   -------------------------------------------------------------------    -------------------
 

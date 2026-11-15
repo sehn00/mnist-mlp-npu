@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
-| Date         : Sat Nov 14 19:51:53 2026
+| Date         : Sun Nov 15 13:31:30 2026
 | Host         : sehn-pc running 64-bit major release  (build 9200)
 | Command      : report_utilization -hierarchical -file C:/Users/user/AISSD/aissd_D_1114/reports/impl_utilization_hier.rpt
 | Design       : npu_top
@@ -22,12 +22,12 @@ Table of Contents
 +--------------------------------------------------+-----------------------------------------------------------+------------+------------+---------+------+-----+--------+--------+------+------------+
 |                     Instance                     |                           Module                          | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | URAM | DSP Blocks |
 +--------------------------------------------------+-----------------------------------------------------------+------------+------------+---------+------+-----+--------+--------+------+------------+
-| npu_top                                          |                                                     (top) |       1185 |       1185 |       0 |    0 | 283 |    106 |     12 |    0 |          0 |
+| npu_top                                          |                                                     (top) |       1183 |       1183 |       0 |    0 | 283 |    106 |     12 |    0 |          0 |
 |   (npu_top)                                      |                                                     (top) |          0 |          0 |       0 |    0 |   0 |      0 |      0 |    0 |          0 |
-|   u_A                                            |                                              npu_postproc |         66 |         66 |       0 |    0 |  97 |      0 |      0 |    0 |          0 |
-|   u_B                                            |                                              npu_mem_ctrl |        763 |        763 |       0 |    0 |  29 |    106 |     12 |    0 |          0 |
+|   u_A                                            |                                              npu_postproc |         71 |         71 |       0 |    0 |  97 |      0 |      0 |    0 |          0 |
+|   u_B                                            |                                              npu_mem_ctrl |        762 |        762 |       0 |    0 |  29 |    106 |     12 |    0 |          0 |
 |     (u_B)                                        |                                              npu_mem_ctrl |         32 |         32 |       0 |    0 |   9 |      0 |      0 |    0 |          0 |
-|     u_mem                                        |                                         memory_controller |        731 |        731 |       0 |    0 |  20 |    106 |     12 |    0 |          0 |
+|     u_mem                                        |                                         memory_controller |        730 |        730 |       0 |    0 |  20 |    106 |     12 |    0 |          0 |
 |       (u_mem)                                    |                                         memory_controller |        372 |        372 |       0 |    0 |   0 |      0 |      0 |    0 |          0 |
 |       u_act_a                                    |                                                act_a_bram |          0 |          0 |       0 |    0 |   0 |      0 |      1 |    0 |          0 |
 |         U0                                       |                             act_a_bram_blk_mem_gen_v8_4_9 |          0 |          0 |       0 |    0 |   0 |      0 |      1 |    0 |          0 |
@@ -255,11 +255,11 @@ Table of Contents
 |                   prim_init.ram                  |  wmem_bank2_blk_mem_gen_prim_wrapper_init__parameterized7 |          0 |          0 |       0 |    0 |   0 |      1 |      0 |    0 |          0 |
 |                 ramloop[9].ram.r                 |         wmem_bank2_blk_mem_gen_prim_width__parameterized8 |          0 |          0 |       0 |    0 |   0 |      1 |      0 |    0 |          0 |
 |                   prim_init.ram                  |  wmem_bank2_blk_mem_gen_prim_wrapper_init__parameterized8 |          0 |          0 |       0 |    0 |   0 |      1 |      0 |    0 |          0 |
-|       u_wmem_bank3                               |                                                wmem_bank3 |         93 |         93 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
-|         U0                                       |                             wmem_bank3_blk_mem_gen_v8_4_9 |         93 |         93 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
-|           inst_blk_mem_gen                       |                       wmem_bank3_blk_mem_gen_v8_4_9_synth |         93 |         93 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
-|             gnbram.gnativebmg.native_blk_mem_gen |                                wmem_bank3_blk_mem_gen_top |         93 |         93 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
-|               valid.cstr                         |                       wmem_bank3_blk_mem_gen_generic_cstr |         93 |         93 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
+|       u_wmem_bank3                               |                                                wmem_bank3 |         92 |         92 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
+|         U0                                       |                             wmem_bank3_blk_mem_gen_v8_4_9 |         92 |         92 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
+|           inst_blk_mem_gen                       |                       wmem_bank3_blk_mem_gen_v8_4_9_synth |         92 |         92 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
+|             gnbram.gnativebmg.native_blk_mem_gen |                                wmem_bank3_blk_mem_gen_top |         92 |         92 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
+|               valid.cstr                         |                       wmem_bank3_blk_mem_gen_generic_cstr |         92 |         92 |       0 |    0 |   5 |     26 |      2 |    0 |          0 |
 |                 bindec_a.bindec_inst_a           |                                         wmem_bank3_bindec |          1 |          1 |       0 |    0 |   0 |      0 |      0 |    0 |          0 |
 |                 has_mux_a.A                      |                                wmem_bank3_blk_mem_gen_mux |         83 |         83 |       0 |    0 |   5 |      0 |      0 |    0 |          0 |
 |                 ramloop[0].ram.r                 |                         wmem_bank3_blk_mem_gen_prim_width |          0 |          0 |       0 |    0 |   0 |      1 |      0 |    0 |          0 |
@@ -318,8 +318,8 @@ Table of Contents
 |                   prim_init.ram                  |  wmem_bank3_blk_mem_gen_prim_wrapper_init__parameterized7 |          0 |          0 |       0 |    0 |   0 |      1 |      0 |    0 |          0 |
 |                 ramloop[9].ram.r                 |         wmem_bank3_blk_mem_gen_prim_width__parameterized8 |          0 |          0 |       0 |    0 |   0 |      1 |      0 |    0 |          0 |
 |                   prim_init.ram                  |  wmem_bank3_blk_mem_gen_prim_wrapper_init__parameterized8 |          0 |          0 |       0 |    0 |   0 |      1 |      0 |    0 |          0 |
-|   u_C                                            |                                              npu_pe_array |        154 |        154 |       0 |    0 |  97 |      0 |      0 |    0 |          0 |
-|   u_D                                            |                                                  npu_ctrl |        202 |        202 |       0 |    0 |  60 |      0 |      0 |    0 |          0 |
+|   u_C                                            |                                              npu_pe_array |        155 |        155 |       0 |    0 |  97 |      0 |      0 |    0 |          0 |
+|   u_D                                            |                                                  npu_ctrl |        197 |        197 |       0 |    0 |  60 |      0 |      0 |    0 |          0 |
 +--------------------------------------------------+-----------------------------------------------------------+------------+------------+---------+------+-----+--------+--------+------+------------+
 * Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
 

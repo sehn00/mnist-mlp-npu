@@ -1,9 +1,22 @@
-run_impl.tcl  2026-11-14 19:34:20
+run_impl.tcl  2026-11-15 13:24:28
 Vivado 2024.2
+==== IP check (scripts/check_ip.py) ====
+  check_ip : RTL RD_LAT defaults npu_top.v 1, npu_ctrl.v 1, npu_mem_ctrl.v 1, checking for RD_LAT 1
+    wmem_bank0   32x29280 read latency 1  coe/weight_bank0.coe = .mif (29280 words) OK
+    wmem_bank1   32x29280 read latency 1  coe/weight_bank1.coe = .mif (29280 words) OK
+    wmem_bank2   32x29280 read latency 1  coe/weight_bank2.coe = .mif (29280 words) OK
+    wmem_bank3   32x29280 read latency 1  coe/weight_bank3.coe = .mif (29280 words) OK
+    bmem_128     128x163  read latency 1  coe/bias_128bit.coe = .mif (163 words) OK
+    imem_a_bram  32x196   read latency 1  -                                    OK
+    imem_b_bram  32x196   read latency 1  -                                    OK
+    act_a_bram   32x128   read latency 1  -                                    OK
+    act_b_bram   32x32    read latency 1  -                                    OK
+    omem_bram    32x10    read latency 1  -                                    OK
+  check_ip : PASS (0 problems)
 part xck26-sfvc784-2LV-c  top npu_top
 ==== synthesis (synth_1) ====
 synth_1 status: synth_design Complete!
-  [synth] LUT cells 1401 / FF 283 / RAMB36 106 / RAMB18 13 (= 112.5 BRAM tiles) / DSP48E2 0 / CARRY8 52
+  [synth] LUT cells 1400 / FF 283 / RAMB36 106 / RAMB18 13 (= 112.5 BRAM tiles) / DSP48E2 0 / CARRY8 52
   [synth] WNS 5.453 ns  (logic levels 11, data delay 4.410 ns)
   [synth]   from u_B/u_mem/u_wmem_bank1/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[12].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.SIMPLE_PRIM36.ram/CLKARDCLK
   [synth]   to   u_C/p1_reg[15]/D
@@ -12,14 +25,14 @@ synth_1 status: synth_design Complete!
   [synth]   to   u_C/v1_reg/D
 ==== implementation (impl_1) ====
 impl_1 status: route_design Complete!
-  [impl] LUT cells 1405 / FF 283 / RAMB36 106 / RAMB18 12 (= 112.0 BRAM tiles) / DSP48E2 0 / CARRY8 52
-  [impl] WNS 2.553 ns  (logic levels 10, data delay 7.094 ns)
+  [impl] LUT cells 1404 / FF 283 / RAMB36 106 / RAMB18 12 (= 112.0 BRAM tiles) / DSP48E2 0 / CARRY8 52
+  [impl] WNS 2.709 ns  (logic levels 11, data delay 7.015 ns)
   [impl]   from u_B/u_mem/u_wmem_bank0/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[5].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.SIMPLE_PRIM36.ram/CLKARDCLK
   [impl]   to   u_C/p0_reg[15]/D
-  [impl] WHS 0.054 ns
-  [impl]   from u_D/r_b_ptr_reg[9]/C
-  [impl]   to   u_B/u_mem/u_bmem/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[1].ram.r/prim_init.ram/DEVICE_8SERIES.NO_BMM_INFO.SP.WIDE_PRIM36.ram/ADDRARDADDR[13]
-  [impl] power: Total On-Chip Power (W) = 0.367
+  [impl] WHS 0.031 ns
+  [impl]   from u_A/r_pack_reg[29]/C
+  [impl]   to   u_A/o_wdata_reg[29]/D
+  [impl] power: Total On-Chip Power (W) = 0.366
   [impl] power: Dynamic (W) = 0.077
   [impl] power: Device Static (W) = 0.289
   [impl] power: Junction Temperature (C) = 25.9
@@ -30,5 +43,6 @@ impl_1 status: route_design Complete!
   [impl] power breakdown: Block RAM = 0.038 W
   [impl] power breakdown: I/O = 0.025 W
   [impl] power breakdown: Static Power = 0.289 W
-*** TIMING MET at 100 MHz (WNS 2.553, WHS 0.054) ***
+*** TIMING MET at 100 MHz (WNS 2.709, WHS 0.031, both > 0) ***
 done. reports: C:/Users/user/AISSD/aissd_D_1114/reports
+RESULT: PASS

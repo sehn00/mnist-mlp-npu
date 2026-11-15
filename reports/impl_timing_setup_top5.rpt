@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version      : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
-| Date              : Sat Nov 14 19:51:57 2026
+| Date              : Sun Nov 15 13:31:34 2026
 | Host              : sehn-pc running 64-bit major release  (build 9200)
 | Command           : report_timing -setup -max_paths 5 -nworst 1 -file C:/Users/user/AISSD/aissd_D_1114/reports/impl_timing_setup_top5.rpt
 | Design            : npu_top
@@ -13,7 +13,7 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanc
 
 Timing Report
 
-Slack (MET) :             2.553ns  (required time - arrival time)
+Slack (MET) :             2.709ns  (required time - arrival time)
   Source:                 <hidden>
                             (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Destination:            u_C/p0_reg[15]/D
@@ -21,19 +21,19 @@ Slack (MET) :             2.553ns  (required time - arrival time)
   Path Group:             i_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
-  Data Path Delay:        7.094ns  (logic 2.690ns (37.918%)  route 4.404ns (62.082%))
-  Logic Levels:           10  (CARRY8=3 LUT3=1 LUT4=1 LUT6=5)
-  Clock Path Skew:        -0.360ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    2.361ns = ( 12.361 - 10.000 ) 
-    Source Clock Delay      (SCD):    3.092ns
+  Data Path Delay:        7.015ns  (logic 3.141ns (44.773%)  route 3.874ns (55.227%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.284ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.397ns = ( 12.397 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.052ns
     Clock Pessimism Removal (CPR):    0.371ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
     Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
-  Clock Net Delay (Source):      2.049ns (routing 0.246ns, distribution 1.803ns)
-  Clock Net Delay (Destination): 1.674ns (routing 0.231ns, distribution 1.443ns)
+  Clock Net Delay (Source):      2.009ns (routing 0.246ns, distribution 1.763ns)
+  Clock Net Delay (Destination): 1.710ns (routing 0.231ns, distribution 1.479ns)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -48,43 +48,46 @@ Slack (MET) :             2.553ns  (required time - arrival time)
                          net (fo=1, routed)           0.477     0.999    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.044     1.043 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.049     3.092    <hidden>
-    RAMB36_X1Y13         RAMB36E2                                     r  <hidden>
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.009     3.052    <hidden>
+    RAMB36_X1Y9          RAMB36E2                                     r  <hidden>
   -------------------------------------------------------------------    -------------------
-    RAMB36_X1Y13         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[5])
-                                                      1.349     4.441 r  <hidden>
-                         net (fo=1, routed)           0.810     5.251    <hidden>
-    SLICE_X51Y62         LUT6 (Prop_F6LUT_SLICEL_I2_O)
-                                                      0.136     5.387 r  <hidden>
-                         net (fo=1, routed)           0.583     5.970    <hidden>
-    SLICE_X47Y62         LUT6 (Prop_D6LUT_SLICEL_I5_O)
-                                                      0.057     6.027 r  <hidden>
-                         net (fo=1, routed)           1.155     7.182    u_B/u_mem/w_wd0[5]
-    SLICE_X47Y161        LUT6 (Prop_F6LUT_SLICEL_I1_O)
-                                                      0.056     7.238 r  u_B/u_mem/p00__30_carry_i_16/O
-                         net (fo=16, routed)          0.612     7.851    u_B/u_mem/w[5]
-    SLICE_X49Y162        LUT6 (Prop_C6LUT_SLICEL_I0_O)
-                                                      0.221     8.072 r  u_B/u_mem/p00__30_carry_i_3/O
-                         net (fo=2, routed)           0.519     8.591    u_B/u_mem/r_wsel_d1_reg[0]_18[4]
-    SLICE_X47Y162        LUT6 (Prop_F6LUT_SLICEL_I0_O)
-                                                      0.150     8.741 r  u_B/u_mem/p00__30_carry_i_10/O
-                         net (fo=1, routed)           0.015     8.756    u_C/p0_reg[3]_1[5]
-    SLICE_X47Y162        CARRY8 (Prop_CARRY8_SLICEL_S[5]_O[6])
-                                                      0.180     8.936 r  u_C/p00__30_carry/O[6]
-                         net (fo=2, routed)           0.348     9.284    u_C/p00__30_carry_n_9
-    SLICE_X45Y163        LUT3 (Prop_F5LUT_SLICEM_I1_O)
-                                                      0.100     9.384 r  u_C/p00__85_carry_i_2/O
-                         net (fo=2, routed)           0.277     9.661    u_C/p00__85_carry_i_2_n_0
-    SLICE_X45Y163        LUT4 (Prop_G6LUT_SLICEM_I0_O)
-                                                      0.152     9.813 r  u_C/p00__85_carry_i_10/O
-                         net (fo=1, routed)           0.021     9.834    u_C/p00__85_carry_i_10_n_0
-    SLICE_X45Y163        CARRY8 (Prop_CARRY8_SLICEM_S[6]_CO[7])
-                                                      0.175    10.009 r  u_C/p00__85_carry/CO[7]
-                         net (fo=1, routed)           0.030    10.039    u_C/p00__85_carry_n_0
-    SLICE_X45Y164        CARRY8 (Prop_CARRY8_SLICEM_CI_O[3])
-                                                      0.114    10.153 r  u_C/p00__85_carry__0/O[3]
-                         net (fo=1, routed)           0.034    10.187    u_C/p00[15]
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[15]/D
+    RAMB36_X1Y9          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[1])
+                                                      1.406     4.458 r  <hidden>
+                         net (fo=1, routed)           0.708     5.166    <hidden>
+    SLICE_X52Y47         LUT6 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.137     5.303 r  <hidden>
+                         net (fo=1, routed)           0.181     5.484    <hidden>
+    SLICE_X52Y51         LUT6 (Prop_H6LUT_SLICEL_I5_O)
+                                                      0.227     5.711 r  <hidden>
+                         net (fo=1, routed)           1.652     7.363    u_B/u_mem/w_wd0[1]
+    SLICE_X48Y165        LUT6 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.153     7.516 r  u_B/u_mem/p00__0_carry_i_18/O
+                         net (fo=17, routed)          0.506     8.022    u_B/u_mem/w[1]
+    SLICE_X49Y166        LUT6 (Prop_G6LUT_SLICEL_I2_O)
+                                                      0.226     8.248 r  u_B/u_mem/p00__0_carry_i_3/O
+                         net (fo=2, routed)           0.188     8.436    u_B/u_mem/r_wsel_d1_reg[0]_16[4]
+    SLICE_X49Y165        LUT6 (Prop_F6LUT_SLICEL_I0_O)
+                                                      0.056     8.492 r  u_B/u_mem/p00__0_carry_i_10/O
+                         net (fo=1, routed)           0.015     8.507    u_C/p0_reg[2]_1[5]
+    SLICE_X49Y165        CARRY8 (Prop_CARRY8_SLICEL_S[5]_CO[7])
+                                                      0.232     8.739 r  u_C/p00__0_carry/CO[7]
+                         net (fo=1, routed)           0.030     8.769    u_C/p00__0_carry_n_0
+    SLICE_X49Y166        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.106     8.875 r  u_C/p00__0_carry__0/O[1]
+                         net (fo=2, routed)           0.206     9.081    u_C/p00__0_carry__0_n_14
+    SLICE_X50Y164        LUT3 (Prop_F5LUT_SLICEL_I2_O)
+                                                      0.162     9.243 r  u_C/p00__85_carry_i_2/O
+                         net (fo=2, routed)           0.312     9.555    u_C/p00__85_carry_i_2_n_0
+    SLICE_X50Y164        LUT4 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.151     9.706 r  u_C/p00__85_carry_i_10/O
+                         net (fo=1, routed)           0.012     9.718    u_C/p00__85_carry_i_10_n_0
+    SLICE_X50Y164        CARRY8 (Prop_CARRY8_SLICEL_S[6]_CO[7])
+                                                      0.171     9.889 r  u_C/p00__85_carry/CO[7]
+                         net (fo=1, routed)           0.030     9.919    u_C/p00__85_carry_n_0
+    SLICE_X50Y165        CARRY8 (Prop_CARRY8_SLICEL_CI_O[3])
+                                                      0.114    10.033 r  u_C/p00__85_carry__0/O[3]
+                         net (fo=1, routed)           0.034    10.067    u_C/p00[15]
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[15]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock i_clk rise edge)     10.000    10.000 r  
@@ -98,19 +101,19 @@ Slack (MET) :             2.553ns  (required time - arrival time)
                          net (fo=1, routed)           0.376    10.648    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.039    10.687 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.674    12.361    u_C/CLK
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[15]/C
-                         clock pessimism              0.371    12.732    
-                         clock uncertainty           -0.035    12.697    
-    SLICE_X45Y164        FDCE (Setup_DFF_SLICEM_C_D)
-                                                      0.043    12.740    u_C/p0_reg[15]
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.710    12.397    u_C/CLK
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[15]/C
+                         clock pessimism              0.371    12.768    
+                         clock uncertainty           -0.035    12.733    
+    SLICE_X50Y165        FDCE (Setup_DFF_SLICEL_C_D)
+                                                      0.044    12.777    u_C/p0_reg[15]
   -------------------------------------------------------------------
-                         required time                         12.740    
-                         arrival time                         -10.187    
+                         required time                         12.777    
+                         arrival time                         -10.067    
   -------------------------------------------------------------------
-                         slack                                  2.553    
+                         slack                                  2.709    
 
-Slack (MET) :             2.562ns  (required time - arrival time)
+Slack (MET) :             2.718ns  (required time - arrival time)
   Source:                 <hidden>
                             (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Destination:            u_C/p0_reg[13]/D
@@ -118,19 +121,19 @@ Slack (MET) :             2.562ns  (required time - arrival time)
   Path Group:             i_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
-  Data Path Delay:        7.085ns  (logic 2.682ns (37.854%)  route 4.403ns (62.146%))
-  Logic Levels:           10  (CARRY8=3 LUT3=1 LUT4=1 LUT6=5)
-  Clock Path Skew:        -0.360ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    2.361ns = ( 12.361 - 10.000 ) 
-    Source Clock Delay      (SCD):    3.092ns
+  Data Path Delay:        7.006ns  (logic 3.133ns (44.717%)  route 3.873ns (55.283%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.284ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.397ns = ( 12.397 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.052ns
     Clock Pessimism Removal (CPR):    0.371ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
     Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
-  Clock Net Delay (Source):      2.049ns (routing 0.246ns, distribution 1.803ns)
-  Clock Net Delay (Destination): 1.674ns (routing 0.231ns, distribution 1.443ns)
+  Clock Net Delay (Source):      2.009ns (routing 0.246ns, distribution 1.763ns)
+  Clock Net Delay (Destination): 1.710ns (routing 0.231ns, distribution 1.479ns)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -145,43 +148,46 @@ Slack (MET) :             2.562ns  (required time - arrival time)
                          net (fo=1, routed)           0.477     0.999    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.044     1.043 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.049     3.092    <hidden>
-    RAMB36_X1Y13         RAMB36E2                                     r  <hidden>
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.009     3.052    <hidden>
+    RAMB36_X1Y9          RAMB36E2                                     r  <hidden>
   -------------------------------------------------------------------    -------------------
-    RAMB36_X1Y13         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[5])
-                                                      1.349     4.441 r  <hidden>
-                         net (fo=1, routed)           0.810     5.251    <hidden>
-    SLICE_X51Y62         LUT6 (Prop_F6LUT_SLICEL_I2_O)
-                                                      0.136     5.387 r  <hidden>
-                         net (fo=1, routed)           0.583     5.970    <hidden>
-    SLICE_X47Y62         LUT6 (Prop_D6LUT_SLICEL_I5_O)
-                                                      0.057     6.027 r  <hidden>
-                         net (fo=1, routed)           1.155     7.182    u_B/u_mem/w_wd0[5]
-    SLICE_X47Y161        LUT6 (Prop_F6LUT_SLICEL_I1_O)
-                                                      0.056     7.238 r  u_B/u_mem/p00__30_carry_i_16/O
-                         net (fo=16, routed)          0.612     7.851    u_B/u_mem/w[5]
-    SLICE_X49Y162        LUT6 (Prop_C6LUT_SLICEL_I0_O)
-                                                      0.221     8.072 r  u_B/u_mem/p00__30_carry_i_3/O
-                         net (fo=2, routed)           0.519     8.591    u_B/u_mem/r_wsel_d1_reg[0]_18[4]
-    SLICE_X47Y162        LUT6 (Prop_F6LUT_SLICEL_I0_O)
-                                                      0.150     8.741 r  u_B/u_mem/p00__30_carry_i_10/O
-                         net (fo=1, routed)           0.015     8.756    u_C/p0_reg[3]_1[5]
-    SLICE_X47Y162        CARRY8 (Prop_CARRY8_SLICEL_S[5]_O[6])
-                                                      0.180     8.936 r  u_C/p00__30_carry/O[6]
-                         net (fo=2, routed)           0.348     9.284    u_C/p00__30_carry_n_9
-    SLICE_X45Y163        LUT3 (Prop_F5LUT_SLICEM_I1_O)
-                                                      0.100     9.384 r  u_C/p00__85_carry_i_2/O
-                         net (fo=2, routed)           0.277     9.661    u_C/p00__85_carry_i_2_n_0
-    SLICE_X45Y163        LUT4 (Prop_G6LUT_SLICEM_I0_O)
-                                                      0.152     9.813 r  u_C/p00__85_carry_i_10/O
-                         net (fo=1, routed)           0.021     9.834    u_C/p00__85_carry_i_10_n_0
-    SLICE_X45Y163        CARRY8 (Prop_CARRY8_SLICEM_S[6]_CO[7])
-                                                      0.175    10.009 r  u_C/p00__85_carry/CO[7]
-                         net (fo=1, routed)           0.030    10.039    u_C/p00__85_carry_n_0
-    SLICE_X45Y164        CARRY8 (Prop_CARRY8_SLICEM_CI_O[1])
-                                                      0.106    10.145 r  u_C/p00__85_carry__0/O[1]
-                         net (fo=1, routed)           0.033    10.178    u_C/p00[13]
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[13]/D
+    RAMB36_X1Y9          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[1])
+                                                      1.406     4.458 r  <hidden>
+                         net (fo=1, routed)           0.708     5.166    <hidden>
+    SLICE_X52Y47         LUT6 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.137     5.303 r  <hidden>
+                         net (fo=1, routed)           0.181     5.484    <hidden>
+    SLICE_X52Y51         LUT6 (Prop_H6LUT_SLICEL_I5_O)
+                                                      0.227     5.711 r  <hidden>
+                         net (fo=1, routed)           1.652     7.363    u_B/u_mem/w_wd0[1]
+    SLICE_X48Y165        LUT6 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.153     7.516 r  u_B/u_mem/p00__0_carry_i_18/O
+                         net (fo=17, routed)          0.506     8.022    u_B/u_mem/w[1]
+    SLICE_X49Y166        LUT6 (Prop_G6LUT_SLICEL_I2_O)
+                                                      0.226     8.248 r  u_B/u_mem/p00__0_carry_i_3/O
+                         net (fo=2, routed)           0.188     8.436    u_B/u_mem/r_wsel_d1_reg[0]_16[4]
+    SLICE_X49Y165        LUT6 (Prop_F6LUT_SLICEL_I0_O)
+                                                      0.056     8.492 r  u_B/u_mem/p00__0_carry_i_10/O
+                         net (fo=1, routed)           0.015     8.507    u_C/p0_reg[2]_1[5]
+    SLICE_X49Y165        CARRY8 (Prop_CARRY8_SLICEL_S[5]_CO[7])
+                                                      0.232     8.739 r  u_C/p00__0_carry/CO[7]
+                         net (fo=1, routed)           0.030     8.769    u_C/p00__0_carry_n_0
+    SLICE_X49Y166        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.106     8.875 r  u_C/p00__0_carry__0/O[1]
+                         net (fo=2, routed)           0.206     9.081    u_C/p00__0_carry__0_n_14
+    SLICE_X50Y164        LUT3 (Prop_F5LUT_SLICEL_I2_O)
+                                                      0.162     9.243 r  u_C/p00__85_carry_i_2/O
+                         net (fo=2, routed)           0.312     9.555    u_C/p00__85_carry_i_2_n_0
+    SLICE_X50Y164        LUT4 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.151     9.706 r  u_C/p00__85_carry_i_10/O
+                         net (fo=1, routed)           0.012     9.718    u_C/p00__85_carry_i_10_n_0
+    SLICE_X50Y164        CARRY8 (Prop_CARRY8_SLICEL_S[6]_CO[7])
+                                                      0.171     9.889 r  u_C/p00__85_carry/CO[7]
+                         net (fo=1, routed)           0.030     9.919    u_C/p00__85_carry_n_0
+    SLICE_X50Y165        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.106    10.025 r  u_C/p00__85_carry__0/O[1]
+                         net (fo=1, routed)           0.033    10.058    u_C/p00[13]
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[13]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock i_clk rise edge)     10.000    10.000 r  
@@ -195,19 +201,19 @@ Slack (MET) :             2.562ns  (required time - arrival time)
                          net (fo=1, routed)           0.376    10.648    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.039    10.687 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.674    12.361    u_C/CLK
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[13]/C
-                         clock pessimism              0.371    12.732    
-                         clock uncertainty           -0.035    12.697    
-    SLICE_X45Y164        FDCE (Setup_BFF_SLICEM_C_D)
-                                                      0.043    12.740    u_C/p0_reg[13]
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.710    12.397    u_C/CLK
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[13]/C
+                         clock pessimism              0.371    12.768    
+                         clock uncertainty           -0.035    12.733    
+    SLICE_X50Y165        FDCE (Setup_BFF_SLICEL_C_D)
+                                                      0.044    12.777    u_C/p0_reg[13]
   -------------------------------------------------------------------
-                         required time                         12.740    
-                         arrival time                         -10.178    
+                         required time                         12.777    
+                         arrival time                         -10.058    
   -------------------------------------------------------------------
-                         slack                                  2.562    
+                         slack                                  2.718    
 
-Slack (MET) :             2.574ns  (required time - arrival time)
+Slack (MET) :             2.730ns  (required time - arrival time)
   Source:                 <hidden>
                             (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Destination:            u_C/p0_reg[14]/D
@@ -215,19 +221,19 @@ Slack (MET) :             2.574ns  (required time - arrival time)
   Path Group:             i_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
-  Data Path Delay:        7.073ns  (logic 2.669ns (37.734%)  route 4.404ns (62.266%))
-  Logic Levels:           10  (CARRY8=3 LUT3=1 LUT4=1 LUT6=5)
-  Clock Path Skew:        -0.360ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    2.361ns = ( 12.361 - 10.000 ) 
-    Source Clock Delay      (SCD):    3.092ns
+  Data Path Delay:        6.994ns  (logic 3.120ns (44.608%)  route 3.874ns (55.392%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.284ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.397ns = ( 12.397 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.052ns
     Clock Pessimism Removal (CPR):    0.371ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
     Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
-  Clock Net Delay (Source):      2.049ns (routing 0.246ns, distribution 1.803ns)
-  Clock Net Delay (Destination): 1.674ns (routing 0.231ns, distribution 1.443ns)
+  Clock Net Delay (Source):      2.009ns (routing 0.246ns, distribution 1.763ns)
+  Clock Net Delay (Destination): 1.710ns (routing 0.231ns, distribution 1.479ns)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -242,43 +248,46 @@ Slack (MET) :             2.574ns  (required time - arrival time)
                          net (fo=1, routed)           0.477     0.999    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.044     1.043 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.049     3.092    <hidden>
-    RAMB36_X1Y13         RAMB36E2                                     r  <hidden>
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.009     3.052    <hidden>
+    RAMB36_X1Y9          RAMB36E2                                     r  <hidden>
   -------------------------------------------------------------------    -------------------
-    RAMB36_X1Y13         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[5])
-                                                      1.349     4.441 r  <hidden>
-                         net (fo=1, routed)           0.810     5.251    <hidden>
-    SLICE_X51Y62         LUT6 (Prop_F6LUT_SLICEL_I2_O)
-                                                      0.136     5.387 r  <hidden>
-                         net (fo=1, routed)           0.583     5.970    <hidden>
-    SLICE_X47Y62         LUT6 (Prop_D6LUT_SLICEL_I5_O)
-                                                      0.057     6.027 r  <hidden>
-                         net (fo=1, routed)           1.155     7.182    u_B/u_mem/w_wd0[5]
-    SLICE_X47Y161        LUT6 (Prop_F6LUT_SLICEL_I1_O)
-                                                      0.056     7.238 r  u_B/u_mem/p00__30_carry_i_16/O
-                         net (fo=16, routed)          0.612     7.851    u_B/u_mem/w[5]
-    SLICE_X49Y162        LUT6 (Prop_C6LUT_SLICEL_I0_O)
-                                                      0.221     8.072 r  u_B/u_mem/p00__30_carry_i_3/O
-                         net (fo=2, routed)           0.519     8.591    u_B/u_mem/r_wsel_d1_reg[0]_18[4]
-    SLICE_X47Y162        LUT6 (Prop_F6LUT_SLICEL_I0_O)
-                                                      0.150     8.741 r  u_B/u_mem/p00__30_carry_i_10/O
-                         net (fo=1, routed)           0.015     8.756    u_C/p0_reg[3]_1[5]
-    SLICE_X47Y162        CARRY8 (Prop_CARRY8_SLICEL_S[5]_O[6])
-                                                      0.180     8.936 r  u_C/p00__30_carry/O[6]
-                         net (fo=2, routed)           0.348     9.284    u_C/p00__30_carry_n_9
-    SLICE_X45Y163        LUT3 (Prop_F5LUT_SLICEM_I1_O)
-                                                      0.100     9.384 r  u_C/p00__85_carry_i_2/O
-                         net (fo=2, routed)           0.277     9.661    u_C/p00__85_carry_i_2_n_0
-    SLICE_X45Y163        LUT4 (Prop_G6LUT_SLICEM_I0_O)
-                                                      0.152     9.813 r  u_C/p00__85_carry_i_10/O
-                         net (fo=1, routed)           0.021     9.834    u_C/p00__85_carry_i_10_n_0
-    SLICE_X45Y163        CARRY8 (Prop_CARRY8_SLICEM_S[6]_CO[7])
-                                                      0.175    10.009 r  u_C/p00__85_carry/CO[7]
-                         net (fo=1, routed)           0.030    10.039    u_C/p00__85_carry_n_0
-    SLICE_X45Y164        CARRY8 (Prop_CARRY8_SLICEM_CI_O[2])
-                                                      0.093    10.132 r  u_C/p00__85_carry__0/O[2]
-                         net (fo=1, routed)           0.034    10.166    u_C/p00[14]
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[14]/D
+    RAMB36_X1Y9          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[1])
+                                                      1.406     4.458 r  <hidden>
+                         net (fo=1, routed)           0.708     5.166    <hidden>
+    SLICE_X52Y47         LUT6 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.137     5.303 r  <hidden>
+                         net (fo=1, routed)           0.181     5.484    <hidden>
+    SLICE_X52Y51         LUT6 (Prop_H6LUT_SLICEL_I5_O)
+                                                      0.227     5.711 r  <hidden>
+                         net (fo=1, routed)           1.652     7.363    u_B/u_mem/w_wd0[1]
+    SLICE_X48Y165        LUT6 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.153     7.516 r  u_B/u_mem/p00__0_carry_i_18/O
+                         net (fo=17, routed)          0.506     8.022    u_B/u_mem/w[1]
+    SLICE_X49Y166        LUT6 (Prop_G6LUT_SLICEL_I2_O)
+                                                      0.226     8.248 r  u_B/u_mem/p00__0_carry_i_3/O
+                         net (fo=2, routed)           0.188     8.436    u_B/u_mem/r_wsel_d1_reg[0]_16[4]
+    SLICE_X49Y165        LUT6 (Prop_F6LUT_SLICEL_I0_O)
+                                                      0.056     8.492 r  u_B/u_mem/p00__0_carry_i_10/O
+                         net (fo=1, routed)           0.015     8.507    u_C/p0_reg[2]_1[5]
+    SLICE_X49Y165        CARRY8 (Prop_CARRY8_SLICEL_S[5]_CO[7])
+                                                      0.232     8.739 r  u_C/p00__0_carry/CO[7]
+                         net (fo=1, routed)           0.030     8.769    u_C/p00__0_carry_n_0
+    SLICE_X49Y166        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.106     8.875 r  u_C/p00__0_carry__0/O[1]
+                         net (fo=2, routed)           0.206     9.081    u_C/p00__0_carry__0_n_14
+    SLICE_X50Y164        LUT3 (Prop_F5LUT_SLICEL_I2_O)
+                                                      0.162     9.243 r  u_C/p00__85_carry_i_2/O
+                         net (fo=2, routed)           0.312     9.555    u_C/p00__85_carry_i_2_n_0
+    SLICE_X50Y164        LUT4 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.151     9.706 r  u_C/p00__85_carry_i_10/O
+                         net (fo=1, routed)           0.012     9.718    u_C/p00__85_carry_i_10_n_0
+    SLICE_X50Y164        CARRY8 (Prop_CARRY8_SLICEL_S[6]_CO[7])
+                                                      0.171     9.889 r  u_C/p00__85_carry/CO[7]
+                         net (fo=1, routed)           0.030     9.919    u_C/p00__85_carry_n_0
+    SLICE_X50Y165        CARRY8 (Prop_CARRY8_SLICEL_CI_O[2])
+                                                      0.093    10.012 r  u_C/p00__85_carry__0/O[2]
+                         net (fo=1, routed)           0.034    10.046    u_C/p00[14]
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[14]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock i_clk rise edge)     10.000    10.000 r  
@@ -292,19 +301,19 @@ Slack (MET) :             2.574ns  (required time - arrival time)
                          net (fo=1, routed)           0.376    10.648    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.039    10.687 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.674    12.361    u_C/CLK
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[14]/C
-                         clock pessimism              0.371    12.732    
-                         clock uncertainty           -0.035    12.697    
-    SLICE_X45Y164        FDCE (Setup_CFF_SLICEM_C_D)
-                                                      0.043    12.740    u_C/p0_reg[14]
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.710    12.397    u_C/CLK
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[14]/C
+                         clock pessimism              0.371    12.768    
+                         clock uncertainty           -0.035    12.733    
+    SLICE_X50Y165        FDCE (Setup_CFF_SLICEL_C_D)
+                                                      0.044    12.777    u_C/p0_reg[14]
   -------------------------------------------------------------------
-                         required time                         12.740    
-                         arrival time                         -10.166    
+                         required time                         12.777    
+                         arrival time                         -10.046    
   -------------------------------------------------------------------
-                         slack                                  2.574    
+                         slack                                  2.730    
 
-Slack (MET) :             2.592ns  (required time - arrival time)
+Slack (MET) :             2.747ns  (required time - arrival time)
   Source:                 <hidden>
                             (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Destination:            u_C/p0_reg[12]/D
@@ -312,19 +321,19 @@ Slack (MET) :             2.592ns  (required time - arrival time)
   Path Group:             i_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
-  Data Path Delay:        7.056ns  (logic 2.654ns (37.612%)  route 4.402ns (62.388%))
-  Logic Levels:           10  (CARRY8=3 LUT3=1 LUT4=1 LUT6=5)
-  Clock Path Skew:        -0.360ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    2.361ns = ( 12.361 - 10.000 ) 
-    Source Clock Delay      (SCD):    3.092ns
+  Data Path Delay:        6.977ns  (logic 3.105ns (44.501%)  route 3.872ns (55.499%))
+  Logic Levels:           11  (CARRY8=4 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.284ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.397ns = ( 12.397 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.052ns
     Clock Pessimism Removal (CPR):    0.371ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
     Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
-  Clock Net Delay (Source):      2.049ns (routing 0.246ns, distribution 1.803ns)
-  Clock Net Delay (Destination): 1.674ns (routing 0.231ns, distribution 1.443ns)
+  Clock Net Delay (Source):      2.009ns (routing 0.246ns, distribution 1.763ns)
+  Clock Net Delay (Destination): 1.710ns (routing 0.231ns, distribution 1.479ns)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -339,43 +348,46 @@ Slack (MET) :             2.592ns  (required time - arrival time)
                          net (fo=1, routed)           0.477     0.999    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.044     1.043 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.049     3.092    <hidden>
-    RAMB36_X1Y13         RAMB36E2                                     r  <hidden>
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.009     3.052    <hidden>
+    RAMB36_X1Y9          RAMB36E2                                     r  <hidden>
   -------------------------------------------------------------------    -------------------
-    RAMB36_X1Y13         RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[5])
-                                                      1.349     4.441 r  <hidden>
-                         net (fo=1, routed)           0.810     5.251    <hidden>
-    SLICE_X51Y62         LUT6 (Prop_F6LUT_SLICEL_I2_O)
-                                                      0.136     5.387 r  <hidden>
-                         net (fo=1, routed)           0.583     5.970    <hidden>
-    SLICE_X47Y62         LUT6 (Prop_D6LUT_SLICEL_I5_O)
-                                                      0.057     6.027 r  <hidden>
-                         net (fo=1, routed)           1.155     7.182    u_B/u_mem/w_wd0[5]
-    SLICE_X47Y161        LUT6 (Prop_F6LUT_SLICEL_I1_O)
-                                                      0.056     7.238 r  u_B/u_mem/p00__30_carry_i_16/O
-                         net (fo=16, routed)          0.612     7.851    u_B/u_mem/w[5]
-    SLICE_X49Y162        LUT6 (Prop_C6LUT_SLICEL_I0_O)
-                                                      0.221     8.072 r  u_B/u_mem/p00__30_carry_i_3/O
-                         net (fo=2, routed)           0.519     8.591    u_B/u_mem/r_wsel_d1_reg[0]_18[4]
-    SLICE_X47Y162        LUT6 (Prop_F6LUT_SLICEL_I0_O)
-                                                      0.150     8.741 r  u_B/u_mem/p00__30_carry_i_10/O
-                         net (fo=1, routed)           0.015     8.756    u_C/p0_reg[3]_1[5]
-    SLICE_X47Y162        CARRY8 (Prop_CARRY8_SLICEL_S[5]_O[6])
-                                                      0.180     8.936 r  u_C/p00__30_carry/O[6]
-                         net (fo=2, routed)           0.348     9.284    u_C/p00__30_carry_n_9
-    SLICE_X45Y163        LUT3 (Prop_F5LUT_SLICEM_I1_O)
-                                                      0.100     9.384 r  u_C/p00__85_carry_i_2/O
-                         net (fo=2, routed)           0.277     9.661    u_C/p00__85_carry_i_2_n_0
-    SLICE_X45Y163        LUT4 (Prop_G6LUT_SLICEM_I0_O)
-                                                      0.152     9.813 r  u_C/p00__85_carry_i_10/O
-                         net (fo=1, routed)           0.021     9.834    u_C/p00__85_carry_i_10_n_0
-    SLICE_X45Y163        CARRY8 (Prop_CARRY8_SLICEM_S[6]_CO[7])
-                                                      0.175    10.009 r  u_C/p00__85_carry/CO[7]
-                         net (fo=1, routed)           0.030    10.039    u_C/p00__85_carry_n_0
-    SLICE_X45Y164        CARRY8 (Prop_CARRY8_SLICEM_CI_O[0])
-                                                      0.078    10.117 r  u_C/p00__85_carry__0/O[0]
-                         net (fo=1, routed)           0.032    10.149    u_C/p00[12]
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[12]/D
+    RAMB36_X1Y9          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[1])
+                                                      1.406     4.458 r  <hidden>
+                         net (fo=1, routed)           0.708     5.166    <hidden>
+    SLICE_X52Y47         LUT6 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.137     5.303 r  <hidden>
+                         net (fo=1, routed)           0.181     5.484    <hidden>
+    SLICE_X52Y51         LUT6 (Prop_H6LUT_SLICEL_I5_O)
+                                                      0.227     5.711 r  <hidden>
+                         net (fo=1, routed)           1.652     7.363    u_B/u_mem/w_wd0[1]
+    SLICE_X48Y165        LUT6 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.153     7.516 r  u_B/u_mem/p00__0_carry_i_18/O
+                         net (fo=17, routed)          0.506     8.022    u_B/u_mem/w[1]
+    SLICE_X49Y166        LUT6 (Prop_G6LUT_SLICEL_I2_O)
+                                                      0.226     8.248 r  u_B/u_mem/p00__0_carry_i_3/O
+                         net (fo=2, routed)           0.188     8.436    u_B/u_mem/r_wsel_d1_reg[0]_16[4]
+    SLICE_X49Y165        LUT6 (Prop_F6LUT_SLICEL_I0_O)
+                                                      0.056     8.492 r  u_B/u_mem/p00__0_carry_i_10/O
+                         net (fo=1, routed)           0.015     8.507    u_C/p0_reg[2]_1[5]
+    SLICE_X49Y165        CARRY8 (Prop_CARRY8_SLICEL_S[5]_CO[7])
+                                                      0.232     8.739 r  u_C/p00__0_carry/CO[7]
+                         net (fo=1, routed)           0.030     8.769    u_C/p00__0_carry_n_0
+    SLICE_X49Y166        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.106     8.875 r  u_C/p00__0_carry__0/O[1]
+                         net (fo=2, routed)           0.206     9.081    u_C/p00__0_carry__0_n_14
+    SLICE_X50Y164        LUT3 (Prop_F5LUT_SLICEL_I2_O)
+                                                      0.162     9.243 r  u_C/p00__85_carry_i_2/O
+                         net (fo=2, routed)           0.312     9.555    u_C/p00__85_carry_i_2_n_0
+    SLICE_X50Y164        LUT4 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.151     9.706 r  u_C/p00__85_carry_i_10/O
+                         net (fo=1, routed)           0.012     9.718    u_C/p00__85_carry_i_10_n_0
+    SLICE_X50Y164        CARRY8 (Prop_CARRY8_SLICEL_S[6]_CO[7])
+                                                      0.171     9.889 r  u_C/p00__85_carry/CO[7]
+                         net (fo=1, routed)           0.030     9.919    u_C/p00__85_carry_n_0
+    SLICE_X50Y165        CARRY8 (Prop_CARRY8_SLICEL_CI_O[0])
+                                                      0.078     9.997 r  u_C/p00__85_carry__0/O[0]
+                         net (fo=1, routed)           0.032    10.029    u_C/p00[12]
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[12]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock i_clk rise edge)     10.000    10.000 r  
@@ -389,39 +401,39 @@ Slack (MET) :             2.592ns  (required time - arrival time)
                          net (fo=1, routed)           0.376    10.648    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.039    10.687 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.674    12.361    u_C/CLK
-    SLICE_X45Y164        FDCE                                         r  u_C/p0_reg[12]/C
-                         clock pessimism              0.371    12.732    
-                         clock uncertainty           -0.035    12.697    
-    SLICE_X45Y164        FDCE (Setup_AFF_SLICEM_C_D)
-                                                      0.044    12.741    u_C/p0_reg[12]
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.710    12.397    u_C/CLK
+    SLICE_X50Y165        FDCE                                         r  u_C/p0_reg[12]/C
+                         clock pessimism              0.371    12.768    
+                         clock uncertainty           -0.035    12.733    
+    SLICE_X50Y165        FDCE (Setup_AFF_SLICEL_C_D)
+                                                      0.044    12.777    u_C/p0_reg[12]
   -------------------------------------------------------------------
-                         required time                         12.741    
-                         arrival time                         -10.149    
+                         required time                         12.777    
+                         arrival time                         -10.029    
   -------------------------------------------------------------------
-                         slack                                  2.592    
+                         slack                                  2.747    
 
-Slack (MET) :             2.728ns  (required time - arrival time)
+Slack (MET) :             2.918ns  (required time - arrival time)
   Source:                 <hidden>
                             (rising edge-triggered cell RAMB36E2 clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            u_C/p1_reg[15]/D
+  Destination:            u_C/p0_reg[11]/D
                             (rising edge-triggered cell FDCE clocked by i_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             i_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (i_clk rise@10.000ns - i_clk rise@0.000ns)
-  Data Path Delay:        6.923ns  (logic 2.738ns (39.551%)  route 4.185ns (60.449%))
-  Logic Levels:           10  (CARRY8=4 LUT3=1 LUT4=2 LUT6=3)
-  Clock Path Skew:        -0.357ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    2.355ns = ( 12.355 - 10.000 ) 
-    Source Clock Delay      (SCD):    3.083ns
+  Data Path Delay:        6.816ns  (logic 2.972ns (43.601%)  route 3.844ns (56.399%))
+  Logic Levels:           10  (CARRY8=3 LUT3=1 LUT4=1 LUT6=5)
+  Clock Path Skew:        -0.275ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.406ns = ( 12.406 - 10.000 ) 
+    Source Clock Delay      (SCD):    3.052ns
     Clock Pessimism Removal (CPR):    0.371ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
     Discrete Jitter          (DJ):    0.000ns
     Phase Error              (PE):    0.000ns
-  Clock Net Delay (Source):      2.040ns (routing 0.246ns, distribution 1.794ns)
-  Clock Net Delay (Destination): 1.668ns (routing 0.231ns, distribution 1.437ns)
+  Clock Net Delay (Source):      2.009ns (routing 0.246ns, distribution 1.763ns)
+  Clock Net Delay (Destination): 1.719ns (routing 0.231ns, distribution 1.488ns)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -436,43 +448,43 @@ Slack (MET) :             2.728ns  (required time - arrival time)
                          net (fo=1, routed)           0.477     0.999    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.044     1.043 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.040     3.083    <hidden>
-    RAMB36_X2Y8          RAMB36E2                                     r  <hidden>
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         2.009     3.052    <hidden>
+    RAMB36_X1Y9          RAMB36E2                                     r  <hidden>
   -------------------------------------------------------------------    -------------------
-    RAMB36_X2Y8          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[0])
-                                                      1.412     4.495 r  <hidden>
-                         net (fo=1, routed)           0.828     5.323    <hidden>
-    SLICE_X47Y43         LUT6 (Prop_H6LUT_SLICEL_I2_O)
-                                                      0.083     5.406 r  <hidden>
-                         net (fo=1, routed)           0.236     5.642    <hidden>
-    SLICE_X47Y50         LUT6 (Prop_E6LUT_SLICEL_I4_O)
-                                                      0.152     5.794 r  <hidden>
-                         net (fo=1, routed)           1.648     7.442    u_B/u_mem/w_wd0[9]
-    SLICE_X43Y140        LUT6 (Prop_H6LUT_SLICEM_I1_O)
-                                                      0.154     7.596 r  u_B/u_mem/p10__0_carry_i_18/O
-                         net (fo=17, routed)          0.414     8.010    u_B/u_mem/w[9]
-    SLICE_X43Y156        LUT4 (Prop_D6LUT_SLICEM_I0_O)
-                                                      0.080     8.090 r  u_B/u_mem/p10__0_carry_i_6/O
-                         net (fo=1, routed)           0.305     8.395    u_C/p1_reg[2]_0[1]
-    SLICE_X43Y157        CARRY8 (Prop_CARRY8_SLICEM_DI[2]_CO[7])
-                                                      0.164     8.559 r  u_C/p10__0_carry/CO[7]
-                         net (fo=1, routed)           0.030     8.589    u_C/p10__0_carry_n_0
-    SLICE_X43Y158        CARRY8 (Prop_CARRY8_SLICEM_CI_O[1])
-                                                      0.106     8.695 r  u_C/p10__0_carry__0/O[1]
-                         net (fo=2, routed)           0.416     9.111    u_C/p10__0_carry__0_n_14
-    SLICE_X45Y157        LUT3 (Prop_F5LUT_SLICEM_I2_O)
-                                                      0.161     9.272 r  u_C/p10__85_carry_i_2/O
-                         net (fo=2, routed)           0.223     9.495    u_C/p10__85_carry_i_2_n_0
-    SLICE_X45Y157        LUT4 (Prop_G6LUT_SLICEM_I0_O)
-                                                      0.137     9.632 r  u_C/p10__85_carry_i_10/O
-                         net (fo=1, routed)           0.021     9.653    u_C/p10__85_carry_i_10_n_0
-    SLICE_X45Y157        CARRY8 (Prop_CARRY8_SLICEM_S[6]_CO[7])
-                                                      0.175     9.828 r  u_C/p10__85_carry/CO[7]
-                         net (fo=1, routed)           0.030     9.858    u_C/p10__85_carry_n_0
-    SLICE_X45Y158        CARRY8 (Prop_CARRY8_SLICEM_CI_O[3])
-                                                      0.114     9.972 r  u_C/p10__85_carry__0/O[3]
-                         net (fo=1, routed)           0.034    10.006    u_C/p10[15]
-    SLICE_X45Y158        FDCE                                         r  u_C/p1_reg[15]/D
+    RAMB36_X1Y9          RAMB36E2 (Prop_RAMB36E2_RAMB36_CLKARDCLK_DOUTADOUT[1])
+                                                      1.406     4.458 r  <hidden>
+                         net (fo=1, routed)           0.708     5.166    <hidden>
+    SLICE_X52Y47         LUT6 (Prop_H6LUT_SLICEL_I2_O)
+                                                      0.137     5.303 r  <hidden>
+                         net (fo=1, routed)           0.181     5.484    <hidden>
+    SLICE_X52Y51         LUT6 (Prop_H6LUT_SLICEL_I5_O)
+                                                      0.227     5.711 r  <hidden>
+                         net (fo=1, routed)           1.652     7.363    u_B/u_mem/w_wd0[1]
+    SLICE_X48Y165        LUT6 (Prop_H6LUT_SLICEL_I1_O)
+                                                      0.153     7.516 r  u_B/u_mem/p00__0_carry_i_18/O
+                         net (fo=17, routed)          0.506     8.022    u_B/u_mem/w[1]
+    SLICE_X49Y166        LUT6 (Prop_G6LUT_SLICEL_I2_O)
+                                                      0.226     8.248 r  u_B/u_mem/p00__0_carry_i_3/O
+                         net (fo=2, routed)           0.188     8.436    u_B/u_mem/r_wsel_d1_reg[0]_16[4]
+    SLICE_X49Y165        LUT6 (Prop_F6LUT_SLICEL_I0_O)
+                                                      0.056     8.492 r  u_B/u_mem/p00__0_carry_i_10/O
+                         net (fo=1, routed)           0.015     8.507    u_C/p0_reg[2]_1[5]
+    SLICE_X49Y165        CARRY8 (Prop_CARRY8_SLICEL_S[5]_CO[7])
+                                                      0.232     8.739 r  u_C/p00__0_carry/CO[7]
+                         net (fo=1, routed)           0.030     8.769    u_C/p00__0_carry_n_0
+    SLICE_X49Y166        CARRY8 (Prop_CARRY8_SLICEL_CI_O[1])
+                                                      0.106     8.875 r  u_C/p00__0_carry__0/O[1]
+                         net (fo=2, routed)           0.206     9.081    u_C/p00__0_carry__0_n_14
+    SLICE_X50Y164        LUT3 (Prop_F5LUT_SLICEL_I2_O)
+                                                      0.162     9.243 r  u_C/p00__85_carry_i_2/O
+                         net (fo=2, routed)           0.312     9.555    u_C/p00__85_carry_i_2_n_0
+    SLICE_X50Y164        LUT4 (Prop_G6LUT_SLICEL_I0_O)
+                                                      0.151     9.706 r  u_C/p00__85_carry_i_10/O
+                         net (fo=1, routed)           0.012     9.718    u_C/p00__85_carry_i_10_n_0
+    SLICE_X50Y164        CARRY8 (Prop_CARRY8_SLICEL_S[6]_O[7])
+                                                      0.116     9.834 r  u_C/p00__85_carry/O[7]
+                         net (fo=1, routed)           0.034     9.868    u_C/p00[11]
+    SLICE_X50Y164        FDCE                                         r  u_C/p0_reg[11]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock i_clk rise edge)     10.000    10.000 r  
@@ -486,17 +498,17 @@ Slack (MET) :             2.728ns  (required time - arrival time)
                          net (fo=1, routed)           0.376    10.648    i_clk_IBUF
     BUFGCE_X0Y55         BUFGCE (Prop_BUFCE_BUFGCE_I_O)
                                                       0.039    10.687 r  i_clk_IBUF_BUFG_inst/O
-    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.668    12.355    u_C/CLK
-    SLICE_X45Y158        FDCE                                         r  u_C/p1_reg[15]/C
-                         clock pessimism              0.371    12.726    
-                         clock uncertainty           -0.035    12.691    
-    SLICE_X45Y158        FDCE (Setup_DFF_SLICEM_C_D)
-                                                      0.043    12.734    u_C/p1_reg[15]
+    X1Y2 (CLOCK_ROOT)    net (fo=519, routed)         1.719    12.406    u_C/CLK
+    SLICE_X50Y164        FDCE                                         r  u_C/p0_reg[11]/C
+                         clock pessimism              0.371    12.777    
+                         clock uncertainty           -0.035    12.742    
+    SLICE_X50Y164        FDCE (Setup_HFF_SLICEL_C_D)
+                                                      0.044    12.786    u_C/p0_reg[11]
   -------------------------------------------------------------------
-                         required time                         12.734    
-                         arrival time                         -10.006    
+                         required time                         12.786    
+                         arrival time                          -9.868    
   -------------------------------------------------------------------
-                         slack                                  2.728    
+                         slack                                  2.918    
 
 
 

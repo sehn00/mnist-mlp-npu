@@ -1,7 +1,19 @@
-run_sim.tcl  2026-11-15 08:18:10
+run_sim.tcl  2026-11-15 13:20:59
 Vivado 2024.2
 project re-used (10 IPs)
 BRAM primitives output register: WMEM/BMEM false, others false (RD_LAT = 1)
+  check_ip : RTL RD_LAT defaults npu_top.v 1, npu_ctrl.v 1, npu_mem_ctrl.v 1, checking for RD_LAT 1
+    wmem_bank0   32x29280 read latency 1  coe/weight_bank0.coe = .mif (29280 words) OK
+    wmem_bank1   32x29280 read latency 1  coe/weight_bank1.coe = .mif (29280 words) OK
+    wmem_bank2   32x29280 read latency 1  coe/weight_bank2.coe = .mif (29280 words) OK
+    wmem_bank3   32x29280 read latency 1  coe/weight_bank3.coe = .mif (29280 words) OK
+    bmem_128     128x163  read latency 1  coe/bias_128bit.coe = .mif (163 words) OK
+    imem_a_bram  32x196   read latency 1  -                                    OK
+    imem_b_bram  32x196   read latency 1  -                                    OK
+    act_a_bram   32x128   read latency 1  -                                    OK
+    act_b_bram   32x32    read latency 1  -                                    OK
+    omem_bram    32x10    read latency 1  -                                    OK
+  check_ip : PASS (0 problems)
 ==== tb_npu_ctrl (D unit test, RD_LAT=1) ====
    RD_LAT = 1
    GO count  FC1 512 (512) / FC2 128 (128) / FC3 10 (10)

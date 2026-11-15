@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2024.2 (win64) Build 5239630 Fri Nov 08 22:35:27 MST 2024
-| Date         : Sat Nov 14 19:47:28 2026
+| Date         : Sun Nov 15 13:26:38 2026
 | Host         : sehn-pc running 64-bit major release  (build 9200)
 | Command      : report_utilization -file C:/Users/user/AISSD/aissd_D_1114/reports/synth_utilization.rpt
 | Design       : npu_top
@@ -32,8 +32,8 @@ Table of Contents
 +-------------------------+------+-------+------------+-----------+-------+
 |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
 +-------------------------+------+-------+------------+-----------+-------+
-| CLB LUTs*               | 1212 |     0 |          0 |    117120 |  1.03 |
-|   LUT as Logic          | 1212 |     0 |          0 |    117120 |  1.03 |
+| CLB LUTs*               | 1213 |     0 |          0 |    117120 |  1.04 |
+|   LUT as Logic          | 1213 |     0 |          0 |    117120 |  1.04 |
 |   LUT as Memory         |    0 |     0 |          0 |     57600 |  0.00 |
 | CLB Registers           |  283 |     0 |          0 |    234240 |  0.12 |
 |   Register as Flip Flop |  283 |     0 |          0 |    234240 |  0.12 |
@@ -159,12 +159,12 @@ Warning! For any ECO changes, please run place_design if there are unplaced inst
 +----------+------+---------------------+
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
-| LUT6     |  717 |                 CLB |
-| LUT4     |  275 |                 CLB |
+| LUT6     |  716 |                 CLB |
+| LUT4     |  285 |                 CLB |
 | FDCE     |  263 |            Register |
-| LUT2     |  150 |                 CLB |
-| LUT5     |  144 |                 CLB |
-| LUT3     |  113 |                 CLB |
+| LUT2     |  146 |                 CLB |
+| LUT5     |  140 |                 CLB |
+| LUT3     |  111 |                 CLB |
 | RAMB36E2 |  106 |            BLOCKRAM |
 | CARRY8   |   52 |                 CLB |
 | INBUF    |   48 |                 I/O |
