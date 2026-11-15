@@ -9,6 +9,8 @@
 //   3) ACT_A 0~127 (FC1 출력), ACT_B 0~31 (FC2 출력), OMEM 0~9 (FC3 점수) 읽어서 golden v2 와 비교
 //   4) 점수 10개 중 최댓값 번호(argmax) = 예측, labels.txt 와 비교
 //   5) start -> 끝 클럭 수가 119,009 (OREG_ON 이면 119,659) 인지 확인. 다르면 그 이미지는 FAIL
+//   시작 전 검사 (11/15 검수 V01): N_IMG >= 1, 이미지 구간이 golden 안, 쓸 구간의 golden 에 X/Z 없음,
+//   라벨 0~9. 하나라도 어기면 바로 FAIL. 읽은 값에 X/Z 가 있어도 FAIL
 //
 // 설정 (컴파일할 때 define)
 //   N_IMG     돌릴 이미지 수 (기본 10)
@@ -100,6 +102,7 @@ module tb_npu_top;
     reg [31:0] rd;
     reg signed [31:0] best;
     reg        busy_at_done;
+    integer    n_bad_gold, n_x_read;
 
     initial begin
         $readmemh({`HEX_DIR, "input_act_a.hex"},      g_in);
@@ -111,13 +114,39 @@ module tb_npu_top;
         $readmemh({`HEX_DIR, "labels.txt"},           g_lab);
 
         if (!$value$plusargs("IMG_BASE=%d", img_base)) img_base = 0;
+        // 시험 조건 검사 (11/15 검수 V01): 장수가 1 이상, 구간이 golden 안
+        if (N_IMG <= 0) begin
+            $display("[ERR] N_IMG = %0d : must be 1 or more", N_IMG);
+            $display(" *** tb_npu_top FAIL ***");
+            $finish;
+        end
         if (img_base < 0 || img_base + N_IMG > N_GOLD) begin
             $display("[ERR] IMG_BASE %0d + N_IMG %0d > N_GOLD %0d (number of images in the golden files)", img_base, N_IMG, N_GOLD);
             $display(" *** tb_npu_top FAIL ***");
             $finish;
         end
+        // golden 데이터 검사: 쓸 구간에 X/Z 가 없고 (파일이 짧거나 깨지면 X 로 남음), 라벨은 0~9
+        n_bad_gold = 0;
+        for (img = img_base; img < img_base + N_IMG; img = img + 1) begin
+            for (i = 0; i < 196; i = i + 1) if (^g_in[img*196 + i] === 1'bx) n_bad_gold = n_bad_gold + 1;
+`ifndef ACC_ONLY
+            for (i = 0; i < 128; i = i + 1) if (^g_fc1[img*128 + i] === 1'bx) n_bad_gold = n_bad_gold + 1;
+            for (i = 0; i < 32;  i = i + 1) if (^g_fc2[img*32 + i] === 1'bx)  n_bad_gold = n_bad_gold + 1;
+`endif
+            for (i = 0; i < 10;  i = i + 1) if (^g_fc3[img*10 + i] === 1'bx)  n_bad_gold = n_bad_gold + 1;
+            if (^g_lab[img] === 1'bx || g_lab[img] > 9) begin
+                if (n_bad_gold < 5) $display("[ERR] label of image %0d is %h (must be 0..9)", img, g_lab[img]);
+                n_bad_gold = n_bad_gold + 1;
+            end
+        end
+        if (n_bad_gold != 0) begin
+            $display("[ERR] golden data for images %0d .. %0d has %0d invalid entries (X/Z or label outside 0..9) in %0s",
+                     img_base, img_base + N_IMG - 1, n_bad_gold, `HEX_DIR);
+            $display(" *** tb_npu_top FAIL ***");
+            $finish;
+        end
 
-        n_pass = 0; n_correct = 0; n_clk_ok = 0;
+        n_pass = 0; n_correct = 0; n_clk_ok = 0; n_x_read = 0;
         repeat (5) @(posedge i_clk);
         i_rstn = 1'b1;
         repeat (5) @(posedge i_clk);
@@ -143,6 +172,7 @@ module tb_npu_top;
 `ifndef ACC_ONLY
             for (i = 0; i < 128; i = i + 1) begin
                 ext_read(SEL_ACTA, i, rd);
+                if (^rd === 1'bx) n_x_read = n_x_read + 1;     // 읽은 값에 X/Z (golden 에는 없음을 위에서 확인 -> 불일치로도 셈)
                 if (rd !== g_fc1[img*128 + i]) begin
                     if (nerr_fc1 < 3) $display("  [img %0d] FC1 line %0d : got %h exp %h", img, i, rd, g_fc1[img*128 + i]);
                     nerr_fc1 = nerr_fc1 + 1;
@@ -150,6 +180,7 @@ module tb_npu_top;
             end
             for (i = 0; i < 32; i = i + 1) begin
                 ext_read(SEL_ACTB, i, rd);
+                if (^rd === 1'bx) n_x_read = n_x_read + 1;
                 if (rd !== g_fc2[img*32 + i]) begin
                     if (nerr_fc2 < 3) $display("  [img %0d] FC2 line %0d : got %h exp %h", img, i, rd, g_fc2[img*32 + i]);
                     nerr_fc2 = nerr_fc2 + 1;
@@ -159,6 +190,7 @@ module tb_npu_top;
             best = 32'sh8000_0000; pred = -1;
             for (i = 0; i < 10; i = i + 1) begin
                 ext_read(SEL_OMEM, i, rd);
+                if (^rd === 1'bx) n_x_read = n_x_read + 1;
                 if (rd !== g_fc3[img*10 + i]) begin
                     if (nerr_fc3 < 3) $display("  [img %0d] FC3 score %0d : got %h exp %h", img, i, rd, g_fc3[img*10 + i]);
                     nerr_fc3 = nerr_fc3 + 1;
@@ -188,7 +220,8 @@ module tb_npu_top;
         $display(" golden bit-exact : %0d / %0d images", n_pass, N_IMG);
         $display(" prediction       : %0d / %0d correct", n_correct, N_IMG);
         $display(" clock count      : %0d / %0d images at %0d clk", n_clk_ok, N_IMG, EXP_CYCLES);
-        if (n_pass == N_IMG) $display(" *** tb_npu_top PASS ***");
+        if (n_x_read != 0) $display(" X/Z in read data : %0d words", n_x_read);
+        if (n_pass == N_IMG && n_x_read == 0) $display(" *** tb_npu_top PASS ***");
         else                 $display(" *** tb_npu_top FAIL ***");
         $display("==================================================");
         $finish;
@@ -196,7 +229,7 @@ module tb_npu_top;
 
     // 너무 오래 걸리면 멈춤 (이미지당 200만 클럭 이상이면 FSM 이 멈춘 것)
     initial begin
-        #(64'd20_000_000 * N_IMG);
+        #(64'd20_000_000 * ((N_IMG > 0) ? N_IMG : 1));
         $display("[TIMEOUT] run did not finish (waiting for o_done == 1, img %0d)", img);
         $display(" *** tb_npu_top FAIL : timeout ***");
         $finish;
