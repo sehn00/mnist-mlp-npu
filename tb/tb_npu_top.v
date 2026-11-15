@@ -4,8 +4,8 @@
 //
 // 이미지마다
 //   1) 외부 포트로 IMEM_A 0~195 줄에 입력 이미지 쓰기   (가중치/bias 는 COE 로 이미 들어 있음)
-//   2) i_start 1클럭 -> "o_busy == 0 && o_done == 1" 기다리기
-//      (o_done 이 o_busy 보다 1클럭 먼저 올라가서, o_done 만 보고 바로 읽으면 첫 읽기가 무시됨)
+//   2) i_start 1클럭 -> o_done == 1 기다리기 (스펙 6-1 순서 그대로). o_done 이 올라간 순간 o_busy 가 0 이 아니면 FAIL
+//      (11/15 D01: o_done 은 마지막 OMEM 쓰기가 끝나고 o_busy 가 0 이 되는 엣지에 올라감 -> 바로 읽어도 됨)
 //   3) ACT_A 0~127 (FC1 출력), ACT_B 0~31 (FC2 출력), OMEM 0~9 (FC3 점수) 읽어서 golden v2 와 비교
 //   4) 점수 10개 중 최댓값 번호(argmax) = 예측, labels.txt 와 비교
 //   5) start -> 끝 클럭 수가 119,009 (OREG_ON 이면 119,659) 인지 확인. 다르면 그 이미지는 FAIL
@@ -99,6 +99,7 @@ module tb_npu_top;
     integer img_base;
     reg [31:0] rd;
     reg signed [31:0] best;
+    reg        busy_at_done;
 
     initial begin
         $readmemh({`HEX_DIR, "input_act_a.hex"},      g_in);
@@ -127,12 +128,14 @@ module tb_npu_top;
             // 1) 입력 이미지 쓰기
             for (i = 0; i < 196; i = i + 1) ext_write(SEL_IMEM, i, g_in[img*196 + i]);
 
-            // 2) start -> 끝. o_done 만 보면 안 됨: o_done 이 o_busy 보다 1클럭 먼저 올라감
+            // 2) start -> o_done 기다리기. o_done 이 올라간 그 순간 o_busy 는 0 이어야 함 (D01)
             @(negedge i_clk) i_start = 1'b1;
             t0 = $time;
             @(negedge i_clk) i_start = 1'b0;
-            wait (o_busy == 1'b0 && o_done == 1'b1);
+            wait (o_done === 1'b1);
             cycles = ($time - t0) / 10;
+            #0.1 busy_at_done = o_busy;        // 같은 엣지의 갱신이 다 끝난 뒤 값 (0.1 ns 뒤에 봄)
+            if (busy_at_done !== 1'b0) $display("  [img %0d] o_busy = %b when o_done rose (must be 0)", img, busy_at_done);
             if (cycles == EXP_CYCLES) n_clk_ok = n_clk_ok + 1;
             else $display("  [img %0d] clock count %0d, expected %0d", img, cycles, EXP_CYCLES);
 
@@ -164,7 +167,7 @@ module tb_npu_top;
             end
 
             // golden 과 다른 줄이 있거나 클럭 수가 다르면 그 이미지는 FAIL
-            nerr_img = nerr_fc1 + nerr_fc2 + nerr_fc3 + ((cycles == EXP_CYCLES) ? 0 : 1);
+            nerr_img = nerr_fc1 + nerr_fc2 + nerr_fc3 + ((cycles == EXP_CYCLES) ? 0 : 1) + ((busy_at_done === 1'b0) ? 0 : 1);
             if (nerr_img == 0) n_pass = n_pass + 1;
             if (pred == g_lab[img]) n_correct = n_correct + 1;
 `ifdef ACC_ONLY
@@ -194,7 +197,7 @@ module tb_npu_top;
     // 너무 오래 걸리면 멈춤 (이미지당 200만 클럭 이상이면 FSM 이 멈춘 것)
     initial begin
         #(64'd20_000_000 * N_IMG);
-        $display("[TIMEOUT] run did not finish (waiting for o_busy == 0 && o_done == 1, img %0d)", img);
+        $display("[TIMEOUT] run did not finish (waiting for o_done == 1, img %0d)", img);
         $display(" *** tb_npu_top FAIL : timeout ***");
         $finish;
     end

@@ -12,7 +12,9 @@
 //   6) GO 다음 클럭의 o_oaddr = n/4 (FC3는 n), o_layer = 그 뉴런의 레이어
 //   7) GO 클럭의 o_lane = n%4, o_shift/o_relu_en/o_fc3 = 설정표 값
 //   8) start -> done 전체 클럭 수 = 119,009 + 650 x (RD_LAT - 1)  (RD_LAT=1이면 119,009, 2면 119,659)
+//      = start 를 받은 엣지부터 o_done 이 올라가는 엣지까지 = o_busy 가 1 인 클럭 수
 //   9) 타임아웃: o_done 이 200만 클럭 안에 안 올라오면 FAIL 로 끝냄
+//  10) o_done 과 o_busy 가 동시에 1 인 클럭이 없음 (o_done 은 busy 가 0 이 되는 엣지에 올라감, 리뷰 D01)
 // 시뮬레이션 시간: 약 1.2 ms (Vivado: run all)
 // ============================================================================
 `ifndef TB_RD_LAT
@@ -164,7 +166,9 @@ module tb_npu_ctrl;
             if (e_n == f_N(e_layer)) begin e_n = 0; e_layer = e_layer + 1; end
         end
 
-        if (o_done && t_done == 0) t_done = cyc;
+        // posedge 에서 보는 값은 직전 엣지에 정해진 값 -> o_done 이 올라간 엣지 = cyc - 1
+        if (o_done && t_done == 0) t_done = cyc - 1;
+        if (o_done && o_busy) err("o_done = 1 while o_busy = 1 (done must rise when busy falls)");
 
         // ISSUE 이력 시프트 + bias_we 위치 확인
         for (i = 7; i > 0; i = i - 1) issue_hist[i] = issue_hist[i-1];

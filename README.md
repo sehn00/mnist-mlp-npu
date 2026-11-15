@@ -87,8 +87,10 @@ wave_fc2_n27_n28.png  통합 파형 (FC2 뉴런 27 → 28 경계, iverilog)
 - `RD_LAT` parameter (npu_top, npu_mem_ctrl, npu_ctrl 공통, 기본 1): 과제 가이드 p.9 규칙대로 BRAM 출력 레지스터 OFF = 읽기 지연 1. 조원2 11/12 IP(WMEM/BMEM 출력 레지스터 ON)를 그대로 쓸 때만 2 (TB에서 `OREG_ON` define)
 - WMEM 주소를 두 가지로 냄: `o_waddr`(스펙의 단일 WMEM 기준), `o_wbank_addr`+`o_wbank_sel`(B의 4뱅크 구조 기준).
   곱셈·나눗셈 없이 포인터 +1, 뉴런의 마지막 줄에서 lane ≠ 3이면 묶음 시작으로 되돌림
-- **npu_top을 바깥(TB)에서 쓰는 순서**: IMEM_A에 이미지 쓰기 → `i_start` 1클럭 → **`o_busy == 0 && o_done == 1`을 기다릴 것** → 결과 읽기.
-  - `o_done`은 `o_busy`보다 1클럭 먼저 1이 돼 (DONE 상태 클럭 = A가 OMEM 9번에 마지막 점수를 쓰는 클럭: done = 1, busy = 1). `o_busy = 1`인 동안의 외부 접근과 `i_start`는 무시되니까, `o_done`만 보고 바로 읽으면 **첫 읽기가 틀린 값**이 나와 (리뷰 R05, `tb_edge` S12에서 확인). `tb_npu_top`은 처음부터 위 조건을 기다려.
+- **npu_top을 바깥(TB)에서 쓰는 순서**: IMEM_A에 이미지 쓰기 → `i_start` 1클럭 → **`o_done == 1`을 기다리기** → 결과 읽기 (스펙 v0.2 6-1 순서 그대로).
+  - (11/15 외부 검수 D01 반영) `o_done`은 마지막 OMEM 쓰기(A가 OMEM 9번에 점수를 쓰는 DONE 상태 클럭)가 끝나는 엣지에 1이 되고, 같은 엣지에 상태가 IDLE로 가서 `o_busy`가 0이 돼. 그래서 **`o_done = 1`이면 항상 `o_busy = 0`**이고 결과가 다 써져 있어. 바로 읽어도 되고, 그 클럭의 `i_start`도 받아들여져 (`tb_edge` S07, S12가 판정). 예전 조건 `o_busy == 0 && o_done == 1`도 그대로 맞아.
+  - 예전(11/15 이전)에는 `o_done`이 `o_busy`보다 1클럭 먼저 올라가서 `o_done`만 보고 읽으면 첫 읽기가 무시됐어 (리뷰 R05). 연산 길이는 그대로: start를 받은 엣지 → `o_done`이 올라가는 엣지 = `o_busy`가 1인 클럭 수 = **119,009클럭** (RD_LAT=1).
+  - 스펙 v0.2 6-2절 타이밍 표에서 "DONE 상태 클럭에 o_done = 1"은 "DONE 다음(IDLE로 가는) 엣지에 o_done = 1, 같은 엣지에 busy = 0"으로 고쳐야 함 (스펙 갱신 목록 #5에 추가).
   - `i_start`는 1클럭 펄스로 줄 것. 끝난 뒤까지 계속 1로 두면 다시 시작해 (R06).
   - 외부 포트 주소는 줄 수 안에서만 쓸 것 (IMEM_A 0~195, ACT_A 0~127, ACT_B 0~31, OMEM 0~9). 범위 검사가 없고 윗주소 비트는 무시돼 (R09). `o_dout`은 주소를 준 다음 클럭 1클럭 동안만 유효.
 - (11/14 수정) 되돌리는 시점을 GO에서 ISSUE 마지막 클럭으로 옮김. B의 WMEM은 ena가 1로 고정이라 ISSUE가 아닌 클럭의 주소도 실제로 읽히는데, 예전 방식은 FC3 마지막 묶음에서 포인터가 29,280(범위 밖)에 4클럭 머물러서 IP 모델이 `Address 7260 is outside range` 경고를 사진당 32번 냈어. 그 데이터는 안 쓰여서 결과는 같았고, 지금은 주소가 항상 0~29,279 안에 있어 (TB가 매 클럭 검사).
@@ -158,7 +160,7 @@ iverilog -g2005 -DTB_RD_LAT=1 -o ctrl.vvp rtl/npu_ctrl.v tb/tb_npu_ctrl.v && vvp
 | 2 | B | WMEM이 4뱅크(뱅크 i = n%4 뉴런) 구조. 스펙과 11/10 카톡은 단일 32b × 117,056 | D가 4뱅크 주소도 같이 냄 (`o_wbank_addr`, `o_wbank_sel`). 4뱅크로 100장 일치 확인 | 4뱅크를 최종으로 할지. BRAM은 4뱅크 합계 RAMB36 104 + RAMB18 8 |
 | 3 | B | 모듈 이름 memory_controller, 포트 clk/rst(active-high 동기) | 어댑터에서 변환 | 이름 규칙에 맞출지 |
 | 4 | B | npu_mem_ctrl(외부 인터페이스, busy MUX, 읽기 MUX) 없음, WMEM·BMEM 외부 쓰기 불가(COE만) | 어댑터가 대신 함. 임시 주소 맵 `i_addr[19:17]`: 2 IMEM_A, 3 ACT_A, 4 ACT_B, 5 OMEM | 정식 npu_mem_ctrl을 누가 마무리할지, 주소 맵 확정. **가이드 p.3은 제출물에 "testbench and hex file for data import"를 요구** → 가중치를 테스트벤치가 hex로 써 넣는 구조가 필요한지(그러면 B의 wea=0 고정을 풀어야 함), COE 초기화로 괜찮은지 교수님 확인 |
-| 5 | 스펙 | v0.2 메모리 맵(ACT_A 228줄 등), shift 10/9가 옛날 값 | handoff 11/12 + golden v2 기준으로 구현 | 스펙 v1.0 갱신 |
+| 5 | 스펙 | v0.2 메모리 맵(ACT_A 228줄 등), shift 10/9가 옛날 값. 6-2절 DONE 타이밍(o_done이 DONE 클럭에 1)도 11/15 D01 이후 다름 | handoff 11/12 + golden v2 기준으로 구현. o_done은 DONE 다음 엣지(busy=0과 같은 엣지)에 1 | 스펙 v1.0 갱신 |
 | 6 | C | C_pe_array_final.zip은 clk/rstn, handoff_D/rtl은 i_clk/i_rstn | handoff 버전 사용 | 최종본 하나로 정리 |
 | 7 | D | 이름 표에 없는 포트 추가: `o_rd_en`, `o_wbank_addr`, `o_wbank_sel` | — | 이름 규칙 표에 추가 |
 | 8 | B | (해결) 합성·BRAM 사용량·타이밍 미확인 | 통합 상태로 합성·구현 완료(출력 레지스터 OFF 기준): BRAM 112/144 타일, 100MHz 충족 | B README의 "Vivado 강제 종료"가 메모리 부족이었는지 확인 (나도 병렬 8개로 돌렸을 때 IP 런이 죽었고 2개로 낮추니 해결) |

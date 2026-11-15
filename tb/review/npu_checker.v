@@ -24,7 +24,8 @@
 //   A9  같은 메모리를 같은 클럭에 읽고 쓰지 않음, 쓰기 주소 범위(ACT_A <= 127, ACT_B <= 31, OMEM <= 9)
 //   A10 busy 동안 BRAM 포트(ena/wea/addr/din)는 내부 신호만으로 결정됨 = 외부 접근 무시
 //   A11 외부 읽기: 주소 준 다음 클럭의 o_dout = 그림자 메모리 값
-//   A12 start/busy/done 규칙: busy 는 받아들인 start 다음 클럭에 1, done 은 busy 중에만 올라가고 다음 start 까지 유지
+//   A12 start/busy/done 규칙: busy 는 받아들인 start 다음 클럭에 1, done 은 busy 가 0 이 되는 엣지에 같이 올라가고
+//       (done = 1 && busy = 1 인 클럭 없음, 11/15 D01) 다음 start 까지 유지
 //   A13 한 번의 연산 끝: go 512/128/10, we 128/32/10, valid 117,056, bias_we 650, 줄마다 정확히 1번 쓰기,
 //       start -> done = 119,009 + 650 x (RD_LAT - 1) 클럭
 //   A14 제어 신호에 X 없음, valid 클럭의 x/w, go 클럭의 acc, we 클럭의 wdata 에 X 없음
@@ -224,13 +225,14 @@ module npu_checker;
             end
             if (busy && !busy_d1)  chk(start_d1 === 1'b1, "A12 busy rose without start");
             if (!busy && busy_d1)  chk(done === 1'b1, "A12 busy fell but done != 1");
-            if (done && !done_d1)  chk(busy_d1 === 1'b1 && busy === 1'b1, "A12 done rose outside busy");
+            if (done && !done_d1)  chk(busy_d1 === 1'b1 && busy === 1'b0, "A12 done did not rise exactly when busy fell");
+            chk(!(done === 1'b1 && busy === 1'b1), "A12 done = 1 while busy = 1");
             if (!done && done_d1)  chk(start_d1 === 1'b1 && !busy_d1, "A12 done fell without a new start");
             if (!busy) begin
                 chk(!rd_en && !valid && !go && !acc_clr && !bias_we, "A12 activity (rd_en/valid/go/bias_we) while idle");
             end
 
-            // ---- A13: 연산 한 번이 끝났을 때 (done 이 올라간 클럭 = A 가 OMEM 9 를 쓰는 클럭 -> 그 다음 클럭에 집계)
+            // ---- A13: 연산 한 번이 끝났을 때 (busy 가 내려가고 done 이 올라간 첫 IDLE 클럭에 집계)
             if (!busy && busy_d1 && in_run) begin
                 chk(go_cnt[0] == 512 && go_cnt[1] == 128 && go_cnt[2] == 10, "A13 go count != 512/128/10");
                 chk(we_cnt[0] == 128 && we_cnt[1] == 32  && we_cnt[2] == 10, "A13 write count != 128/32/10");

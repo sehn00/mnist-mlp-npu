@@ -11,8 +11,8 @@
 // RD_LAT = 1 : 과제 가이드 p.9 "Primitives Output Register should be disabled" -> BMEM 읽기 지연 1클럭.
 //              조원2의 11/12 IP(WMEM/BMEM 출력 레지스터 ON, 폐기된 구성)를 그대로 쓸 때만 2로 바꿈.
 //
-// 바깥에서 쓰는 순서: IMEM_A 에 이미지 쓰기 -> i_start 1클럭 -> "o_busy == 0 && o_done == 1" 기다리기 -> 결과 읽기
-//   (o_done 이 o_busy 보다 1클럭 먼저 올라가고, o_busy = 1 인 동안의 외부 접근과 i_start 는 무시됨)
+// 바깥에서 쓰는 순서: IMEM_A 에 이미지 쓰기 -> i_start 1클럭 -> o_done == 1 기다리기 -> 결과 읽기
+//   (o_done 은 마지막 OMEM 쓰기가 끝나고 o_busy 가 0 이 되는 엣지에 올라감. o_busy = 1 인 동안의 외부 접근과 i_start 는 무시됨)
 // 연결선 waddr(단일 WMEM 기준 주소)는 u_B 로 가지 않음: B 가 4뱅크 구조라 wbank_addr / wbank_sel 을 씀
 // ============================================================================
 module npu_top #(

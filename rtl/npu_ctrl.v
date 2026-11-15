@@ -19,10 +19,11 @@
 //   2 = 예전 구성 (조원2 11/12 IP: WMEM, BMEM 출력 레지스터 켬, 가이드 위반이라 폐기).
 //       뉴런 하나 = L + 4클럭, start -> done 119,659클럭. 비교용으로만 남겨 둠
 //
-// 끝났는지 볼 때 주의: o_done 은 DONE 상태 클럭에 올라가는데 그 클럭에는 o_busy 도 아직 1 이다
-//   (A 가 OMEM 9번에 마지막 점수를 쓰는 클럭). 그래서 o_done 이 o_busy 보다 1클럭 먼저 1 이 되고,
-//   그 1클럭 동안의 외부 읽기와 i_start 는 무시된다.
-//   -> 바깥(TB)에서는 "o_busy == 0 && o_done == 1" 을 기다린 뒤에 결과를 읽을 것
+// 끝 신호 (11/15 리뷰 D01 반영): o_done 은 DONE 상태(A 가 OMEM 9번에 마지막 점수를 쓰는 클럭)를 끝내는
+//   클럭 엣지에 1 이 된다. 같은 엣지에 OMEM 9번 쓰기가 끝나고 상태가 IDLE 로 가서 o_busy 가 0 이 됨.
+//   -> o_done == 1 이면 항상 o_busy == 0 이고 결과가 전부 써져 있음. o_done 만 기다리고 바로 읽어도 됨
+//   (예전에는 o_done 이 1클럭 먼저 올라가서 "o_busy == 0 && o_done == 1" 을 기다려야 했음. 그 조건도 그대로 맞음)
+//   연산 길이(start 를 받은 엣지 -> o_done 이 올라가는 엣지)는 RD_LAT=1 에서 119,009클럭 = o_busy 가 1 인 클럭 수
 // i_start 는 레벨로 받는다: IDLE 에서 1 이면 시작. 끝난 뒤까지 계속 1 로 두면 다시 시작하므로 1클럭 펄스로 줄 것
 //
 // 레이어 설정표 (golden v2, handoff_D_1112 5절)
@@ -44,7 +45,7 @@ module npu_ctrl #(
     input  wire        i_rstn,
     input  wire        i_start,          // 1클럭 1이면 FC1~FC3 시작 (IDLE 일 때만 받음)
     output wire        o_busy,           // 연산 중 1 (IDLE 이외)
-    output reg         o_done,           // 끝나면 1, 다음 i_start 까지 유지. o_busy 보다 1클럭 먼저 올라감 (위 설명 참고)
+    output reg         o_done,           // 끝나면 1, 다음 i_start 까지 유지. o_busy 가 0 이 되는 엣지에 같이 올라감 (위 설명 참고)
 
     // ---- B (메모리) ----
     output wire        o_rd_en,          // 1: 이번 클럭에 입력/가중치 읽기 (ISSUE 상태)
@@ -178,7 +179,6 @@ module npu_ctrl #(
                     if (w_last_n) begin
                         r_n     <= 10'd0;
                         r_state <= (r_layer == 2'd2) ? S_DONE : S_LAYER;
-                        if (r_layer == 2'd2) o_done <= 1'b1;
                     end else begin
                         r_n     <= r_n + 10'd1;
                         r_state <= S_ISSUE;
@@ -197,6 +197,7 @@ module npu_ctrl #(
 
                 S_DONE: begin                        // A가 OMEM 9번에 점수 쓰는 클럭
                     r_state <= S_IDLE;
+                    o_done  <= 1'b1;                 // 쓰기가 끝나는 엣지에 busy 해제와 같이 올림 (D01)
                 end
 
                 default: r_state <= S_IDLE;

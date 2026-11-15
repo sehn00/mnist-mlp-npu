@@ -10,12 +10,12 @@
 //   S04 연산 중 외부 쓰기/읽기 (IMEM/ACT_A/ACT_B/OMEM/WMEM/BIAS 번호 전부) -> 결과와 IMEM 내용이 그대로인지
 //   S05 연산 중 리셋 (a FC1 중간, b FC2 중간, c FC3 끝 직전, d 쓰기 클럭) 후 재시작. b 는 다른 이미지로 바꿔서
 //   S06 done 직후: (a) busy 가 내려간 첫 클럭에 바로 start, (b) 다음 이미지 마지막 줄 쓰기와 같은 클럭에 start
-//   S07 DONE 상태 클럭(o_done = 1, o_busy = 1)에 start 1클럭  -> 관찰: 무시되는지
+//   S07 o_done 이 올라간 바로 그 클럭에 start 1클럭           -> 판정: 받아들여져야 함 (11/15 D01 전에는 무시됐음)
 //   S08 i_start 를 연산이 끝난 뒤까지 계속 1 로 유지           -> 관찰: 다시 시작하는지
 //   S09 busy 가 내려간 첫 클럭에 OMEM 9 읽기 (마지막 쓰기가 보이는지)
 //   S10 외부 포트 연속 접근: cen 을 계속 0 으로 두고 연속 쓰기 / 연속 읽기, 쓰기 바로 다음 클럭 읽기
 //   S11 없는 SRAM 번호(0, 1, 6, 7) 읽기/쓰기, 범위 밖 주소, 윗주소 비트 겹침(aliasing) -> 그 뒤 연산 결과 확인
-//   S12 o_done 이 올라간 바로 그 클럭(o_busy 는 아직 1)에 결과 읽기  -> 관찰: 첫 읽기가 무시되는지
+//   S12 o_done 만 보고 바로 결과 읽기 (스펙 6-1 순서 그대로)    -> 판정: 첫 읽기가 맞아야 함 (D01 전에는 무시됐음)
 // 출력: "[EDGE] Sxx ... : PASS / FAIL / OBSERVE"
 // ============================================================================
 `ifndef HEX_DIR
@@ -265,33 +265,30 @@ module tb_edge;
         check_results(6, nerr);
         report("S06b", "last image line written in the same clock as start", ok && nerr == 0, nerr, 0);
 
-        // ================= S07: DONE 상태 클럭에 start 1클럭 (관찰)
+        // ================= S07: o_done 이 올라간 바로 그 클럭에 start 1클럭 -> 받아들여져야 함 (D01)
         load_image(7);
         start_pulse(1);
-        wait (o_done == 1'b1);                         // DONE 상태 클럭 (o_busy 는 아직 1)
-        seen_busy = o_busy;
-        i_start = 1'b1; @(negedge i_clk); @(negedge i_clk); i_start = 1'b0;   // DONE 클럭의 다음 posedge 한 번만 걸치게
+        wait (o_done == 1'b1);                         // o_done 이 올라간 엣지 (이때 o_busy 는 0 이어야 함)
+        #0.1 seen_busy = o_busy;
+        i_start = 1'b1; @(negedge i_clk); @(negedge i_clk); i_start = 1'b0;   // 그 다음 posedge 한 번만 걸치게
         retrig = 0;
         repeat (10) begin @(negedge i_clk); if (o_busy) retrig = 1; end
-        n_obs = n_obs + 1;
-        $display("[EDGE] S07 start pulse while o_done=1 & o_busy=%0d (DONE state clock) : OBSERVE -> %0s",
+        $display("[EDGE] S07 start pulse on the clock o_done rose (o_busy=%0d) -> %0s",
                  seen_busy, retrig ? "accepted (new run started)" : "ignored (no new run)");
-        if (retrig) wait_done(ok);
+        if (retrig) wait_done(ok); else ok = 0;
         check_results(7, nerr);
-        report("S07", "results after start pulse in DONE state", nerr == 0, nerr, 0);
+        report("S07", "start on the clock o_done rose is accepted, results", ok && retrig && seen_busy === 1'b0 && nerr == 0, nerr, 0);
 
-        // ================= S12: o_done 만 보고 바로 읽기 (스펙 6-1 의 "o_done = 1 까지 기다리기 -> 읽기"를 글자 그대로 따른 TB) (관찰)
+        // ================= S12: o_done 만 보고 바로 읽기 (스펙 6-1 의 "o_done = 1 까지 기다리기 -> 읽기"를 글자 그대로 따른 TB) -> 첫 읽기가 맞아야 함
         // 읽을 줄: ACT_A 에서 마지막으로 읽힌 줄(127)과 값이 다른 줄을 고름 (같으면 무시됐는지 구별이 안 됨)
         t1 = 0;
         for (k = 126; k >= 0; k = k - 1) if (g_fc1[7*128 + k] !== g_fc1[7*128 + 127]) t1 = k;
         start_pulse(1);
-        wait (o_done == 1'b1);                         // DONE 상태 클럭: o_done = 1 이지만 o_busy 도 1
-        ext_read(SEL_ACTA, t1, rd);                    // 이 읽기의 주소는 DONE 클럭을 끝내는 posedge 에 걸림
-        ext_read(SEL_ACTA, t1, rd2);                   // 한 번 더 (IDLE 에서)
-        n_obs = n_obs + 1;
-        $display("[EDGE] S12 read of ACT_A[%0d] issued right after o_done rose (still busy): got %h, second try %h, golden %h : OBSERVE -> %0s",
-                 t1, rd, rd2, g_fc1[7*128 + t1], (rd === g_fc1[7*128 + t1]) ? "first read OK" : "first read is ignored (must wait for o_busy = 0)");
-        if (rd2 !== g_fc1[7*128 + t1]) begin n_fail = n_fail + 1; $display("[EDGE] S12 second read wrong : FAIL"); end
+        wait (o_done == 1'b1);                         // o_done 이 올라간 엣지 (o_busy 도 같은 엣지에 0)
+        ext_read(SEL_ACTA, t1, rd);                    // 이 읽기의 주소는 그 다음 posedge 에 걸림
+        ext_read(SEL_ACTA, t1, rd2);                   // 한 번 더
+        $display("[EDGE] S12 read of ACT_A[%0d] issued right after o_done rose: got %h, second try %h, golden %h", t1, rd, rd2, g_fc1[7*128 + t1]);
+        report("S12", "first read right after o_done rose is correct", rd === g_fc1[7*128 + t1] && rd2 === g_fc1[7*128 + t1], 0, 0);
 
         // ================= S08: i_start 를 끝난 뒤까지 계속 유지 (관찰)
         load_image(8);
