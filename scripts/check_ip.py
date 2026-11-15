@@ -15,6 +15,8 @@ check_ip.py : 시뮬레이션·합성 전에 BRAM IP 10개 설정과 RTL 의 RD_
   생성된 시뮬레이션 모델 (vivado_sim/aissd_D_sim.gen/sources_1/ip/<ip>/sim/<ip>.v) - xsim 이 실제로 쓰는 것
     - C_READ_WIDTH_A / C_READ_DEPTH_A / C_HAS_MEM_OUTPUT_REGS_A / C_HAS_MUX_OUTPUT_REGS_A 가 위와 같음
   생성된 초기화 파일 (.mif) 이 coe/ 의 COE 와 워드 단위로 같음 (COE 를 바꾸고 IP 를 다시 안 만들면 여기서 걸림)
+    - 그 .mif 는 시뮬 래퍼가 실제로 로드하는 파일이어야 함: C_LOAD_INIT_FILE = 1, C_INIT_FILE_NAME = "<ip>.mif"
+      (초기화 없는 IP 는 C_LOAD_INIT_FILE = 0)
   RTL: rtl/npu_top.v, npu_ctrl.v, npu_mem_ctrl.v 의 parameter RD_LAT 기본값이 셋 다 같음
 반환값: 0 = 전부 맞음, 1 = 하나라도 다름, 2 = 파일이 없음
 """
@@ -133,9 +135,15 @@ def main():
             cpath = os.path.normpath(os.path.join(os.path.dirname(xci), cf))
             want = os.path.normpath(os.path.join(ROOT, "coe", coe))
             need(os.path.normcase(cpath) == os.path.normcase(want), "Coe_File %s (want coe/%s)" % (cf, coe))
-            mif = os.path.join(GEN, ip, ip + ".mif")
+            # 생성된 시뮬 래퍼가 실제로 로드하는 파일 (재검수 D03): C_LOAD_INIT_FILE = 1 이고
+            # C_INIT_FILE_NAME 이 <ip>.mif (xrun.sh 와 Vivado 시뮬 흐름이 복사해 두는 파일) 이어야 하며, 그 파일 == COE
+            need(s.get("C_LOAD_INIT_FILE") == "1", "sim model C_LOAD_INIT_FILE %s (wrapper does not load the init file)" % s.get("C_LOAD_INIT_FILE"))
+            need(s.get("C_USE_DEFAULT_DATA") == "0", "sim model C_USE_DEFAULT_DATA %s" % s.get("C_USE_DEFAULT_DATA"))
+            fname = (s.get("C_INIT_FILE_NAME") or "").strip().strip('"')
+            need(fname == ip + ".mif", "sim model C_INIT_FILE_NAME \"%s\" (want %s.mif)" % (fname, ip))
+            mif = os.path.join(GEN, ip, fname or (ip + ".mif"))
             if not os.path.isfile(mif):
-                bad.append("generated %s.mif missing" % ip)
+                bad.append("init file %s named by the sim model is missing" % (fname or ip + ".mif"))
             else:
                 cw, mw = coe_words(want, w), mif_words(mif)
                 cw = cw + [0] * (dep - len(cw))
@@ -146,6 +154,7 @@ def main():
                     init = "coe/%s = .mif (%d words)" % (coe, dep)
         else:
             need(p.get("Load_Init_File") == "false", "Load_Init_File on (expected no init)")
+            need(s.get("C_LOAD_INIT_FILE") == "0", "sim model C_LOAD_INIT_FILE %s (expected no init)" % s.get("C_LOAD_INIT_FILE"))
         lat = 1 + prim + core
         rows.append((ip, "%dx%d" % (w, dep), lat, init, bad))
         errs += ["%s: %s" % (ip, b) for b in bad]

@@ -28,7 +28,8 @@ def main():
     ap.add_argument("--gold", default="build/golden_10k")
     ap.add_argument("--total", type=int, default=10000)
     ap.add_argument("--chunk", type=int, default=500)
-    ap.add_argument("--stamp", default=None, help="stamp.txt (주면 묶음마다 .done 의 스탬프와 종료 코드를 확인)")
+    ap.add_argument("--stamp", default="build/accuracy/stamp.txt",
+                    help="run_accuracy.sh 가 쓴 stamp.txt. 묶음마다 .done 의 스탬프와 종료 코드 0 을 항상 확인 (없으면 FAIL)")
     ap.add_argument("--seconds", type=int, default=-1, help="이번 실행에 걸린 시간 (이어 돌린 경우 이번 실행분만)")
     ap.add_argument("--out", default="reports/accuracy_10k.txt")
     args = ap.parse_args()
@@ -41,8 +42,14 @@ def main():
     logs = sorted(glob.glob(os.path.join(args.chunks, "chunk_*.log")))
     n_timeout = 0
     sim_ms = 0.0
-    stamp = open(args.stamp, encoding="utf-8").read().splitlines()[0] if args.stamp else None
     chunk_bad = []             # (파일, 이유)
+    # 스탬프와 묶음 완료 표시(.done, 종료 코드)는 항상 검사 (재검수 V03: 손으로 실행해도 건너뛰지 않음)
+    stamp = None
+    if os.path.isfile(args.stamp):
+        sl = open(args.stamp, encoding="utf-8").read().splitlines()
+        stamp = sl[0] if sl else None
+    if not stamp:
+        chunk_bad.append(("stamp", "stamp file %s missing or empty (run scripts/run_accuracy.sh)" % args.stamp))
     starts = []
     for fn in logs:
         name = os.path.basename(fn)
@@ -69,16 +76,15 @@ def main():
             chunk_bad.append((name, "no final '*** tb_npu_top PASS ***' line"))
         if n_in != args.chunk:
             chunk_bad.append((name, "%d image lines, expected %d" % (n_in, args.chunk)))
-        if stamp is not None:
-            dn = fn[:-4] + ".done"
-            dl = open(dn, encoding="utf-8").read().splitlines() if os.path.isfile(dn) else []
-            if not dl:
-                chunk_bad.append((name, "no completion marker .done"))
-            else:
-                if dl[0] != stamp:
-                    chunk_bad.append((name, ".done stamp differs from the current build"))
-                if "rc 0" not in dl[1:]:
-                    chunk_bad.append((name, ".done exit code is not 0"))
+        dn = fn[:-4] + ".done"
+        dl = open(dn, encoding="utf-8").read().splitlines() if os.path.isfile(dn) else []
+        if not dl:
+            chunk_bad.append((name, "no completion marker .done"))
+        else:
+            if stamp is None or dl[0] != stamp:
+                chunk_bad.append((name, ".done stamp differs from the current build"))
+            if "rc 0" not in dl[1:]:
+                chunk_bad.append((name, ".done exit code is not 0"))
     want_starts = list(range(0, args.total, args.chunk))
     if sorted(starts) != want_starts:
         chunk_bad.append(("chunks", "%d chunk logs do not cover 0..%d in steps of %d" % (len(starts), args.total - 1, args.chunk)))
@@ -129,7 +135,7 @@ def main():
         rep.append("chunk checks      : %d problems (see below)" % len(chunk_bad))
     else:
         rep.append("chunk checks      : %d chunks of %d all complete (range line, image count, final PASS line%s)" % (
-            len(logs), args.chunk, ", .done stamp + exit code 0" if stamp else "; .done not checked"))
+            len(logs), args.chunk, ", .done stamp + exit code 0"))
     if sim_ms > 0:
         rep.append("simulator CPU time: %.0f s in total (sum over chunks), %.2f s per image" % (sim_ms / 1000.0, sim_ms / 1000.0 / max(len(have), 1)))
     if args.seconds >= 0:

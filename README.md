@@ -143,7 +143,7 @@ wave_fc2_n27_n28.png  통합 파형 (FC2 뉴런 27 → 28 경계, iverilog)
      ```
      python scripts/accuracy_report.py && git add reports/accuracy_10k.txt && git commit -m "Accuracy: 10,000-image RTL result"
      ```
-     묶음 로그를 모아 요약(비트 일치 장수, RTL 정확도, 틀린 이미지 목록)을 화면에 찍고 `reports/accuracy_10k.txt`를 쓴 다음 커밋해. 1만 장이 다 안 끝났거나 불일치가 있으면 `RESULT: FAIL`로 끝나고 커밋은 안 돼. (`run_accuracy.sh`는 끝에 이걸 `--stamp build/accuracy/stamp.txt`와 같이 자동으로 부름)
+     묶음 로그를 모아 요약(비트 일치 장수, RTL 정확도, 틀린 이미지 목록)을 화면에 찍고 `reports/accuracy_10k.txt`를 쓴 다음 커밋해. 1만 장이 다 안 끝났거나 불일치가 있으면 `RESULT: FAIL`로 끝나고 커밋은 안 돼. (`run_accuracy.sh`는 끝에 이걸 자동으로 부름). 손으로 실행해도 `build/accuracy/stamp.txt`와 묶음마다의 완료 표시(`.done`, xsim 종료 코드 0)를 **항상** 검사해서, 없거나 안 맞으면 FAIL (재검수 V03). 그래서 `.done`이 생기기 전에 돌린 74c88dd 기준 1만 장 묶음 로그(`build/accuracy/`, `build/accuracy_10k_74c88dd/`)로 다시 집계하면 FAIL이 나오는 게 정상이고, 그 결과는 이미 커밋된 `reports/accuracy_10k.txt`가 기록
    - 중간에 끊겼으면(PC 종료 등) 위의 `run_accuracy_detached.ps1`을 다시 실행하면 끝난 묶음은 건너뛰고 이어서 해. 도는 중에 또 실행하면 "이미 돌고 있음"이라고 하고 안 띄워. PC가 절전에 들어가면 그동안 멈췄다가 깨어나면 이어서 돌아.
    - `gen_golden_10k.py`는 MNIST 테스트셋(`~/.keras/datasets/mnist.npz`, 다른 위치면 `--mnist`)을 픽셀 >> 1로 바꾸고, **앞 100장이 `hex/`의 기존 100장(입력·label·FC1·FC2·FC3)과 비트 단위로 같은지 먼저 확인**한 뒤에만 파일을 써.
    - `run_accuracy.sh`는 `tb_npu_top`을 정확도 전용 모드(`ACC_ONLY`: FC3 점수 10개를 golden과 비교 + argmax를 label과 비교, FC1/FC2 출력은 안 읽음)로 한 번 컴파일하고 500장씩 20묶음으로 돌려. 시뮬레이션은 한 번에 하나만. 끝난 묶음은 건너뛰니까 중간에 끊겨도 같은 명령으로 이어서 할 수 있어. 진행 상황은 `build/accuracy/progress.txt`.

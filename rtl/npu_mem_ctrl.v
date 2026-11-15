@@ -193,11 +193,15 @@ module npu_mem_ctrl #(
     end
 
     // RD_LAT 은 1 또는 2만 지원 (11/15 검수 D07). 다른 값이면 없는 모듈을 부르게 해서
-    // 시뮬레이션(elaboration)과 합성 둘 다 에러로 멈춤 (npu_ctrl 과 같은 방법)
+    // 시뮬레이션(elaboration)과 합성 둘 다 에러로 멈춤 (npu_ctrl 과 같은 방법. generate case 라서 X/Z 도 default 로 감)
     generate
-        if (RD_LAT != 1 && RD_LAT != 2) begin : g_bad_rd_lat
-            ERROR_npu_mem_ctrl_RD_LAT_must_be_1_or_2 u_error ();
-        end
+        case (RD_LAT)
+            1, 2: begin : g_rd_lat_ok
+            end
+            default: begin : g_bad_rd_lat
+                ERROR_npu_mem_ctrl_RD_LAT_must_be_1_or_2 u_error ();
+            end
+        endcase
     endgenerate
 
 endmodule
