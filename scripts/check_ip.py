@@ -11,10 +11,10 @@ check_ip.py : 시뮬레이션·합성 전에 BRAM IP 10개 설정과 RTL 의 RD_
     - Primitives Output Register: RD_LAT = 1 이면 전부 OFF (과제 가이드 p.9),
       RD_LAT = 2 이면 WMEM 4개와 BMEM 만 ON (예전 조원2 11/12 구성), 나머지는 OFF
     - Core Output Register: 항상 OFF (켜면 지연이 하나 더 늘어남. RTL 은 1 또는 2만 지원)
-    - 초기화 파일: WMEM/BMEM 은 coe/ 의 정해진 파일을 가리켜야 하고, 나머지는 초기화 없음
+    - 초기화 파일: WMEM/BMEM 은 data/coe/ 의 정해진 파일을 가리켜야 하고, 나머지는 초기화 없음
   생성된 시뮬레이션 모델 (vivado_sim/aissd_D_sim.gen/sources_1/ip/<ip>/sim/<ip>.v) - xsim 이 실제로 쓰는 것
     - C_READ_WIDTH_A / C_READ_DEPTH_A / C_HAS_MEM_OUTPUT_REGS_A / C_HAS_MUX_OUTPUT_REGS_A 가 위와 같음
-  생성된 초기화 파일 (.mif) 이 coe/ 의 COE 와 워드 단위로 같음 (COE 를 바꾸고 IP 를 다시 안 만들면 여기서 걸림)
+  생성된 초기화 파일 (.mif) 이 data/coe/ 의 COE 와 워드 단위로 같음 (COE 를 바꾸고 IP 를 다시 안 만들면 여기서 걸림)
     - 그 .mif 는 시뮬 래퍼가 실제로 로드하는 파일이어야 함: C_LOAD_INIT_FILE = 1, C_INIT_FILE_NAME = "<ip>.mif"
       (초기화 없는 IP 는 C_LOAD_INIT_FILE = 0)
   RTL: rtl/npu_top.v, npu_ctrl.v, npu_mem_ctrl.v 의 parameter RD_LAT 기본값이 셋 다 같음
@@ -133,8 +133,8 @@ def main():
             need(p.get("Load_Init_File") == "true", "Load_Init_File off")
             cf = p.get("Coe_File") or ""
             cpath = os.path.normpath(os.path.join(os.path.dirname(xci), cf))
-            want = os.path.normpath(os.path.join(ROOT, "coe", coe))
-            need(os.path.normcase(cpath) == os.path.normcase(want), "Coe_File %s (want coe/%s)" % (cf, coe))
+            want = os.path.normpath(os.path.join(ROOT, "data", "coe", coe))
+            need(os.path.normcase(cpath) == os.path.normcase(want), "Coe_File %s (want data/coe/%s)" % (cf, coe))
             # 생성된 시뮬 래퍼가 실제로 로드하는 파일 (재검수 D03): C_LOAD_INIT_FILE = 1 이고
             # C_INIT_FILE_NAME 이 <ip>.mif (xrun.sh 와 Vivado 시뮬 흐름이 복사해 두는 파일) 이어야 하며, 그 파일 == COE
             need(s.get("C_LOAD_INIT_FILE") == "1", "sim model C_LOAD_INIT_FILE %s (wrapper does not load the init file)" % s.get("C_LOAD_INIT_FILE"))
@@ -149,9 +149,9 @@ def main():
                 cw = cw + [0] * (dep - len(cw))
                 if len(mw) != dep or cw != mw:
                     nd = sum(1 for a, b in zip(cw, mw) if a != b) + abs(len(cw) - len(mw))
-                    bad.append("generated .mif differs from coe/%s (%d words; regenerate the IP)" % (coe, nd))
+                    bad.append("generated .mif differs from data/coe/%s (%d words; regenerate the IP)" % (coe, nd))
                 else:
-                    init = "coe/%s = .mif (%d words)" % (coe, dep)
+                    init = "data/coe/%s = .mif (%d words)" % (coe, dep)
         else:
             need(p.get("Load_Init_File") == "false", "Load_Init_File on (expected no init)")
             need(s.get("C_LOAD_INIT_FILE") == "0", "sim model C_LOAD_INIT_FILE %s (expected no init)" % s.get("C_LOAD_INIT_FILE"))

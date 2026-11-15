@@ -100,7 +100,7 @@ def u32(x): return int(x) & 0xFFFFFFFF
 
 
 def main():
-    sd = load_pt(P("team_originals", "golden_v2_1110", "mlp_mnist.pt"))
+    sd = load_pt(P("data", "model", "mlp_mnist.pt"))
     print("model tensors:", {k: v.shape for k, v in sd.items()})
     Wq, bq, sw, tie, btie = quantize(sd)
     print("weight scale FC1/2/3 : %.4f, %.4f, %.4f" % tuple(sw))
@@ -115,13 +115,13 @@ def main():
         for n in range(N):
             for g in range(L):
                 mine.append(pack4(Wq[k][n, 4 * g:4 * g + 4]))
-    team_w = read_hex(P("team_originals", "handoff_D_1112", "golden", "mem", "wmem.hex"))
+    team_w = read_hex(P("data", "ref", "wmem.hex"))
     nd = sum(a != b for a, b in zip(mine, team_w))
     check("내 정수화 == handoff wmem.hex (117,056줄)", len(mine) == len(team_w) == 117056 and nd == 0, "다른 줄 %d" % nd)
-    v2_w = read_hex(P("team_originals", "golden_v2_1110", "out", "weight.hex"))
+    v2_w = read_hex(P("data", "ref", "golden_v2_weight.hex"))
     check("handoff wmem.hex == golden_v2 weight.hex", v2_w == team_w)
     # 4뱅크: 뱅크 i 의 주소 wbank_base + (n//4)*L + k  <->  단일 주소 w_base + n*L + k  (n%4 == i)
-    banks = [read_hex(P("coe", "weight_bank%d.coe" % i), coe=True) for i in range(4)]
+    banks = [read_hex(P("data", "coe", "weight_bank%d.coe" % i), coe=True) for i in range(4)]
     check("COE 뱅크 4개 깊이 29,280", all(len(b) == 29280 for b in banks), str([len(b) for b in banks]))
     bad, used = 0, [set() for _ in range(4)]
     for k, (L, N) in enumerate(LAYERS):
@@ -135,15 +135,15 @@ def main():
     check("안 쓰는 뱅크 주소(FC3 뉴런 10, 11 자리)는 0", all(v == 0 for _, _, v in pad),
           "안 쓰는 주소 %d개 (뱅크 2, 3 의 29,248~29,279)" % len(pad))
     for i in range(4):
-        check("hex/weight_bank%d.mem == COE" % i, read_hex(P("hex", "weight_bank%d.mem" % i)) == banks[i])
+        check("hex/weight_bank%d.mem == COE" % i, read_hex(P("data", "hex", "weight_bank%d.mem" % i)) == banks[i])
 
     print("\n== B. bias")
     mine_b = [u32(v) for k in range(3) for v in bq[k]]
-    team_b = read_hex(P("team_originals", "handoff_D_1112", "golden", "mem", "bias.hex"))
+    team_b = read_hex(P("data", "ref", "bias.hex"))
     nd = sum(a != b for a, b in zip(mine_b, team_b))
     check("내 bias == handoff bias.hex (650줄)", len(mine_b) == len(team_b) == 650 and nd == 0, "다른 줄 %d" % nd)
-    check("handoff bias.hex == golden_v2 bias.hex", read_hex(P("team_originals", "golden_v2_1110", "out", "bias.hex")) == team_b)
-    b128 = read_hex(P("coe", "bias_128bit.coe"), coe=True)
+    check("handoff bias.hex == golden_v2 bias.hex", read_hex(P("data", "ref", "golden_v2_bias.hex")) == team_b)
+    b128 = read_hex(P("data", "coe", "bias_128bit.coe"), coe=True)
     exp128 = []
     for m in range(163):
         v = 0
@@ -153,13 +153,13 @@ def main():
         exp128.append(v)
     check("COE bias_128bit (128b x 163) == 내 bias 4개 묶음", b128 == exp128,
           "다른 줄 %d" % sum(a != b for a, b in zip(b128, exp128)))
-    check("hex/bias_128bit.mem == COE", read_hex(P("hex", "bias_128bit.mem")) == b128)
+    check("hex/bias_128bit.mem == COE", read_hex(P("data", "hex", "bias_128bit.mem")) == b128)
 
     print("\n== C. 정수 추론 (하드웨어 순서) : 사진 100장")
-    xin = read_hex(P("hex", "input_act_a.hex"))
+    xin = read_hex(P("data", "hex", "input_act_a.hex"))
     n_img = len(xin) // 196
-    g1 = read_hex(P("hex", "fc1_out_act_b.hex")); g2 = read_hex(P("hex", "fc2_out_act_a196.hex"))
-    g3 = read_hex(P("hex", "fc3_omem.hex"));      lab = [int(s) for s in open(P("hex", "labels.txt")).read().split()]
+    g1 = read_hex(P("data", "hex", "fc1_out_act_b.hex")); g2 = read_hex(P("data", "hex", "fc2_out_act_a196.hex"))
+    g3 = read_hex(P("data", "hex", "fc3_omem.hex"));      lab = [int(s) for s in open(P("data", "hex", "labels.txt")).read().split()]
     check("입력 100장 x 196줄, 모든 값 0~127", n_img == 100 and all(((w >> (8 * i)) & 0xFF) <= 127 for w in xin for i in range(4)))
 
     W4 = [Wq[k].reshape(N, L, 4) for k, (L, N) in enumerate(LAYERS)]   # [뉴런][줄][레인]
@@ -216,7 +216,7 @@ def main():
     check("최악 입력에서도 s32 안 (실제 가중치 기준 상한)", worst < 2 ** 31, "상한 %d (2^%.1f)" % (worst, np.log2(worst)))
 
     print("\n== D. 단계별 정답 (사진 0~9, handoff stages)")
-    st = P("team_originals", "handoff_D_1112", "golden", "stages")
+    st = P("data", "ref", "stages")
     for key, fn, per in (("acc1", "fc1_1_acc_nobias.hex", 512), ("sum1", "fc1_2_plus_bias.hex", 512),
                          ("acc2", "fc2_1_acc_nobias.hex", 128), ("sum2", "fc2_2_plus_bias.hex", 128),
                          ("acc3", "fc3_1_acc_nobias.hex", 10),  ("sum3", "fc3_2_plus_bias.hex", 10)):

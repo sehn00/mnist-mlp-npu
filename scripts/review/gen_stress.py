@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from golden_check import load_pt, quantize, pack4, u32, P, SHIFT
 
 def main():
-    sd = load_pt(P("team_originals", "golden_v2_1110", "mlp_mnist.pt"))
+    sd = load_pt(P("data", "model", "mlp_mnist.pt"))
     Wq, bq, sw, _, _ = quantize(sd)
     rs = np.random.RandomState(20261114)
     imgs = []

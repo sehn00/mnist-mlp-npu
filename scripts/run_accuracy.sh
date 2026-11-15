@@ -46,7 +46,7 @@ mkdir -p "$CH"
 #   coe/, golden 입력·정답
 DEFS="N_IMG=$CHUNK N_GOLD=$NGOLD ACC_ONLY"
 IPGEN="vivado_sim/aissd_D_sim.gen/sources_1/ip"
-STAMP_FILES=(rtl/*.v tb/tb_npu_top.v scripts/review/xrun.sh "$IPGEN"/*/sim/*.v "$IPGEN"/*/*.mif coe/*.coe
+STAMP_FILES=(rtl/*.v tb/tb_npu_top.v scripts/review/xrun.sh "$IPGEN"/*/sim/*.v "$IPGEN"/*/*.mif data/coe/*.coe
              "$GOLD/input_act_a.hex" "$GOLD/fc3_omem.hex" "$GOLD/labels.txt")
 for f in "${STAMP_FILES[@]}"; do [ -f "$f" ] || { echo "스탬프 파일이 없음: $f"; exit 2; }; done
 STAMP="$(for f in "${STAMP_FILES[@]}"; do printf '%s ' "$f"; sha1sum < "$f" | cut -d' ' -f1; done | sha1sum | cut -d' ' -f1) defs=[$DEFS] total=$TOTAL chunk=$CHUNK"

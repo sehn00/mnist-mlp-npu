@@ -2,7 +2,7 @@
 # ============================================================================
 # xrun.sh : 리뷰용 XSim 단독 실행기 (Vivado 프로젝트를 열지 않고 xvlog -> xelab -> xsim)
 #
-#   BRAM 은 run_sim.tcl 이 만든 실제 blk_mem_gen IP 의 시뮬레이션 모델을 그대로 씀
+#   BRAM 은 scripts/run_sim.tcl 이 만든 실제 blk_mem_gen IP 의 시뮬레이션 모델을 그대로 씀
 #   (vivado_sim/aissd_D_sim.gen/sources_1/ip/*/sim/*.v + .mif). 그래서 run_sim.tcl 을 한 번은 돌려 둬야 함.
 #   결과물은 전부 build/review/<run>/ 아래 (git 제외 폴더). rtl/ 은 읽기만 함.
 #
@@ -16,9 +16,9 @@
 #     EXTRA_SRC   추가로 컴파일할 파일들 (공백 구분, 저장소 루트 기준 또는 절대 경로)
 #     XELAB_OPTS  xelab 추가 옵션
 #     SIM_MAX     시뮬레이션 시간 상한 (예: 5ms). 없으면 $finish 까지 (run -all)
-#     HEX_SRC     TB 가 읽을 golden 폴더 (기본 hex/). 합성 이미지 세트는 build/review/stress_hex
+#     HEX_SRC     TB 가 읽을 golden 폴더 (기본 data/hex/). 합성 이미지 세트는 build/review/stress_hex
 #     STAGE_SRC   체커용 단계별 정답 폴더 (기본 build/review/golden_stages)
-#     OUT_BASE    결과 폴더의 부모 (기본 build/review). 정식 회귀(run_regress.sh)는 build/regress 를 씀
+#     OUT_BASE    결과 폴더의 부모 (기본 build/review). 정식 회귀(scripts/run_regress.sh)는 build/regress 를 씀
 #     BUILD_ONLY=1  컴파일(xvlog, xelab)까지만 하고 시뮬레이션은 안 돌림 (scripts/run_accuracy.sh 가 씀)
 # 끝나면 <OUT_BASE>/<run>/xsim.log 에 시뮬레이션 출력이 남음. 반환값: 0 = 시뮬레이션까지 실행됨
 # ============================================================================
@@ -33,9 +33,9 @@ abs() { case "$1" in [A-Za-z]:*|/*) echo "$1";; *) echo "$ROOT/$1";; esac; }
 
 rm -rf "$RD"; mkdir -p "$RD/hex"
 # golden / 가중치 파일: TB 는 "hex/" 상대 경로로 읽음
-cp "${HEX_SRC:-$ROOT/hex}"/*.hex "${HEX_SRC:-$ROOT/hex}"/labels.txt "$RD/hex/" 2>/dev/null; cp "$ROOT"/hex/*.mem "$RD/hex/" 2>/dev/null
-cp "$ROOT/team_originals/handoff_D_1112/golden/mem/wmem.hex" "$RD/hex/wmem_single.hex"
-cp "$ROOT/team_originals/handoff_D_1112/golden/mem/bias.hex" "$RD/hex/bias_single.hex"
+cp "${HEX_SRC:-$ROOT/data/hex}"/*.hex "${HEX_SRC:-$ROOT/data/hex}"/labels.txt "$RD/hex/" 2>/dev/null; cp "$ROOT"/data/hex/*.mem "$RD/hex/" 2>/dev/null
+cp "$ROOT/data/ref/wmem.hex" "$RD/hex/wmem_single.hex"
+cp "$ROOT/data/ref/bias.hex" "$RD/hex/bias_single.hex"
 STG="${STAGE_SRC:-$ROOT/build/review/golden_stages}"      # golden_check.py / gen_stress.py 가 만든 단계별 정답 (체커 CHK_STAGES 용)
 [ -d "$STG" ] && cp "$STG"/rev_*.hex "$RD/hex/" 2>/dev/null
 

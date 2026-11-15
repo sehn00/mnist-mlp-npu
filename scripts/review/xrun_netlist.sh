@@ -21,7 +21,7 @@ RD="$ROOT/build/review/$RUN"
 NL="$ROOT/build/review/netlist"
 
 rm -rf "$RD"; mkdir -p "$RD/hex"
-cp "${HEX_SRC:-$ROOT/hex}"/*.hex "${HEX_SRC:-$ROOT/hex}"/labels.txt "$RD/hex/"
+cp "${HEX_SRC:-$ROOT/data/hex}"/*.hex "${HEX_SRC:-$ROOT/data/hex}"/labels.txt "$RD/hex/"
 
 sed -E 's/npu_top #\(\.RD_LAT\([0-9]\)\) u_top/npu_top u_top/' "$ROOT/tb/tb_npu_top.v" > "$RD/tb_npu_top_netlist.v"
 case "$MODE" in

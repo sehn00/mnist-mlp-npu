@@ -4,7 +4,7 @@ gen_golden_10k.py : MNIST 테스트셋 1만 장의 입력 hex + 정답(golden) �
 하는 일
   1) mlp_mnist.pt 를 정수화 (scripts/review/golden_check.py 의 독립 정수화. 팀 hex 와 비트 일치가 확인된 것)
   2) MNIST 테스트셋 1만 장: 픽셀(0~255) >> 1 -> 0~127, 4픽셀씩 한 줄(32b)로 묶기
-  3) 먼저 확인: 앞 100장이 지금 hex/ 의 100장(입력, label, FC1/FC2/FC3 정답)과 비트 단위로 같은지.
+  3) 먼저 확인: 앞 100장이 지금 data/hex/ 의 100장(입력, label, FC1/FC2/FC3 정답)과 비트 단위로 같은지.
      하나라도 다르면 파일을 쓰지 않고 끝냄 (exit 1)
   4) 1만 장 정수 추론 -> FC1/FC2 출력, FC3 점수, 예측, 정확도
   5) 파일 쓰기 (tb_npu_top 이 읽는 이름 그대로)
@@ -69,7 +69,7 @@ def main():
     print("MNIST test set : %d images from %s" % (n, args.mnist))
     print("  sha256 %s" % sha)
 
-    sd = load_pt(P("team_originals", "golden_v2_1110", "mlp_mnist.pt"))
+    sd = load_pt(P("data", "model", "mlp_mnist.pt"))
     Wq, bq, sw, _, _ = quantize(sd)
 
     # ---- 정수 추론 (하드웨어와 같은 식: 누산 -> + bias -> ReLU -> >> shift(버림) -> 0~127 포화)
@@ -88,8 +88,8 @@ def main():
     fc2_lines = pack_lines(h2)
     fc3_lines = (s3.ravel() & 0xFFFFFFFF)
 
-    # ---- 먼저 확인: 앞 100장이 기존 hex/ 와 비트 일치하는지
-    print("\n== 기존 golden 100장(hex/)과 앞부분 비교")
+    # ---- 먼저 확인: 앞 100장이 기존 data/hex/ 와 비트 일치하는지
+    print("\n== 기존 golden 100장(data/hex/)과 앞부분 비교")
     m = min(n, 100)
     checks = []
     def cmp(name, mine, path, per):
@@ -98,11 +98,11 @@ def main():
         nd = sum(a != b for a, b in zip(mine, ref)) + abs(len(mine) - len(ref))
         checks.append(nd == 0)
         print("  [%s] %-22s %d줄 중 다른 줄 %d" % ("OK  " if nd == 0 else "FAIL", name, len(ref), nd))
-    cmp("input_act_a.hex", in_lines, P("hex", "input_act_a.hex"), 196)
-    cmp("fc1_out_act_b.hex", fc1_lines, P("hex", "fc1_out_act_b.hex"), 128)
-    cmp("fc2_out_act_a196.hex", fc2_lines, P("hex", "fc2_out_act_a196.hex"), 32)
-    cmp("fc3_omem.hex", fc3_lines, P("hex", "fc3_omem.hex"), 10)
-    ref_lab = [int(s) for s in open(P("hex", "labels.txt")).read().split()][:m]
+    cmp("input_act_a.hex", in_lines, P("data", "hex", "input_act_a.hex"), 196)
+    cmp("fc1_out_act_b.hex", fc1_lines, P("data", "hex", "fc1_out_act_b.hex"), 128)
+    cmp("fc2_out_act_a196.hex", fc2_lines, P("data", "hex", "fc2_out_act_a196.hex"), 32)
+    cmp("fc3_omem.hex", fc3_lines, P("data", "hex", "fc3_omem.hex"), 10)
+    ref_lab = [int(s) for s in open(P("data", "hex", "labels.txt")).read().split()][:m]
     nd = sum(int(a) != b for a, b in zip(lab[:m], ref_lab))
     checks.append(nd == 0 and len(ref_lab) == m)
     print("  [%s] %-22s %d개 중 다른 것 %d" % ("OK  " if checks[-1] else "FAIL", "labels.txt", len(ref_lab), nd))
@@ -134,7 +134,7 @@ def main():
     rep = []
     rep.append("accuracy_golden_10k : python integer model (scripts/gen_golden_10k.py), golden v2 (shift FC1 %d, FC2 %d)" % SHIFT)
     rep.append("MNIST test set      : %d images, mnist.npz sha256 %s" % (n, sha))
-    rep.append("first %d images     : input / label / FC1 / FC2 / FC3 bit-identical to hex/ (checked before writing)" % m)
+    rep.append("first %d images     : input / label / FC1 / FC2 / FC3 bit-identical to data/hex/ (checked before writing)" % m)
     rep.append("INT  accuracy       : %d / %d = %.2f %%" % (n_ok, n, 100.0 * n_ok / n))
     rep.append("FP   accuracy       : %d / %d = %.2f %%   (float64 model before quantization, for reference)" % (n_ok_f, n, 100.0 * n_ok_f / n))
     rep.append("saturated (>127)    : FC1 %d / %d outputs, FC2 %d / %d outputs" % (sat1, h1.size, sat2, h2.size))

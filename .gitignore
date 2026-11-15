@@ -26,3 +26,10 @@ golden_10k/
 # 수업 자료 (과제 노트북, 교수님 말씀 메모)
 docs/old/mnist_mlp_assignment1-1.ipynb
 docs/회의_*_교수님말씀.txt
+
+# 내 PC 전용 메모 (공개 안 함)
+CLAUDE.md
+docs/회의_*_확인사항.md
+# 예전 루트 위치 (스크립트를 scripts/로 옮기기 전)
+/team_originals/
+/patches/
