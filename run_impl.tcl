@@ -5,6 +5,11 @@
 # Usage: vivado -mode batch -source run_impl.tcl -log run_impl.log -notrace
 #        vivado -mode batch -source run_impl.tcl -tclargs synth     (합성까지만)
 # 결과 : result_impl.txt (요약), reports/*.rpt (사용량, 타이밍, 전력)
+# 반환값 (11/15 검수 V02, D03): 0 = 성공. 1 = 다음 중 하나
+#   - 합성 전 IP 검사 실패 (scripts/check_ip.py: IP 폭·깊이·출력 레지스터·초기화 파일 vs RTL RD_LAT)
+#   - 합성 또는 구현 실패
+#   - 구현 후 setup / hold 검사 경로가 없음, 또는 WNS <= 0, 또는 WHS <= 0 (가이드 p.5: slack 양수)
+#   타이밍 실패여도 리포트와 result_impl.txt 는 다 쓴 뒤에 1 로 끝남
 # ============================================================================
 catch {unset ::env(NoDefaultCurrentDirectoryInExePath)}   ;# see run_sim.tcl
 # Parallel Vivado jobs. Each one needs 2-3 GB of RAM: with 8 jobs a 16 GB PC ran out of memory
@@ -33,7 +38,29 @@ if {![file exists $xpr]} {
     note "project not found: $xpr  (run run_sim.tcl first)"
     exit 1
 }
+# IP 10개 설정(폭, 깊이, 출력 레지스터, 초기화 파일)과 RTL 의 RD_LAT 가 맞는지 검사 (scripts/check_ip.py, 11/15 검수 D03)
+proc check_ip_cfg {rd_lat} {
+    global here
+    set py python
+    if {[info exists ::env(NPU_PYTHON)]} { set py $::env(NPU_PYTHON) }   ;# not PYTHON: Vivado sets that to its own folder
+    set args [list "$here/scripts/check_ip.py"]
+    if {$rd_lat ne ""} { lappend args --rd-lat $rd_lat }
+    set rc [catch {exec $py {*}$args 2>@1} out]
+    foreach line [split $out "\n"] { if {$line ne ""} { note "  $line" } }
+    if {$rc} {
+        if {[lindex $::errorCode 0] ne "CHILDSTATUS"} { note "  check_ip.py could not run with '$py' (set NPU_PYTHON to the python.exe path)" }
+        return 0
+    }
+    return 1
+}
+
 open_project $xpr
+note "==== IP check (scripts/check_ip.py) ===="
+if {![check_ip_cfg ""]} {
+    note "IP check FAILED: IP settings do not match the RTL (fix the IPs, e.g. run_sim.tcl ... fresh) -> stop before synthesis"
+    close_project
+    exit 1
+}
 
 # ---------------------------------------------------------------- constraints / top
 if {[llength [get_files -quiet -of_objects [get_filesets constrs_1] *npu_top.xdc]] == 0} {
@@ -134,13 +161,27 @@ if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {
 open_run impl_1 -name impl_1
 summarize impl
 if {[catch {summarize_power impl} err]} { note "report_power: $err" }
-set wns [get_property SLACK [get_timing_paths -setup -max_paths 1 -nworst 1]]
-set whs [get_property SLACK [get_timing_paths -hold  -max_paths 1 -nworst 1]]
-if {$wns >= 0 && $whs >= 0} { note "*** TIMING MET at 100 MHz (WNS $wns, WHS $whs) ***" } \
-else                        { note "*** TIMING NOT MET (WNS $wns, WHS $whs) ***" }
+# 타이밍 판정 (V02): 검사 경로가 있어야 하고, WNS 와 WHS 가 둘 다 0 보다 커야 함 (가이드 p.5 "slack 양수")
+set sp [get_timing_paths -setup -max_paths 1 -nworst 1]
+set hp [get_timing_paths -hold  -max_paths 1 -nworst 1]
+set timing_ok 1
+if {[llength $sp] == 0 || [llength $hp] == 0} {
+    set timing_ok 0
+    note "*** TIMING NOT CHECKED: no timed paths (setup [llength $sp], hold [llength $hp]) -> check the clock constraint ***"
+} else {
+    set wns [get_property SLACK $sp]
+    set whs [get_property SLACK $hp]
+    if {$wns eq "" || $whs eq "" || $wns <= 0 || $whs <= 0} { set timing_ok 0 }
+    if {$timing_ok} {
+        note "*** TIMING MET at 100 MHz (WNS $wns, WHS $whs, both > 0) ***"
+    } else {
+        note "*** TIMING NOT MET (WNS $wns, WHS $whs; both must be > 0) ***"
+    }
+}
 close_design
 
 note "done. reports: $rpt_dir"
+note "RESULT: [expr {$timing_ok ? {PASS} : {FAIL}}]"
 file copy -force $result "$rpt_dir/impl_summary.txt"
 close_project
-exit 0
+exit [expr {$timing_ok ? 0 : 1}]

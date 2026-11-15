@@ -6,6 +6,8 @@
 #      (The team .xci of 11/12 has it ON for WMEM/BMEM. Add "oreg_on" to rebuild that old setup.)
 #   3) run tb_npu_ctrl (D unit test) and tb_npu_top (A+B+C+D, N_IMG images)
 #   4) write a summary to result.txt. Exit code 0 only if both testbenches print their PASS line, else 1.
+#   Before simulating, scripts/check_ip.py checks the 10 IPs (width, depth, output registers, init files
+#   vs coe/) against the RTL RD_LAT (11/15 review D03). A mismatch stops the run with exit code 1.
 # ============================================================================
 # Usage: double-click run_sim.bat, or (create the logs folder first: mkdir logs)
 #        vivado -mode batch -source run_sim.tcl -log logs/run_sim.log -journal logs/run_sim.jou -notrace
@@ -51,6 +53,22 @@ proc note {msg} {
     global result
     set f [open $result a]; puts $f $msg; close $f
     puts "### $msg"
+}
+
+# 10 IPs (width, depth, output registers, init files) vs the RTL RD_LAT: scripts/check_ip.py (review D03)
+proc check_ip_cfg {rd_lat} {
+    global here
+    set py python
+    if {[info exists ::env(NPU_PYTHON)]} { set py $::env(NPU_PYTHON) }   ;# not PYTHON: Vivado sets that to its own folder
+    set args [list "$here/scripts/check_ip.py"]
+    if {$rd_lat ne ""} { lappend args --rd-lat $rd_lat }
+    set rc [catch {exec $py {*}$args 2>@1} out]
+    foreach line [split $out "\n"] { if {$line ne ""} { note "  $line" } }
+    if {$rc} {
+        if {[lindex $::errorCode 0] ne "CHILDSTATUS"} { note "  check_ip.py could not run with '$py' (set NPU_PYTHON to the python.exe path)" }
+        return 0
+    }
+    return 1
 }
 
 # ---------------------------------------------------------------- project + BRAM IPs
@@ -109,6 +127,11 @@ foreach ip [get_ips] {
     }
 }
 note "BRAM primitives output register: WMEM/BMEM $WB_OREG, others false (RD_LAT = [expr {$WB_OREG ? 2 : 1}])"
+if {![check_ip_cfg [expr {$WB_OREG ? 2 : 1}]]} {
+    note "IP check FAILED (scripts/check_ip.py) -> fix the IPs (run again with: -tclargs $N_IMG fresh)"
+    close_project
+    exit 1
+}
 
 # ---------------------------------------------------------------- sim sources
 # local copy of tb_npu_top.v with absolute HEX_DIR

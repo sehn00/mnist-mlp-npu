@@ -7,6 +7,7 @@
 #
 # 돌리는 것 (위에서 아래로, 시뮬레이션은 한 번에 하나씩)
 #   rules         rtl/ 에 initial, #지연, $readmemh/b 가 없는지 (과제 가이드 p.4-5)
+#   ip_check      BRAM IP 10개의 폭·깊이·출력 레지스터·초기화(.mif == coe/)가 RTL 의 RD_LAT 와 맞는지 (scripts/check_ip.py)
 #   golden_check  mlp_mnist.pt 에서 다시 계산한 값 == 팀 golden hex (가중치, bias, 사진 100장)
 #   gen_stress    합성 이미지 16장 + 정답 만들기 (포화, 레인별, 난수. golden 100장에는 포화가 한 번도 없음)
 #   ctrl_rd1/2    tb_npu_ctrl (D 단위), RD_LAT = 1 과 2
@@ -97,6 +98,12 @@ t0=$SECONDS
 bad=$(for f in rtl/*.v; do sed -E 's://.*$::' "$f" | grep -nE '(^|[^a-zA-Z_])initial([^a-zA-Z_]|$)|\$readmem|#[0-9]' | sed "s|^|$f:|"; done)
 if [ -z "$bad" ]; then row rules 1 $((SECONDS - t0)) "no initial / #delay / \$readmem in rtl/ ($(ls rtl/*.v | wc -l) files)"
 else row rules 0 $((SECONDS - t0)) "found in rtl/: $(echo "$bad" | head -3 | tr '\n' ' ')"; fi
+
+# ---- 1b. BRAM IP 10개 설정 vs RTL RD_LAT (폭, 깊이, 출력 레지스터, 생성된 시뮬 모델, .mif == coe/) (11/15 검수 D03)
+t0=$SECONDS
+"$PY" scripts/check_ip.py > "$LOGD/ip_check.log" 2>&1; rc=$?
+d=$(tr -d '\r' < "$LOGD/ip_check.log" | grep -E '^check_ip : (PASS|FAIL)' | tail -1)
+[ $rc -eq 0 ] && row ip_check 1 $((SECONDS - t0)) "10 IPs vs RTL RD_LAT: $d" || row ip_check 0 $((SECONDS - t0)) "rc $rc ${d:-(see $LOGD/ip_check.log)}"
 
 # ---- 2. golden 독립 확인 (+ 체커용 단계별 정답 build/review/golden_stages)
 t0=$SECONDS
