@@ -9,7 +9,7 @@
 | 통합 `tb_npu_top` 100장 | **PASS** | **100/100장 FC1/FC2/FC3 golden v2 비트 일치, 예측 100/100**, 장당 **119,009클럭**(약 1.19 ms), 시뮬레이터 경고 0개 | 〃 |
 | 전체 회귀 `run_regress.sh` (11/15) | **PASS (10단계 전부)** | golden 100장 100/100 + 매 클럭 검사기 2억 7,264만 번 검사에 에러 0 · 합성 이미지 16장 16/16 (포화 FC1 24번, FC2 1번 포함) · 예외 상황 판정 15개 PASS · 327초 | `reports/regress_summary.txt` |
 | 테스트셋 정확도, 파이썬 정수 모델 (MNIST 1만 장) | 완료 | **9,930 / 10,000 = 99.30%** (float 99.32%). 앞 100장은 기존 golden hex와 비트 일치 | `reports/accuracy_golden_10k.txt` |
-| 테스트셋 정확도, RTL 시뮬 (MNIST 1만 장) | 실행 중 (11/15 08:28 시작) | 끝나면 갱신. 약 3시간 예상 | `reports/accuracy_10k.txt` |
+| 테스트셋 정확도, RTL 시뮬 (MNIST 1만 장) | **진행 중** (11/15 09:45 기준 4,000 / 10,000장 완료) | 끝난 4,000장 **전부 FC3 점수가 golden과 비트 일치** + 장당 119,009클럭, 예측 3,952 / 4,000. 남은 6,000장은 세션과 분리된 프로세스로 도는 중. 끝까지 비트 일치면 파이썬 모델과 같은 9,930 / 10,000이 됨. 끝난 뒤 반영은 3절 5번의 한 줄 명령 | 진행 `build/accuracy/progress.txt`, 끝나면 `reports/accuracy_10k.txt` |
 | 합성 (`npu_top`, 10 ns 클럭) | 완료 | LUT 1,401 · FF 283 · RAMB36 106 + RAMB18 13 · DSP 0 | `reports/synth_*.rpt` |
 | 구현 (place & route) | **100 MHz 타이밍 충족** | **WNS +2.553 ns · WHS +0.054 ns** (실패 경로 0 / 2,165) | `reports/impl_timing_*.rpt` |
 | 전력 (구현 후, vectorless 추정) | 완료 | **합계 0.367 W** = 동적 0.077 W + 정적 0.289 W | `reports/impl_power*.rpt` |
@@ -62,6 +62,7 @@ run_regress.sh      전체 회귀를 명령 하나로 (Git Bash, 3절 0번)
 scripts/
   gen_golden_10k.py   MNIST 테스트셋 1만 장 입력 hex + 정답 생성 (앞 100장이 hex/와 비트 일치하는지 먼저 확인)
   run_accuracy.sh     테스트셋 정확도 RTL 시뮬 (1만 장, 500장씩 나눠 돌리고 끊기면 이어서 함)
+  run_accuracy_detached.ps1  위 스크립트를 창·세션과 분리된 프로세스로 띄움 (이어 돌리기 겸용)
   accuracy_report.py  위 결과를 모아 reports/accuracy_10k.txt 작성
   review/             리뷰용: xrun.sh(XSim 단독 실행기), golden_check.py, gen_stress.py, 버그 주입 등
 constr/
@@ -129,8 +130,16 @@ wave_fc2_n27_n28.png  통합 파형 (FC2 뉴런 27 → 28 경계, iverilog)
 5. **테스트셋 정확도 (MNIST 1만 장, Git Bash)**:
    ```
    python scripts/gen_golden_10k.py     (입력 hex + 정답 1만 장 → build/golden_10k/, 몇 초. 파이썬 정수 모델 정확도도 같이 나옴)
-   bash scripts/run_accuracy.sh         (RTL 시뮬 1만 장, 약 3시간 예상. 결과 reports/accuracy_10k.txt)
+   bash scripts/run_accuracy.sh         (RTL 시뮬 1만 장, 약 2시간 반: 500장에 약 8분. 결과 reports/accuracy_10k.txt)
+   powershell -File scripts\run_accuracy_detached.ps1     (같은 일을 창·세션과 분리된 프로세스로. 창이나 Claude 세션을 닫아도 계속 돎)
    ```
+   - **끝났는지 확인**: `logs/accuracy_console.txt` 마지막 줄이 `rc 0`이면 끝 (`rc 1`은 불일치 있음). 중간 진행은 `build/accuracy/progress.txt` (묶음당 한 줄).
+   - **끝난 뒤 결과 확인 + 반영 (한 줄, Git Bash)**:
+     ```
+     python scripts/accuracy_report.py && git add reports/accuracy_10k.txt && git commit -m "Accuracy: 10,000-image RTL result"
+     ```
+     묶음 로그를 모아 요약(비트 일치 장수, RTL 정확도, 틀린 이미지 목록)을 화면에 찍고 `reports/accuracy_10k.txt`를 쓴 다음 커밋해. 1만 장이 다 안 끝났거나 불일치가 있으면 `RESULT: FAIL`로 끝나고 커밋은 안 돼. 그 뒤 맨 위 표의 "진행 중" 줄만 그 출력의 `RTL accuracy` 숫자로 고치면 끝.
+   - 중간에 끊겼으면(PC 종료 등) 위의 `run_accuracy_detached.ps1`을 다시 실행하면 끝난 묶음은 건너뛰고 이어서 해. 도는 중에 또 실행하면 "이미 돌고 있음"이라고 하고 안 띄워. PC가 절전에 들어가면 그동안 멈췄다가 깨어나면 이어서 돌아.
    - `gen_golden_10k.py`는 MNIST 테스트셋(`~/.keras/datasets/mnist.npz`, 다른 위치면 `--mnist`)을 픽셀 >> 1로 바꾸고, **앞 100장이 `hex/`의 기존 100장(입력·label·FC1·FC2·FC3)과 비트 단위로 같은지 먼저 확인**한 뒤에만 파일을 써.
    - `run_accuracy.sh`는 `tb_npu_top`을 정확도 전용 모드(`ACC_ONLY`: FC3 점수 10개를 golden과 비교 + argmax를 label과 비교, FC1/FC2 출력은 안 읽음)로 한 번 컴파일하고 500장씩 20묶음으로 돌려. 시뮬레이션은 한 번에 하나만. 끝난 묶음은 건너뛰니까 중간에 끊겨도 같은 명령으로 이어서 할 수 있어. 진행 상황은 `build/accuracy/progress.txt`.
    - 일부만 볼 때: `bash scripts/run_accuracy.sh 1000 250` (앞 1,000장, 250장씩).
