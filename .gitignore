@@ -23,3 +23,6 @@ docs/old/인반설_1029_*.pdf
 golden_10k/
 *.backup.log
 *.backup.jou
+# 수업 자료 (과제 노트북, 교수님 말씀 메모)
+docs/old/mnist_mlp_assignment1-1.ipynb
+docs/회의_*_교수님말씀.txt
