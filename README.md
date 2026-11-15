@@ -9,7 +9,7 @@
 | 통합 `tb_npu_top` 100장 | **PASS** | **100/100장 FC1/FC2/FC3 golden v2 비트 일치, 예측 100/100**, 장당 **119,009클럭**(약 1.19 ms), 시뮬레이터 경고 0개 | 〃 |
 | 전체 회귀 `run_regress.sh` (11/15) | **PASS (10단계 전부)** | golden 100장 100/100 + 매 클럭 검사기 2억 7,264만 번 검사에 에러 0 · 합성 이미지 16장 16/16 (포화 FC1 24번, FC2 1번 포함) · 예외 상황 판정 15개 PASS · 327초 | `reports/regress_summary.txt` |
 | 테스트셋 정확도, 파이썬 정수 모델 (MNIST 1만 장) | 완료 | **9,930 / 10,000 = 99.30%** (float 99.32%). 앞 100장은 기존 golden hex와 비트 일치 | `reports/accuracy_golden_10k.txt` |
-| 테스트셋 정확도, RTL 시뮬 (MNIST 1만 장) | **진행 중** (11/15 09:45 기준 4,000 / 10,000장 완료) | 끝난 4,000장 **전부 FC3 점수가 golden과 비트 일치** + 장당 119,009클럭, 예측 3,952 / 4,000. 남은 6,000장은 세션과 분리된 프로세스로 도는 중. 끝까지 비트 일치면 파이썬 모델과 같은 9,930 / 10,000이 됨. 끝난 뒤 반영은 3절 5번의 한 줄 명령 | 진행 `build/accuracy/progress.txt`, 끝나면 `reports/accuracy_10k.txt` |
+| 테스트셋 정확도, RTL 시뮬 (MNIST 1만 장) | **PASS** (11/15 완료) | **9,930 / 10,000 = 99.30%**. 1만 장 전부 FC3 점수 10개가 golden과 비트 일치, 전부 장당 119,009클럭, 파이썬 모델과 예측이 다른 이미지 0장, 타임아웃 0 (RTL 커밋 74c88dd 기준) | `reports/accuracy_10k.txt` |
 | 합성 (`npu_top`, 10 ns 클럭) | 완료 | LUT 1,401 · FF 283 · RAMB36 106 + RAMB18 13 · DSP 0 | `reports/synth_*.rpt` |
 | 구현 (place & route) | **100 MHz 타이밍 충족** | **WNS +2.553 ns · WHS +0.054 ns** (실패 경로 0 / 2,165) | `reports/impl_timing_*.rpt` |
 | 전력 (구현 후, vectorless 추정) | 완료 | **합계 0.367 W** = 동적 0.077 W + 정적 0.289 W | `reports/impl_power*.rpt` |
