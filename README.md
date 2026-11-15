@@ -84,7 +84,7 @@ wave_fc2_n27_n28.png  통합 파형 (FC2 뉴런 27 → 28 경계, iverilog)
 - FSM 상태 6개 (스펙 6-2): IDLE → ISSUE(L클럭) → WAIT(RD_LAT+1클럭) → GO → … → LAYER / DONE
 - 레이어 설정표: golden v2 기준 shift FC1 **11**, FC2 **7** (스펙 v0.2 표는 아직 10/9)
 - 메모리 흐름 (handoff 11/12 기준): FC1 IMEM_A → ACT_A, FC2 ACT_A → ACT_B, FC3 ACT_B → OMEM
-- `RD_LAT` parameter (npu_top, npu_mem_ctrl, npu_ctrl 공통, 기본 1): 과제 가이드 p.9 규칙대로 BRAM 출력 레지스터 OFF = 읽기 지연 1. 조원2 11/12 IP(WMEM/BMEM 출력 레지스터 ON)를 그대로 쓸 때만 2 (TB에서 `OREG_ON` define)
+- `RD_LAT` parameter (npu_top, npu_mem_ctrl, npu_ctrl 공통, 기본 1): 과제 가이드 p.9 규칙대로 BRAM 출력 레지스터 OFF = 읽기 지연 1. 조원2 11/12 IP(WMEM/BMEM 출력 레지스터 ON)를 그대로 쓸 때만 2 (TB에서 `OREG_ON` define). 1과 2 말고 다른 값을 주면 시뮬레이션(elaboration)과 합성 둘 다 에러로 멈춤 (11/15 검수 D07, `ERROR_npu_ctrl_RD_LAT_must_be_1_or_2` 모듈을 못 찾는다는 에러)
 - WMEM 주소를 두 가지로 냄: `o_waddr`(스펙의 단일 WMEM 기준), `o_wbank_addr`+`o_wbank_sel`(B의 4뱅크 구조 기준).
   곱셈·나눗셈 없이 포인터 +1, 뉴런의 마지막 줄에서 lane ≠ 3이면 묶음 시작으로 되돌림
 - **npu_top을 바깥(TB)에서 쓰는 순서**: IMEM_A에 이미지 쓰기 → `i_start` 1클럭 → **`o_done == 1`을 기다리기** → 결과 읽기 (스펙 v0.2 6-1 순서 그대로).

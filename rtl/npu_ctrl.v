@@ -245,4 +245,15 @@ module npu_ctrl #(
     assign o_shift      = w_shift;
     assign o_fc3        = w_fc3;
 
+    // ------------------------------------------------------------------
+    // RD_LAT 은 1 또는 2만 지원 (11/15 검수 D07). 다른 값이면 없는 모듈을 부르게 해서
+    // 시뮬레이션(elaboration)과 합성 둘 다 에러로 멈춤. (rtl/ 에는 initial 이나 $error 를 못 써서 이 방법을 씀)
+    //   0 = 시프트 레지스터 범위 밖, 3 = 어댑터가 지원 안 함, 4 이상 = 2비트 WAIT 카운터가 못 셈
+    // ------------------------------------------------------------------
+    generate
+        if (RD_LAT != 1 && RD_LAT != 2) begin : g_bad_rd_lat
+            ERROR_npu_ctrl_RD_LAT_must_be_1_or_2 u_error ();
+        end
+    endgenerate
+
 endmodule
