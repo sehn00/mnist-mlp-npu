@@ -7,7 +7,10 @@ accuracy_report.py : scripts/run_accuracy.sh 가 남긴 묶음 로그를 모아 
   <gold>/labels.txt     정답 숫자,  <gold>/pred.txt  파이썬 정수 모델의 예측
 쓰는 것
   --out (기본 reports/accuracy_10k.txt)
-반환값: 0 = 이미지가 빠짐없이 한 번씩 있고, 전부 FC3 점수가 golden 과 비트 일치 + 클럭 수 정상. 아니면 1
+반환값: 0 = 이미지가 빠짐없이 한 번씩 있고, 전부 FC3 점수가 golden 과 비트 일치 + 클럭 수 정상
+        + 묶음마다 (11/15 검수 V03) 구간 줄이 파일 이름과 맞고, 이미지 줄이 그 구간에 정확히 묶음 크기만큼,
+          TB 마지막 줄 "*** tb_npu_top PASS ***", 완료 표시 .done 의 스탬프가 지금 것과 같고 xsim 종료 코드 0
+        아니면 1
 """
 import argparse, glob, os, re, sys, time
 
@@ -24,6 +27,8 @@ def main():
     ap.add_argument("--chunks", default="build/accuracy/chunks")
     ap.add_argument("--gold", default="build/golden_10k")
     ap.add_argument("--total", type=int, default=10000)
+    ap.add_argument("--chunk", type=int, default=500)
+    ap.add_argument("--stamp", default=None, help="stamp.txt (주면 묶음마다 .done 의 스탬프와 종료 코드를 확인)")
     ap.add_argument("--seconds", type=int, default=-1, help="이번 실행에 걸린 시간 (이어 돌린 경우 이번 실행분만)")
     ap.add_argument("--out", default="reports/accuracy_10k.txt")
     args = ap.parse_args()
@@ -36,6 +41,47 @@ def main():
     logs = sorted(glob.glob(os.path.join(args.chunks, "chunk_*.log")))
     n_timeout = 0
     sim_ms = 0.0
+    stamp = open(args.stamp, encoding="utf-8").read().splitlines()[0] if args.stamp else None
+    chunk_bad = []             # (파일, 이유)
+    starts = []
+    for fn in logs:
+        name = os.path.basename(fn)
+        mm = re.search(r"chunk_(\d+)\.log$", fn)
+        b = int(mm.group(1)) if mm else -1
+        starts.append(b)
+        e = b + args.chunk - 1
+        n_in, has_mode, has_pass = 0, False, False
+        mode_re = re.compile(r"^ mode +: ACC_ONLY .*images %d \.\. %d$" % (b, e))
+        for line in open(fn, encoding="utf-8", errors="replace"):
+            line = line.rstrip("\r\n")
+            if mode_re.match(line):
+                has_mode = True
+            if "*** tb_npu_top PASS ***" in line:
+                has_pass = True
+            m = LINE.match(line)
+            if m and b <= int(m.group(1)) <= e:
+                n_in += 1
+            elif m:
+                chunk_bad.append((name, "image %s outside the chunk range" % m.group(1)))
+        if not has_mode:
+            chunk_bad.append((name, "no range line 'images %d .. %d'" % (b, e)))
+        if not has_pass:
+            chunk_bad.append((name, "no final '*** tb_npu_top PASS ***' line"))
+        if n_in != args.chunk:
+            chunk_bad.append((name, "%d image lines, expected %d" % (n_in, args.chunk)))
+        if stamp is not None:
+            dn = fn[:-4] + ".done"
+            dl = open(dn, encoding="utf-8").read().splitlines() if os.path.isfile(dn) else []
+            if not dl:
+                chunk_bad.append((name, "no completion marker .done"))
+            else:
+                if dl[0] != stamp:
+                    chunk_bad.append((name, ".done stamp differs from the current build"))
+                if "rc 0" not in dl[1:]:
+                    chunk_bad.append((name, ".done exit code is not 0"))
+    want_starts = list(range(0, args.total, args.chunk))
+    if sorted(starts) != want_starts:
+        chunk_bad.append(("chunks", "%d chunk logs do not cover 0..%d in steps of %d" % (len(starts), args.total - 1, args.chunk)))
     for fn in logs:
         for line in open(fn, encoding="utf-8", errors="replace"):
             m = LINE.match(line)
@@ -63,7 +109,7 @@ def main():
     passed = [i for i in have if seen[i][4] == "PASS"]
 
     ok = (not missing and not extra and dup == 0 and n_timeout == 0 and len(bit_ok) == n and len(clk_ok) == n
-          and not lab_bad and not vs_py and len(passed) == n)
+          and not lab_bad and not vs_py and len(passed) == n and not chunk_bad)
 
     rep = []
     rep.append("accuracy_%s : RTL simulation of npu_top (tb_npu_top, ACC_ONLY mode), xsim, real blk_mem_gen IP models, RD_LAT = 1" % (
@@ -79,6 +125,11 @@ def main():
         sum(1 for i in range(n) if py_pred[i] == lab[i]), n, 100.0 * sum(1 for i in range(n) if py_pred[i] == lab[i]) / n))
     rep.append("RTL vs python     : %d images with a different prediction" % len(vs_py))
     rep.append("timeouts          : %d" % n_timeout)
+    if chunk_bad:
+        rep.append("chunk checks      : %d problems (see below)" % len(chunk_bad))
+    else:
+        rep.append("chunk checks      : %d chunks of %d all complete (range line, image count, final PASS line%s)" % (
+            len(logs), args.chunk, ", .done stamp + exit code 0" if stamp else "; .done not checked"))
     if sim_ms > 0:
         rep.append("simulator CPU time: %.0f s in total (sum over chunks), %.2f s per image" % (sim_ms / 1000.0, sim_ms / 1000.0 / max(len(have), 1)))
     if args.seconds >= 0:
@@ -86,6 +137,8 @@ def main():
     rep.append("not checked here  : FC1 / FC2 outputs (ACC_ONLY skips them; the 100-image regression checks them), per-clock checker")
     rep.append("RESULT            : %s" % ("PASS" if ok else "FAIL"))
     rep.append("")
+    for f, why in chunk_bad[:20]:
+        rep.append("chunk problem: %s : %s" % (f, why))
     if missing:
         rep.append("missing images (first 20): %s" % ", ".join(str(i) for i in missing[:20]))
     bad_bits = [i for i in have if seen[i][0] != 10]
@@ -98,7 +151,7 @@ def main():
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(rep) + "\n")
-    print("\n".join(rep[:14]))
+    print("\n".join(rep[:15]))
     print("-> %s" % args.out)
     return 0 if ok else 1
 
